@@ -550,3 +550,164 @@ case 2:
 default:
     print("A partridge in a pear tree")
 }
+
+//*** TERNARY CONDITIONAL OPERATOR
+//WTF
+//WHAT TRUE FALSE
+//useful for performing certain logic inside function (like print) in SwiftUI
+
+let age3 = 18
+let canVote = age3 >= 18 ? "Yes" : "No"
+
+
+let names = ["Jayne", "Kaylee", "Mal"]
+let crewCount = names.isEmpty ? "No one" : "\(names.count) people"
+print(crewCount)
+
+enum Theme {
+    case light, dark
+}
+
+let theme = Theme.dark
+
+let background = theme == .dark ? "black" : "white"
+print(background)
+
+//*** FOR LOOP ***
+
+let platforms = ["iOS", "macOS", "tvOS", "watchOS"]
+
+for os in platforms {
+    print("Swift works great on \(os).")
+}
+
+for name in platforms {
+    print("Swift works great on \(name).")
+}
+
+for rubberChicken in platforms {
+    print("Swift works great on \(rubberChicken).")
+}
+
+for i in 1...12 { //llop veriable i
+    print("5 x \(i) is \(5 * i)") //loop body
+} //loop iteration
+
+//cool autocomplete
+//for platform in platforms {
+//    <#body#>
+//}
+
+for i in 1...12 {
+    print("The \(i) times table:")
+
+    for j in 1...12 {
+        print("  \(j) x \(i) is \(j * i)")
+    }
+
+    print() //empty line
+}
+
+for i in 1...5 {
+    print("Counting from 1 through 5: \(i)") // 1 2 3 4 5
+}
+
+print()
+
+// counting up to, useful for arrays
+for i in 1..<5 {
+    print("Counting 1 up to 5: \(i)") // 1 2 3 4
+}
+
+//when you don't need a loop variable
+var lyric = "Haters gonna"
+
+for _ in 1...5 {
+    lyric += " hate"
+}
+
+print(lyric)
+
+//*** WHILE LOOP ***
+
+//useful when you do't know how many times the loop will iterate
+
+var countdown = 10
+
+while countdown > 0 {
+    print("\(countdown)…")
+    countdown -= 1
+}
+
+print("Blast off!")
+
+let id = Int.random(in: 1...1000)
+let amount = Double.random(in: 0...1)
+
+// create an integer to store our roll
+var roll = 0
+
+// carry on looping until we reach 20
+while roll != 20 {
+    // roll a new dice and print what it was
+    roll = Int.random(in: 1...20)
+    print("I rolled a \(roll)")
+}
+
+// if we're here it means the loop ended – we got a 20!
+print("Critical hit!")
+
+//You’ll find yourself using both for and while loops in your own code: for loops are more common when you have a finite amount of data to go through, such as a range or an array, but while loops are really helpful when you need a custom condition.
+
+
+//*** SKIP LOOP ITEMS WITH BREAK AND CONITNUE ***
+
+
+let filenames = ["me.jpg", "work.txt", "sophie.jpg", "logo.psd"]
+
+for filename in filenames {
+    if filename.hasSuffix(".jpg") == false {
+        continue
+    }
+
+    print("Found picture: \(filename)")
+}
+
+let number1 = 4
+let number2 = 14
+var multiples = [Int]()
+
+for i in 1...100_000 {
+    if i.isMultiple(of: number1) && i.isMultiple(of: number2) {
+        multiples.append(i)
+
+        if multiples.count == 10 {
+            break
+        }
+    }
+}
+
+print(multiples)
+
+
+//*** CHECKPOINT 3 ****
+
+//Your goal is to loop from 1 through 100, and for each number:
+//If it’s a multiple of 3, print “Fizz”
+//If it’s a multiple of 5, print “Buzz”
+//If it’s a multiple of 3 and 5, print “FizzBuzz”
+//Otherwise, just print the number.
+
+for i in 1...100 {
+    if i.isMultiple(of: 3) && i.isMultiple(of: 5) {
+        print("FizzBuzz")
+    }
+    else if i.isMultiple(of: 3){
+        print("Fizz")
+    } else if i.isMultiple(of: 5) {
+        print("Buzz")
+    }
+        else {
+            print(i)
+        }
+    }
