@@ -934,3 +934,77 @@ func checkPassword(_ password: String) throws -> String {
 //Being marked with throws does not mean the function must throw errors, only that it might.
 //When it comes time to throw an error, we write throw followed by one of our PasswordError cases. This immediately exits the function, meaning that it won’t return a string.
 //If no errors are thrown, the function must behave like normal – it needs to return a string.
+
+
+//do {
+//    try someRiskyWork()
+//} catch {
+//    print("Handle errors here")
+//}
+
+let blah = "12345"
+
+do {
+    let result = try checkPassword(blah)
+    print("Password rating: \(result)")
+} catch {
+    print("There was an error.")
+}
+
+
+let meow = "12345"
+
+do {
+    let result = try checkPassword(meow)
+    print("Password rating: \(result)")
+} catch PasswordError.short {
+    print("Please use a longer password.")
+} catch PasswordError.obvious {
+    print("I have the same combination on my luggage!")
+} catch {
+    print("There was an error.\(error.localizedDescription)")
+}
+
+//Tip: Most errors thrown by Apple provide a meaningful message that you can present to your user if needed. Swift makes this available using an error value that’s automatically provided inside your catch block, and it’s common to read error.localizedDescription to see exactly what happened.
+
+//Functions can throw errors: you create an enum defining the errors you want to happen, throw those errors inside the function as needed, then use do, try, and catch to handle them at the call site.
+
+//** Checkpoint 4 ***
+
+
+//The challenge is this: write a function that accepts an integer from 1 through 10,000, and returns the integer square root of that number. That sounds easy, but there are some catches:
+
+//You can’t use Swift’s built-in sqrt() function or similar – you need to find the square root yourself.
+//If the number is less than 1 or greater than 10,000 you should throw an “out of bounds” error.
+//You should only consider integer square roots – don’t worry about the square root of 3 being 1.732, for example.
+//If you can’t find the square root, throw a “no root” error.
+//As a reminder, if you have number X, the square root of X will be another number that, when multiplied by itself, gives X. So, the square root of 9 is 3, because 3x3 is 9, and the square root of 25 is 5, because 5x5 is 25.
+
+enum  getSquareError: Error {
+    case outOfBounds, noRoot
+}
+
+
+func getSquare(num: Int) throws -> Int {
+    if num < 1 || num > 10_000 {
+        throw getSquareError.outOfBounds
+    }
+    let dbl = pow(Double(num), 1/2)
+    if floor(dbl) != dbl {
+        throw getSquareError.noRoot
+    }
+    return Int(dbl)
+}
+    
+
+let myInt = 15
+
+do {
+    let result = try getSquare(num: myInt)
+    print("The square of \(myInt) is \(result)")
+} catch getSquareError.outOfBounds {
+    print("Your number should be between 1 and 10,000")
+} catch getSquareError.noRoot {
+    print("There is no integer root for \(myInt)")
+}
+
