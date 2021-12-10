@@ -1,4 +1,5 @@
 import Cocoa
+import Darwin
 
 //*** VARIABLES ***
 
@@ -1007,4 +1008,207 @@ do {
 } catch getSquareError.noRoot {
     print("There is no integer root for \(myInt)")
 }
+
+/// * How to create and use closures ///
+
+func greetUser() {
+    print("Hi there!")
+}
+
+greetUser()
+
+var greetCopy = greetUser
+greetCopy()
+
+// Important: When you’re copying a function, you don’t write the parentheses after it – it’s var greetCopy = greetUser and not var greetCopy = greetUser(). If you put the parentheses there you are calling the function and assigning its return value back to something else.
+
+let sayHello = {
+    print("Hi there!")
+}
+
+sayHello()
+//Swift gives this the grandiose name closure expression, which is a fancy way of saying we just created a closure – a chunk of code we can pass around and call whenever we want. This one doesn’t have a name, but otherwise it’s effectively a function that takes no parameters and doesn’t return a value.
+
+//If you want the closure to accept parameters, they need to be written in a special way.
+let sayHello2 = { (name: String) -> String in
+    "Hi \(name)!"
+}
+//I added an extra keyword there – did you spot it? It’s the in keyword, and it comes directly after the parameters and return type of the closure. A
+
+var greetCopy3: () -> Void = greetUser
+//The empty parentheses marks a function that takes no parameters.
+//The arrow means just what it means when creating a function: we’re about to declare the return type for the function.
+//Void means “nothing” – this function returns nothing. Sometimes you might see this written as (), but we usually avoid that because it can be confused with the empty parameter list.
+
+func getUserData(for id: Int) -> String {
+    if id == 1989 {
+        return "Taylor Swift"
+    } else {
+        return "Anonymous"
+    }
+}
+
+//named parameters get lost when using closures (reference to a function)
+//named parametse are only used when calling a function directly
+let data: (Int) -> String = getUserData
+let user4 = data(1989)
+print(user4)
+
+
+let team = ["Gloria", "Suzanne", "Piper", "Tiffany", "Tasha"]
+let sortedTeam = team.sorted()
+print(sortedTeam)
+
+
+func captainFirstSorted(name1: String, name2: String) -> Bool {
+    if name1 == "Suzanne" {
+        return true
+    } else if name2 == "Suzanne" {
+        return false
+    }
+
+    return name1 < name2
+}
+
+//sorted should accepted two strings and return a bool, so we can customize it
+let captainFirstTeam = team.sorted(by: captainFirstSorted)
+print(captainFirstTeam)
+
+//writing a closure directly rather than reference
+let captainFirstTeamClosure = team.sorted(by: { (name1: String, name2: String) -> Bool in
+    if name1 == "Suzanne" {
+        return true
+    } else if name2 == "Suzanne" {
+        return false
+    }
+
+    return name1 < name2
+})
+
+//We’re calling the sorted() function as before.
+//Rather than passing in a function, we’re passing a closure – everything from the opening brace after by: down to the closing brace on the last line is part of the closure.
+//Directly inside the closure we list the two parameters sorted() will pass us, which are two strings. We also say that our closure will return a Boolean, then mark the start of the closure’s code by using in.
+//Everything else is just normal function code.
+
+// *** How to use trailing closures and shorthand syntax ***
+
+//trailing closure syntax
+let captainFirstTeam4 = team.sorted { name1, name2 in
+    if name1 == "Suzanne" {
+        return true
+    } else if name2 == "Suzanne" {
+        return false
+    }
+
+    return name1 < name2
+}
+
+//shorthand syntax
+let captainFirstTeam5 = team.sorted {
+    if $0 == "Suzanne" {
+        return true
+    } else if $1 == "Suzanne" {
+        return false
+    }
+
+    return $0 < $1
+}
+
+//if just to just get a reverse sort, can make it one line
+let reverseTeam = team.sorted { $0 > $1 }
+
+//use shorthand UNLESS -
+//1. The closure’s code is long.
+//2. $0 and friends are used more than once each.
+//3. You get three or more parameters (e.g. $2, $3, etc).
+//
+
+let tOnly = team.filter { $0.hasPrefix("T") }
+print(tOnly)
+
+let uppercaseTeam = team.map { $0.uppercased() }
+print(uppercaseTeam)
+
+//going to be using closures a lot with SwiftUI:
+
+//When you create a list of data on the screen, SwiftUI will ask you to provide a function that accepts one item from the list and converts it something it can display on-screen.
+//When you create a button, SwiftUI will ask you to provide one function to execute when the button is pressed, and another to generate the contents of the button – a picture, or some text, and so on.
+//Even just putting stacking pieces of text vertically is done using a closure.
+
+//*** How to accept functions as parameters ***
+
+func makeArray(size: Int, using generator: () -> Int) -> [Int] {
+    var numbers = [Int]()
+    //dont need to use iterator variable so _ rather than i and from 0 until just before the size argument
+    for _ in 0..<size {
+        let newNumber = generator()
+        numbers.append(newNumber)
+    }
+
+    return numbers
+}
+
+//The function is called makeArray(). It takes two parameters, one of which is the number of integers we want, and also returns an array of integers.
+//The second parameter is a function. This accepts no parameters itself, but will return one integer every time it’s called.
+//Inside makeArray() we create a new empty array of integers, then loop as many times as requested.
+//Each time the loop goes around we call the generator function that was passed in as a parameter. This will return one new integer, so we put that into the numbers array.
+//Finally the finished array is returned.
+
+let rolls = makeArray(size: 50) {
+    Int.random(in: 1...20)
+}
+
+print(rolls)
+
+func generateNumber() -> Int {
+    Int.random(in: 1...20)
+}
+
+let newRolls = makeArray(size: 50, using: generateNumber)
+print(newRolls)
+
+//function that accepts mutiple funcion parameters
+func doImportantWork(first: () -> Void, second: () -> Void, third: () -> Void) {
+    print("About to start first work")
+    first()
+    print("About to start second work")
+    second()
+    print("About to start third work")
+    third()
+    print("Done!")
+}
+
+//first parameter is unamed, while rest are named with braces
+doImportantWork {
+    print("This is the first work")
+} second: {
+    print("This is the second work")
+} third: {
+    print("This is the third work")
+}
+
+// *** Checkpoint 5 ***
+
+let luckyNumbers = [7, 4, 38, 21, 16, 15, 12, 33, 31, 49]
+
+//Filter out any numbers that are even
+//Sort the array in ascending order
+//Map them to strings in the format “7 is a lucky number”
+//Print the resulting array, one item per line
+//So, your output should be as follows:
+//
+//7 is a lucky number
+//15 is a lucky number
+//21 is a lucky number
+//31 is a lucky number
+//33 is a lucky number
+//49 is a lucky number
+
+let getLucky: ([Int]) -> Void = { arr in
+    arr.filter { $0 % 2 != 0 }
+    .sorted()
+    .forEach { print("\($0) is a lucky number \n") }
+}
+
+getLucky(luckyNumbers)
 

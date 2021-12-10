@@ -8,13 +8,13 @@ Todo:
   ✔ NEW: Day 6 – loops, summary, and checkpoint 3 @done(21-12-11 12:05)
   ✔ NEW: Day 7 – functions, parameters, and return values @done(21-12-11 12:05)
   ✔ NEW: Day 8 – default values, throwing functions, and checkpoint 4 @started(21-12-11 12:06) @done(21-12-11 14:09) @lasted(2h3m55s)
-  ☐ NEW: Day 9 – closures, passing functions into functions, and checkpoint 5
+  ✔ NEW: Day 9 – closures, passing functions into functions, and checkpoint 5 @started(21-12-11 14:14) @done(21-12-12 14:30) @lasted(1d16m36s)
   ☐ NEW: Day 10 – structs, computed properties, and property observers
   ☐ NEW: Day 11 – access control, static properties and methods, and checkpoint 6
   ☐ NEW: Day 12 – classes, inheritance, and checkpoint 7
   ☐ NEW: Day 13 – protocols, extensions, and checkpoint 8
   ☐ NEW: Day 14 – optionals, nil coalescing, and checkpoint 9
-   ☐ Day 15: Consolidation I
+  ☐ Day 15: Consolidation I
   You just learned a lot about Swift in only 14 days, so before we continue it's important you reflect on what you've learned.
   NEW: Day 15 – Swift review
   ☐ Days 16-24: Starting SwiftUI
