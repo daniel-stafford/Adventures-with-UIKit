@@ -711,3 +711,226 @@ for i in 1...100 {
             print(i)
         }
     }
+
+//*** FUNCTIONS ***
+
+func showWelcome() {
+    print("Welcome to my app!")
+    print("By default This prints out a conversion")
+    print("chart from centimeters to inches, but you")
+    print("can also set a custom range if you want.")
+}
+
+showWelcome()
+
+let number5 = 139
+
+if number5.isMultiple(of: 2) {
+    print("Even")
+} else {
+    print("Odd")
+}
+
+let roll2 = Int.random(in: 1...20)
+
+
+//func printTimesTables(number: Int) {
+//    for i in 1...12 {
+//        print("\(i) x \(number) is \(i * number)")
+//    }
+//}
+//
+//printTimesTables(number: 5)
+
+func printTimesTables(number: Int, end: Int) {
+    for i in 1...end {
+        print("\(i) x \(number) is \(i * number)")
+    }
+}
+
+printTimesTables(number: 20, end: 5)
+
+//must add argument labels (parameters)
+//printTimesTables(5, 20)
+
+//*** RETURN FUNCTINONS ***
+
+func rollDice() -> Int {
+    Int.random(in: 1...6) //implicit one-line return
+}
+
+let result2 = rollDice()
+print(result2)
+
+//func areLettersIdentical(string1: String, string2: String) -> Bool {
+//    let first = string1.sorted()
+//    let second = string2.sorted()
+//    return first == second
+//}
+//
+//
+//func areLettersIdentical(string1: String, string2: String) -> Bool {
+//    return string1.sorted() == string2.sorted()
+//}
+
+//when a function has only one line of code, we can remove the return keyword entirely, like this:
+func areLettersIdentical(string1: String, string2: String) -> Bool {
+    string1.sorted() == string2.sorted()
+}
+
+func pythagoras(a: Double, b: Double) -> Double {
+    sqrt(a * a + b * b)
+}
+
+let h = pythagoras(a: 3, b: 4)
+print(h)
+
+//*** How to return multiple values from functions using tuples ***
+
+func getUser() -> (firstName: String, lastName: String) {
+    (firstName: "Taylor", lastName: "Swift")
+}
+
+let user = getUser()
+print("Name: \(user.firstName) \(user.lastName)")
+
+//shorthand
+func getUser2() -> (firstName: String, lastName: String) {
+    ("Taylor", "Swift")
+}
+
+let user2 = getUser()
+print("Name: \(user.0) \(user.1)")
+
+func getUser3() -> (firstName: String, lastName: String) {
+    (firstName: "Taylor", lastName: "Swift")
+}
+
+let user3 = getUser3()
+let firstName = user3.firstName
+let lastName = user3.lastName
+
+print("Name: \(firstName) \(lastName)")
+
+//destructure
+let (firstName2, lastName2) = getUser3()
+print("Name: \(firstName2) \(lastName2)")
+
+//don't need all valeus from tuple
+let (firstName4, _) = getUser3()
+print("Name: \(firstName4)")
+
+
+//*** How to customize parameter labels ***
+
+//This method of naming parameters for external use is so important to Swift that it actually uses the names when it comes to figuring out whichmethodto call. This is quite unlike many other languages, but this is perfect valid in Swift:  SUPER WEIRD! 😊
+
+func hireEmployee(name: String) { }
+func hireEmployee(title: String) { }
+func hireEmployee(location: String) { }
+
+let lyric2 = "I see a red door and I want it painted black"
+print(lyric2.hasPrefix("I see"))
+
+//When we call hasPrefix() we pass in the prefix to check for directly – we don’t say hasPrefix(string:) or, worse, hasPrefix(prefix:). How come?
+
+//func isUppercase(string: String) -> Bool {
+//    string == string.uppercased()
+//}
+//
+//let string = "HELLO, WORLD"
+//let result = isUppercase(string: string)
+
+//If we add an 🔥underscore🔥 before the parameter name, we can remove the external parameter label like so:
+func isUppercase(_ string: String) -> Bool {
+    string == string.uppercased()
+}
+
+let string = "HELLO, WORLD"
+let result3 = isUppercase(string)
+print(result3)
+
+func printTimesTables(number: Int) {
+    for i in 1...12 {
+        print("\(i) x \(number) is \(i * number)")
+    }
+}
+
+printTimesTables(number: 5)
+
+//reads better with for but for is a resserved word
+
+//func printTimesTables(for: Int) {
+//    for i in 1...12 {
+//        print("\(i) x \(for) is \(i * for)")
+//    }
+//}
+//
+//printTimesTables(for: 5)
+
+//use for as external paramter name, number is internal parameter
+
+func printTimesTables(for number: Int) {
+    for i in 1...12 {
+        print("\(i) x \(number) is \(i * number)")
+    }
+}
+
+printTimesTables(for: 5)
+
+//There are three things in there you need to look at closely:
+//
+//We write for number: Int: the external name is for, the internal name is number, and it’s of type Int.
+//When we call the function we use the external name for the parameter: printTimesTables(for: 5).
+//Inside the function we use the internal name for the parameter: print("\(i) x \(number) is \(i * number)").
+
+// *** How to provide default values for parameters ///
+
+func printTimesTables(for number: Int, end: Int = 12) {
+    for i in 1...end {
+        print("\(i) x \(number) is \(i * number)")
+    }
+}
+
+printTimesTables(for: 5, end: 20)
+printTimesTables(for: 8)
+
+var characters1 = ["Lana", "Pam", "Ray", "Sterling"]
+print(characters1.count)
+characters1.removeAll()
+print(characters1.count)
+
+characters.removeAll(keepingCapacity: true)
+//This is accomplished using a default parameter value: keepingCapacity is a Boolean with the default value of false so that it does the sensible thing by default, while also leaving open the option of us passing in true for times we want to keep the array’s existing capacity.V
+
+// ***  How to handle errors in functions ***
+
+enum PasswordError: Error {
+    case short, obvious
+}
+
+func checkPassword(_ password: String) throws -> String {
+    if password.count < 5 {
+        throw PasswordError.short
+    }
+
+    if password == "12345" {
+        throw PasswordError.obvious
+    }
+
+    if password.count < 8 {
+        return "OK"
+    } else if password.count < 10 {
+        return "Good"
+    } else {
+        return "Excellent"
+    }
+}
+
+//Let’s break that down…
+//
+//If a function is able to throw errors without handling them itself, you must mark the function as throws before the return type.
+//We don’t specify exactly what kind of error is thrown by the function, just that it can throw errors.
+//Being marked with throws does not mean the function must throw errors, only that it might.
+//When it comes time to throw an error, we write throw followed by one of our PasswordError cases. This immediately exits the function, meaning that it won’t return a string.
+//If no errors are thrown, the function must behave like normal – it needs to return a string.
