@@ -9,8 +9,8 @@ Todo:
   ✔ NEW: Day 7 – functions, parameters, and return values @done(21-12-11 12:05)
   ✔ NEW: Day 8 – default values, throwing functions, and checkpoint 4 @started(21-12-11 12:06) @done(21-12-11 14:09) @lasted(2h3m55s)
   ✔ NEW: Day 9 – closures, passing functions into functions, and checkpoint 5 @started(21-12-11 14:14) @done(21-12-12 14:30) @lasted(1d16m36s)
-  ☐ NEW: Day 10 – structs, computed properties, and property observers
-  ☐ NEW: Day 11 – access control, static properties and methods, and checkpoint 6
+  ✔ NEW: Day 10 – structs, computed properties, and property observers @started(21-12-12 15:11) @done(21-12-12 17:44) @lasted(2h33m28s)
+  ✔ NEW: Day 11 – access control, static properties and methods, and checkpoint 6 @done(21-12-12 19:53)
   ☐ NEW: Day 12 – classes, inheritance, and checkpoint 7
   ☐ NEW: Day 13 – protocols, extensions, and checkpoint 8
   ☐ NEW: Day 14 – optionals, nil coalescing, and checkpoint 9

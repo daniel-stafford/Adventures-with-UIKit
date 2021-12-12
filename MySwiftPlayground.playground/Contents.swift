@@ -1212,3 +1212,372 @@ let getLucky: ([Int]) -> Void = { arr in
 
 getLucky(luckyNumbers)
 
+
+// *** How to create your own structs ***
+
+//similar to classes
+//use capital letters for structures
+struct Album {
+    //properities
+    let title: String
+    let artist: String
+    let year: Int
+    //methods
+    func printSummary() {
+        print("\(title) (\(year)) by \(artist)")
+    }
+}
+
+//instance = intializer, similar to a function call (creates init function background, Album.init() -> {}
+let red = Album(title: "Red", artist: "Taylor Swift", year: 2012)
+let wings = Album(title: "Wings", artist: "BTS", year: 2016)
+
+print(red.title)
+print(wings.artist)
+
+red.printSummary()
+wings.printSummary()
+
+struct Employee {
+    let name: String
+    var vacationRemaining: Int
+    //when wanting to change data (write) add the word mutating
+    mutating func takeVacation(days: Int) {
+        if vacationRemaining > days {
+            vacationRemaining -= days
+            print("I'm going on vacation!")
+            print("Days remaining: \(vacationRemaining)")
+        } else {
+            print("Oops! There aren't enough days remaining.")
+        }
+    }
+}
+
+//must use var instead of let when calling a mutating function inside a structure, cannot mutate a constant let, only variable
+var archer = Employee(name: "Sterling Archer", vacationRemaining: 14)
+archer.takeVacation(days: 5)
+print(archer.vacationRemaining)
+
+
+
+var archer1 = Employee(name: "Sterling Archer", vacationRemaining: 14)
+var archer2 = Employee.init(name: "Sterling Archer", vacationRemaining: 14)
+
+struct Employee2 {
+    let name: String
+    // you can override this as it you are using var, otherwise is a default value, let would prevent override
+    var vacationRemaining = 14
+
+    mutating func takeVacation(days: Int) {
+        if vacationRemaining > days {
+            vacationRemaining -= days
+            print("I'm going on vacation!")
+            print("Days remaining: \(vacationRemaining)")
+        } else {
+            print("Oops! There aren't enough days remaining.")
+        }
+    }
+}
+
+let kane = Employee2(name: "Lana Kane")
+let poovey = Employee2(name: "Pam Poovey", vacationRemaining: 35)
+print(kane)
+print(poovey)
+
+//*** How to compute property values dynamically ***
+
+struct SimpleEmployee {
+    let name: String
+    var vacation: Int
+}
+
+var archer4 = SimpleEmployee(name: "Sterling Archer", vacation: 14)
+archer4.vacation -= 5
+print(archer4.vacation)
+archer4.vacation -= 3
+print(archer4.vacation)
+//we lose the intial value of vacation
+
+
+//add two variables for computer property
+struct EmployeeDynamic {
+    let name: String
+    var vacationAllocated = 14
+    var vacationTaken = 0
+    //add computed propety to avoid directly mutating the intial value pf vacationAllocated
+    //we cannot write to this e.g. vacationRemaining = 50
+    //to remedy this we need to use getter (code that reads) and setter (code that writes)
+    //👀 Computed properties must always have an explicit type.
+    // Constants cannot be computed properties.
+    var vacationRemaining: Int {
+        vacationAllocated - vacationTaken
+    }
+}
+
+var archer5 = EmployeeDynamic(name: "Sterling Archer", vacationAllocated: 14)
+archer5.vacationTaken += 4
+print(archer5.vacationRemaining)
+archer5.vacationTaken += 4
+print(archer5.vacationRemaining)
+print(archer5)
+
+struct EmployeeGetSet {
+    let name: String
+    var vacationAllocated = 14
+    var vacationTaken = 0
+    var vacationRemaining: Int {
+        get {
+            vacationAllocated - vacationTaken
+        }
+        //newValue is reserved word inside setter
+        set {
+            vacationAllocated = vacationTaken + newValue
+        }
+    }
+}
+
+var archer6 = EmployeeGetSet(name: "Sterling Archer", vacationAllocated: 14)
+archer6.vacationTaken += 4
+//use setter
+archer6.vacationRemaining = 5
+print(archer6.vacationAllocated)
+
+// *** How to take action when a property changes ***
+
+//Swift lets us create property observers, which are special pieces of code that run when properties change. These take two forms: a didSet observer to run when the property just changed, and a willSet observer to run before the property changed.
+
+//The most important reason is convenience: using a property observer means your functionality will be executed whenever the property changes. Sure, you could use a function to do that, but would you remember? Always? In every place you change the property?
+
+//There is one place where using a property observer is a bad idea, and that’s if you put slow work in there. If you had a User struct with an age integer, you would expect that changing age would take place virtually instantly – it’s just a number, after all. If you attach a didSet property observer that does all sorts of slow work, then suddenly changing a single integer could take way longer than you expected, and it could cause all sorts of problems for you.
+
+struct Game {
+    var score = 0
+}
+
+var game = Game()
+game.score += 10
+print("Score is now \(game.score)")
+game.score -= 3
+print("Score is now \(game.score)")
+game.score += 1
+//forgot to print....how to solve?
+//use didSet!
+
+struct Game2 {
+    var score = 0 {
+        didSet {
+            print("Score is now \(score)")
+        }
+    }
+}
+
+var game2 = Game2()
+game2.score += 10
+game2.score -= 3
+game2.score += 1
+
+
+struct App {
+    var contacts = [String]() {
+        //willSet variant that runs some code before the property changes
+        //provides the new value that will be assigned in case you want to take different action based on that.
+        willSet {
+            print("Current value is: \(contacts)")
+            print("New value will be: \(newValue)")
+        }
+        //Swift automatically provides the constant oldValue inside didSet, in case you need to have custom functionality based on what you were changing from
+        didSet {
+            print("There are now \(contacts.count) contacts.")
+            print("Old value was \(oldValue)")
+        }
+    }
+}
+
+var app = App()
+app.contacts.append("Adrian E")
+app.contacts.append("Allen W")
+app.contacts.append("Ish S")
+
+//In practice, willSet is used much less than didSet, but you might still see it from time to time so it’s important you know it exists. Regardless of which you choose, please try to avoid putting too much work into property observers – if something that looks trivial such as game.score += 1 triggers intensive work, it will catch you out on a regular basis and cause all sorts of performance problems.
+
+// *** How to create custom initializers ***
+
+struct Player {
+    let name: String
+    let number: Int
+}
+
+//memberwise initializer, which is a fancy way of saying an initializer that accepts each properties in the order it was defined.
+let player = Player(name: "Megan R", number: 15)
+
+struct Player2 {
+    let name: String
+    let number: Int
+    //There is no func keyword. Yes, this looks like a function in terms of its syntax, but Swift treats initializers specially.
+    //initializers never explicitly have a return type – they always return the type of data they belong to.
+    init(name: String, number: Int) {
+        //I’ve used self to assign parameters to properties to clarify we mean “assign the name parameter to my name property”.
+        self.name = name
+        self.number = number
+    }
+}
+
+
+struct Player3 {
+    let name: String
+    let number: Int
+
+    init(name: String) {
+        self.name = name
+        //we could say that you must provide a player name, but the shirt number is randomized:
+        number = Int.random(in: 1...99)
+    }
+}
+
+let player6 = Player3(name: "Megan R")
+print(player6.number)
+
+//Just remember the golden rule:  👀 all properties must have a value by the time the initializer ends. If we had not provided a value for number inside the initializer, Swift would refuse to build our code.
+//You can add multiple initializers to your structs if you want, as well as leveraging features such as external parameter names and default values. However, as soon as you implement your own custom initializers you’ll lose access to Swift’s generated memberwise initializer unless you take extra steps to retain it. This isn’t an accident: if you have a custom initializer, Swift effectively assumes that’s because you have some special way to initialize your properties, which means the default one should no longer be available.
+
+
+//*** How to limit access to internal data using access control ***
+
+//, maybe you have some logic you need to apply before touching yourproperties or maybe you know that some methods need to be called in a certain way or order, and so shouldn’t be touched externally.
+
+struct BankAccount {
+    var funds = 0
+
+    mutating func deposit(amount: Int) {
+        funds += amount
+    }
+
+    mutating func withdraw(amount: Int) -> Bool {
+        if funds > amount {
+            funds -= amount
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+var account = BankAccount()
+account.deposit(amount: 100)
+let success = account.withdraw(amount: 200)
+
+if success {
+    print("Withdrew money successfully")
+} else {
+    print("Failed to get the money")
+}
+
+//But the funds properties is just exposed to us externally, so what’s stopping us from touching it directly? The answer is nothing at all – this kind of code is allowed:
+
+account.funds -= 1000
+
+//To solve this, use private
+
+struct BankAccountFixed {
+    //And now accessing funds from outside the struct isn’t possible, but it is possible inside both deposit() and withdraw(). If you try to read or write funds from outside the struct Swift will refuse to build your code.
+    private(set) var funds = 0
+
+    mutating func deposit(amount: Int) {
+        funds += amount
+    }
+
+    mutating func withdraw(amount: Int) -> Bool {
+        if funds > amount {
+            funds -= amount
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+var myAccount = BankAccountFixed()
+myAccount.withdraw(amount: 200)
+
+//Use private for “don’t let anything outside the struct use this.”
+//Use fileprivate for “don’t let anything outside the current file use this.”
+//Use public for “let anyone, anywhere use this.”
+//Use private(set) Everyone can read but only inside the struct can write
+    // If we had used that with BankAccount, it would mean we could print account.funds outside of the struct, but only deposit() and withdraw() could actually change the value.eeeerereeeeeee
+
+//👀 Important: If you use private access control for one or more properties, chances are you’ll need to create your own initializer.
+
+//*** Static properties and methods ***
+
+struct School {
+    static var studentCount = 0
+    //no need for mutating keyword on static method
+    static func add(student: String) {
+        print("\(student) joined the school.")
+        studentCount += 1
+    }
+}
+
+School.add(student: "Taylor Swift")
+print(School.studentCount)
+
+//If you want to mix and match static and non-static properties and methods, there are two rules:
+//1. To access non-static code from static code… you’re out of luck: static properties and methods can’t refer to non-static properties and methods because it just doesn’t make sense – which instance of School would you be referring to?
+//2. To access static code from non-static code, always use your type’s name such as School.studentCount. You can also use Self to refer to the current type.
+
+//Tip: It’s easy to forget the difference between 👀 self and Sel , but if you think about it it’s just like the rest of Swift’s naming – we start all our data types with a capital letter (Int, Double, Bool, etc), so it makes sense for Self to start with a capital letter too.
+
+//I use static properties to organize common data in my apps. For example, I might have a struct like AppData to store lots of shared values I use in many places:
+struct AppData {
+    static let version = "1.3 beta 2"
+    static let saveFilename = "settings.json"
+    static let homeURL = "https://www.hackingwithswift.com"
+}
+
+//second reason I commonly use static data is to create examples of my structs. As you’ll see later on, SwiftUI works best when it can show previews of your app as you develop, and those previews often require sampledata
+//Using this approach, everywhere I need to check or display something like my app’s version number – an about screen, debug output, logging information, support emails, etc – I can read AppData.version.
+struct Employee5 {
+    let username: String
+    let password: String
+
+    static let example = Employee5(username: "cfederighi", password: "hairforceone")
+}
+//And now whenever you need an Employee instance to work with in your design previews, you can use Employee.example and you’re done.
+
+// *** Checkpoint 6 ***
+// create a struct to store information about a car, including its model, number of seats, and current G, then add a method to change gears up or down. Have a think about variables and access control: what data should be a variable rather than a constant, and whatdatashould be exposed publicly? Should the gear-changing method validate its input somehow?
+
+struct Car {
+    let model: String
+    let numSeats: Int
+    private(set) var currentGear = 1
+    enum ShiftDirection {
+        case up, down
+    }
+    public mutating func shift(shiftDirection: ShiftDirection) {
+        switch shiftDirection {
+        case .up : currentGear = currentGear == 5 ? 5 : currentGear + 1
+        case .down : currentGear = currentGear == 1 ? 1 : currentGear - 1
+        }
+    }
+}
+
+
+var truck = Car(model: "Ford F150", numSeats: 3)
+truck.currentGear
+truck.shift(shiftDirection: .up)
+truck.shift(shiftDirection: .up)
+truck.shift(shiftDirection: .up)
+truck.shift(shiftDirection: .up)
+truck.shift(shiftDirection: .up)
+truck.shift(shiftDirection: .up)
+truck.currentGear
+truck.shift(shiftDirection: .down)
+truck.shift(shiftDirection: .down)
+truck.shift(shiftDirection: .down)
+truck.shift(shiftDirection: .down)
+truck.shift(shiftDirection: .down)
+truck.shift(shiftDirection: .down)
+truck.shift(shiftDirection: .down)
+truck.currentGear
+
