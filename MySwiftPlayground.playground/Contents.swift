@@ -1872,3 +1872,126 @@ let myCat = Cat(legs: 4, isTame: false)
 myCat.speak()
 let myLion = Lion(legs: 4, isTame: false)
 myLion.speak()
+
+// *** How to create and use protocols ***
+
+protocol Vehicle {
+    //That might mean it’s a constant, but it might also be a computed property with a getter.
+    var name: String { get }
+    //An integer called currentPassengers, which must be read-write. That might mean it’s a variable, but it might also be a computed property with a getter and setter.
+    //if you use { get set } then you can’t conform to the protocol using a constant property.
+    var currentPassengers: Int { get set }
+    //no implementation of functions, just fnuuction names, parameters and return type
+    func estimateTime(for distance: Int) -> Int
+    func travel(distance: Int)
+}
+
+//structCarPro conforms to vehicle protocol
+struct CarPro: Vehicle {
+    let name = "Car"
+    var currentPassengers = 1
+    func estimateTime(for distance: Int) -> Int {
+        distance / 50
+    }
+
+    func travel(distance: Int) {
+        print("I'm driving \(distance)km.")
+    }
+    //The openSunroof() method doesn’t come from the Vehicle protocol, and doesn’t really make sense there because many vehicle types don’t have a sunroof. But that’s okay, because the protocol describes only the minimum functionality conforming types must have, and they can add their own as needed.
+    func openSunroof() {
+        print("It's a nice day!")
+    }
+}
+
+
+
+//  👀 note: "using vehicle" <- using is the public, external parameter, while vehicle is the prviate, internal parameter
+// func funcName(publicName privateName: Int) {}
+//not how we ares using Vehicle as the type of second parameter! Not car!
+func commute(distance: Int, using vehicle: Vehicle) {
+    if vehicle.estimateTime(for: distance) > 100 {
+        print("That's too slow! I'll try a different vehicle.")
+    } else {
+        vehicle.travel(distance: distance)
+    }
+}
+
+let car = CarPro()
+commute(distance: 100, using: car)
+
+struct Bicycle: Vehicle {
+    let name = "Bicycle"
+    var currentPassengers = 1
+    func estimateTime(for distance: Int) -> Int {
+        distance / 10
+    }
+
+    func travel(distance: Int) {
+        print("I'm cycling \(distance)km.")
+    }
+}
+
+let bike = Bicycle()
+//we are using the same commute fuction, but swift knows which functions from which structure to use (either from car or bike)
+commute(distance: 50, using: bike)
+
+
+func getTravelEstimates(using vehicles: [Vehicle], distance: Int) {
+    for vehicle in vehicles {
+        let estimate = vehicle.estimateTime(for: distance)
+        print("\(vehicle.name): \(estimate) hours to travel \(distance)km")
+    }
+}
+
+getTravelEstimates(using: [car, bike], distance: 150)
+
+//Tip: You can conform to as many protocols as you need, just by listing them one by one separated with a comma. If you ever need to subclass something and conform to a protocol, you should put the parent class name first, then write your protocols afterwards.
+
+
+// *** How to use opaque return types ***
+
+func getRandomNumber() -> some Equatable {
+    //using some allow use to later change this Double.random
+    //gives us flexiblity without breaking our card when we change
+    //we can change our mind
+    //if we had using Int, we would have to make a ton of changes
+    Int.random(in: 1...6)
+}
+
+func getRandomBool() -> some Equatable {
+    Bool.random()
+}
+
+print(getRandomNumber() == getRandomNumber())
+
+//It’s a subtle distinction, but returning Vehicle means "any sort of Vehicle type but we don't know what", whereas returning some Vehicle means "a specific sort of Vehicle type but we don't want to say which one.”
+//So, when you see some View in your SwiftUI code, it’s effectively us telling Swift “this is going to send back some kind of view to lay out, but I don’t want to write out the exact thing – you figure it out for yourself.”
+
+// ** How to create and use extensions **
+
+var quote2 = "   The truth is rarely pure and never simple   "
+//The .whitespacesAndNewlines value comes from Apple’s Foundation API, and actually so does trimmingCharacters(in:)
+let trimmed = quote2.trimmingCharacters(in: .whitespacesAndNewlines)
+
+extension String {
+    func trimmed() -> String {
+        //Notice how we can use self here – that automatically refers to the current string. This is possible because we’re currently in a string extension.
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+let trimmed2 = quote2.trimmed()
+print(trimmed2)
+
+//alternative with func
+func trim(_ string: String) -> String {
+    string.trimmingCharacters(in: .whitespacesAndNewlines)
+}
+
+let trimmed3 = trim(quote2)
+
+//so why? When you type quote. Xcode brings up a list of methods on the string, including all the ones we add in extensions. This makes our extra functionality easy to find.
+//Writing global functions makes your code rather messy – they are hard to organize and hard to keep track of. On the other hand, extensions are naturally grouped by the data type they are extending.
+//Because your extension methods are a full part of the original type, they get full access to the type’s internal data. That means they can use properties and methods marked with private access control, for example.
+//👀 What’s more, extensions make it easier to modify values in place – i.e., to change a value directly, rather than return a new value.
+
