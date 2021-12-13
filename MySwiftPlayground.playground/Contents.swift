@@ -1581,3 +1581,294 @@ truck.shift(shiftDirection: .down)
 truck.shift(shiftDirection: .down)
 truck.currentGear
 
+// *** How to create your own classes ***
+
+//diffs from structures
+//no memberwise init
+//change const properties
+//mulitple instances classes all point to same data
+//when all instances, deintializer will clean up left over data
+
+class GameClass {
+    var score = 0 {
+        didSet {
+            print("Score is now \(score)")
+        }
+    }
+}
+
+var newGame = GameClass()
+newGame.score += 10
+
+// *** How to make one class inherit from another ***
+
+class EmployeeClass {
+    let hours: Int
+
+    init(hours: Int) {
+        self.hours = hours
+    }
+    func printSummary() {
+        print("I work \(hours) hours a day.")
+    }
+}
+
+// final = can inheret from parent but no subclass will inheret from Developer
+// good strategy to make final by default
+// I think many people instinctively declare their classes as final to mean “you shouldn’t subclass from this unless I specifically allow it.” I certainly do this a lot, because it’s another way I can help folks understand how my code works.
+final class Developer: EmployeeClass {
+    func work() {
+        print("I'm writing code for \(hours) hours.")
+    }
+    //override inherited method
+    //In UIKit, Apple’s original user interface framework for iOS, this approach was used a lot.
+    //Swift developers would create subclasses of Apple’s table and override the parts they wanted to change, giving them all the built-in functionality and lots of flexibility and control.
+    override func printSummary() {
+        print("I'm a developer who will sometimes work \(hours) hours a day, but other times spend hours arguing about whether code should be indented using tabs or spaces.")
+    }
+
+}
+
+class Manager: EmployeeClass {
+    func work() {
+        print("I'm going to meetings for \(hours) hours.")
+    }
+}
+
+let robert = Developer(hours: 8)
+let joseph = Manager(hours: 10)
+robert.work()
+joseph.work()
+
+let novall = Developer(hours: 8)
+novall.printSummary()
+
+// *** How to add initializers for classes ***
+
+// Swift won’t automatically generate a memberwise initializer for classes - with or without inheritance
+// either need to write your own initializer, or provide default values for all the properties of the class.
+
+class Vehicle2 {
+    let isElectric: Bool
+
+    init(isElectric: Bool) {
+        self.isElectric = isElectric
+    }
+}
+
+class Car2: Vehicle2 {
+    let isConvertible: Bool
+
+    init(isElectric: Bool, isConvertible: Bool) {
+        //set up own properties then parent's
+        self.isConvertible = isConvertible
+        //super for parent
+        super.init(isElectric: isElectric)
+    }
+}
+
+let teslaX = Car2(isElectric: true, isConvertible: false)
+ 
+//if no custom intializer, will automatically inherent intializer of parents
+class Car3: Vehicle2 {
+    let isConvertiable = false
+}
+
+let car5 = Car3(isElectric: false)
+
+// *** How to copy classes ***
+
+//In Swift, all copies of a class instance share the same data, meaning that any changes you make to one copy will automatically change the other copies. This happens because classes are reference types in Swift, which means all copies of a class all refer back to the same underlying pot of data.
+
+class User2 {
+    var username = "Anonymous"
+}
+
+var user1 = User2()
+
+var user10 = user1
+user10.username = "Taylor"
+
+print(user1.username)
+print(user10.username)
+
+//classes share data, while structs do not
+
+//If you want to create a unique copy of a class instance – sometimes called a deep copy – you need to handle creating a new instance and copy across all your data safely.
+
+
+//If you want to create a unique copy of a class instance – sometimes called a deep copy – you need to handle creating a new instance and copy across all your data safely.
+class OtherUser {
+    var username = "Anonymous"
+    //Now we can safely call copy() to get an object with the same starting data, but any future changes won’t impact the original.
+    func copy() -> User2 {
+        let user = User2()
+        user.username = username
+        return user
+    }
+}
+
+let thisUser = OtherUser()
+//now we can call copy
+let user5 = thisUser.copy()
+user5.username = "Taylor"
+
+print(thisUser.username)
+print(user5.username)
+
+// *** How to create a deinitializer for a class ***
+
+////Just like initializers, you don’t use func with deinitializers – they are special.
+//Deinitializers can never take parameters or return data, and as a result aren’t even written with parentheses.
+//Your deinitializer will automatically be called when the final copy of a class instance is destroyed. That might mean it was created inside a function that is now finishing, for example.
+//We never call deinitializers directly; they are handled automatically by the system.
+//Structs don’t have deinitializers, because you can’t copy them. Structs are always unique.
+
+class MyUser {
+    let id: Int
+
+    init(id: Int) {
+        self.id = id
+        print("User \(id): I'm alive!")
+    }
+
+    deinit {
+        print("User \(id): I'm dead!")
+    }
+}
+
+for i in 1...3 {
+    //user inside will be destroyed when one loop iteration ends
+    let user = MyUser(id: i)
+    print("User \(user.id): I'm in control!")
+}
+
+
+var users = [MyUser]()
+
+for i in 1...3 {
+    let user = MyUser(id: i)
+    print("User \(user.id): I'm in control!")
+    users.append(user)
+}
+
+print("Loop is finished!")
+//users won't be destryed until array is cleared with users.removeAll()
+users.removeAll()
+print("Array is clear!")
+
+// *** How to work with variables inside classes ***
+
+class TheUser {
+    //note we use var
+    var name = "Paul"
+}
+
+//use constant so always pointing to the same user
+let user8 = TheUser()
+//use var for name prop, so can change
+user8.name = "Taylor"
+print(user8.name)
+//Think of it like this: we created a constant signpoint pointing towards a user, but we erased that user’s name tag and wrote in a different name. The user in question hasn’t changed – the person still exists – but a part of their internal data has changed.
+
+//in contrast, use var inside the class
+class TheRealUser {
+    var name = "Paul"
+}
+
+//use var, so can point to different users
+var user11 = TheRealUser()
+user11.name = "Taylor"
+print(user11.name)
+//now ppint to a different user
+user11 = TheRealUser()
+print(user11.name)
+//ow we’d be able to change theproperty but we’d also be able to change to a wholly new User instance if we wanted. To continue the signpost analogy, it would be like turning the signpost to point at wholly different person.
+//
+//Constant instance, constant property – a signpost that always points to the same user, who always has the same name.
+//Constant instance, variable property – a signpost that always points to the same user, but their name can change.
+//Variable instance, constant property – a signpost that can point to different users, but their names never change.
+//Variable instance, variable property – a signpost that can point to different users, and those users can also change their name
+
+// One upside to all this is that classes don’t need to use the mutating keyword with methods that change their data. This keyword is really important for structs because constant structs cannot have their properties changed no matter how they were created, so when Swift sees us calling a mutating method on a constant struct instance it knows that shouldn’t be allowed.
+
+//remember let struct CAN NEVER CHANGE, so cannot call a mutating function for instnace.
+
+// *** Summary Classes ***
+
+// 👀 Classes aren’t quite as commonly used as structs, but they serve an invaluable purpose for sharing data, and if you ever choose to learn Apple’s older 🔥 UIKit 🔥 framework you’ll find yourself using them extensively.
+ 
+//First, classes can inherit from other classes, which means they get access to the properties and methods of their parent class. You can optionally override methods in child classes if you want, or mark a class as being final to stop others subclassing it.
+
+//Second, Swift doesn’t generate a memberwise initializer for classes, so you need to do it yourself. If a subclass has its own initializer, it must always call the parent class’s initializer at some point.
+
+//Third, if you create a class instance then take copies of it, all those copies point back to the same instance. This means changing some data in one of the copies changes them all.
+
+//Fourth, classes can have deinitializers that run when the last copy of one instance is destroyed.
+
+//Finally, variable properties inside class instances can be changed regardless of whether the instance itself was created as variable.
+
+// *** Checkpoint 7 ***
+
+//Your challenge is this: make a class hierarchy for animals, starting with Animal at the top, then Dog and Cat as subclasses, then Corgi and Poodle as subclasses of Dog, and Persian and Lion as subclasses of Cat.
+//But there’s more:
+//
+//The Animal class should have a legs integer property that tracks how many legs the animal has.
+//The Dog class should have a speak() method that prints a generic dog barking string, but each of the subclasses should print something slightly different.
+//The Cat class should have a matching speak() method, again with each subclass printing something different.
+//The Cat class should have an isTame Boolean property, provided using an initializer.
+
+class Animal {
+    var legs: Int
+    init(legs: Int) {
+        self.legs = legs
+    }
+}
+
+class Dog: Animal {
+   func speak(){
+        print("Woof woof")
+    }
+}
+
+class Corgi: Dog {
+    override func speak(){
+        print("yip yip")
+    }
+}
+
+class Poddle: Dog {
+    override func speak() {
+        print("Bow wow")
+    }
+}
+
+class Cat: Animal {
+    var isTame: Bool
+    func speak(){
+        print("Meow")
+    }
+    init(legs: Int, isTame: Bool){
+        self.isTame = isTame
+        super.init(legs: legs)
+    }
+}
+
+class Lion: Cat {
+    override func speak() {
+        print("Roar!")
+    }
+}
+
+class Persion: Cat {
+    override func speak() {
+        print("mew mew")
+    }
+}
+
+let myDog = Dog(legs: 4)
+myDog.speak()
+let myCat = Cat(legs: 4, isTame: false)
+myCat.speak()
+let myLion = Lion(legs: 4, isTame: false)
+myLion.speak()
