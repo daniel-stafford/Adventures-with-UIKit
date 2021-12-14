@@ -996,7 +996,7 @@ func getSquare(num: Int) throws -> Int {
     }
     return Int(dbl)
 }
-    
+
 
 let myInt = 15
 
@@ -1668,7 +1668,7 @@ class Car2: Vehicle2 {
 }
 
 let teslaX = Car2(isElectric: true, isConvertible: false)
- 
+
 //if no custom intializer, will automatically inherent intializer of parents
 class Car3: Vehicle2 {
     let isConvertiable = false
@@ -1797,7 +1797,7 @@ print(user11.name)
 // *** Summary Classes ***
 
 // 👀 Classes aren’t quite as commonly used as structs, but they serve an invaluable purpose for sharing data, and if you ever choose to learn Apple’s older 🔥 UIKit 🔥 framework you’ll find yourself using them extensively.
- 
+
 //First, classes can inherit from other classes, which means they get access to the properties and methods of their parent class. You can optionally override methods in child classes if you want, or mark a class as being final to stop others subclassing it.
 
 //Second, Swift doesn’t generate a memberwise initializer for classes, so you need to do it yourself. If a subclass has its own initializer, it must always call the parent class’s initializer at some point.
@@ -2105,3 +2105,300 @@ var myHouse = House(rooms: 3, cost: 200_000, agent: "Anne")
 myHouse.salesSummary()
 myHouse.agent = "Mary"
 myHouse.salesSummary()
+
+// *** How to get the most from protocol extensions ***
+
+extension Int {
+    func squared() -> Int {
+        self * self
+    }
+}
+
+let wholeNumber = 5
+print(wholeNumber.squared())
+
+//how to work with both int and double?
+//extension Numeric {
+    // this won't work as the return won't necesarily be an int, could be a double!
+//    func squared() -> Int {
+//        self * self
+//    }
+//}
+
+extension Numeric {
+    //to remedy possibility of either a double or int, use self as return type
+    func squared() -> Self {
+        self * self
+    }
+}
+//
+//Equtable (which is inherited from Comparable <- it will compare all the properties of one object against the same properties in the other object
+// Comparable <- allows Swift to see if one object should be sorted before another.
+struct User: Comparable {
+    let name: String
+}
+
+// Swift can’t automatically implement Comprable in our custom types, needs a function called < that accepts two instances of your struct as its parameter, and returns true if the first instance should be sorted before the second.
+// the < function can be implemented as a static function that helps keep your code a little more organized.
+func <(lhs: User, rhs: User) -> Bool {
+    lhs.name < rhs.name
+}
+
+let user14 = User(name: "Link")
+let user22 = User(name: "Zelda")
+print(user14 == user22)
+print(user14 != user22)
+print(user14 < user22)
+
+// *** How to handle missing data with optionals ***
+
+let opposites = [
+    "Mario": "Wario",
+    "Luigi": "Waluigi"
+]
+
+let peachOpposite = opposites["Peach"] //nil <- String? <- optional string
+
+//you must unwrap the optional, if you want to use it.
+if let marioOpposite = opposites["Mario"] {
+    print("Mario's opposite is \(marioOpposite)")
+}
+
+if let peachOpposite = opposites["Peach"]{
+    print("We got a character: \(peachOpposite)")
+} else {
+    print("The optional was empty.")
+}
+
+var username2: String? = nil
+
+if let unwrappedName = username2 {
+    print("We got a user: \(unwrappedName)")
+} else {
+    print("The optional was empty.")
+}
+
+
+func square(number: Int) -> Int {
+    number * number
+}
+
+//create an optional integer
+var number6: Int? = nil
+//print(square(number: number6)) <- this won't be work, we mut unwrap the optional
+
+if let unwrappedNumber = number6 {
+    //run only if non-nil
+    print(square(number: unwrappedNumber))
+}
+
+// common pattern to unwrap optional using a constant with the same variable name
+// we are temporarily creating a new local constant inside the function
+// called shadowing
+if let number6 = number6 {
+    //unwrapped value to work with inside function bodty
+    print(square(number: number6))
+}
+
+// Swift didn't introduce optionals. It introduced non-optionals.
+
+// ***  How to unwrap optionals with guard ***
+
+//guard let is designed to exit the current function, loop, or condition if the check fails, so any values you unwrap using it will stay around after the check.
+
+func printSquare(of number: Int?) {
+    guard let number = number else {
+        print("Missing input")
+        return
+    }
+
+    print("\(number) x \(number) is \(number * number)")
+}
+
+var myVar: Int? = 3
+
+//if let unwrapped = myVar {
+//    // Run if myVar has a vlaue inside
+//    print("Run if myVar has a value inside.")
+//}
+
+//guard let unwrapped = myVar else {
+//    //Run if myVar is nil
+//    print("Run if myVar doesn't have a value inside")
+//}
+
+func printSquare2(of number: Int?) {
+    guard let number = number else {
+        print("Missing input")
+        //  We *must* exit the function here
+        return
+    }
+    // `number` is still available outside of `guard`
+    print("\(number) x \(number) is \(number * number)")
+}
+
+//you can even use guard with non-optionals! 😊
+
+//use if let if you just want to unwrap some optionals, but prefer guard let if you’re specifically checking that conditions are correct before continuing.
+
+func getMeaningOfLife() -> Int? {
+    42
+}
+
+func printMeaningOfLifeIf() {
+    if let name = getMeaningOfLife() {
+        print(name)
+    }
+}
+
+func printMeaningOfLifeGuard() {
+    //It’s common to see guard used one or more times at the start of methods, because it’s used to verify some conditions are correct up front. This makes our code easier to read than if we tried to check a condition then run some code, then check another condition and run some different code.
+    guard let name = getMeaningOfLife() else {
+        //guard requires that we exit the current scope when it’s used, which in this case means we must return from the function if it fails. This is not optional: Swift won’t compile our code without the return.
+        return
+    }
+    //It lets us focus on the “happy path” – the behavior of our function when everything has gone to plan, which is to print the meaning of life.
+    print(name)
+}
+
+// *** How to unwrap optionals with nil coalescing ***
+
+//This is extraordinarily useful in Swift, because although optionals are a great feature it’s usually better to have a non-optional – to have a real string rather than a “might be a string, might be nil” – and nil coalescing is a great way to get that.
+
+let captains = [
+    "Enterprise": "Picard",
+    "Voyager": "Janeway",
+    "Defiant": "Sisko"
+]
+
+// If the optional has a value inside it will be sent back and stored in new, but if it doesn’t then “N/A” will be used instead.
+let new = captains["Serenity"] ?? "N/A"
+//n’t we just specify a default value when reading from the dictionary? If you’re thinking that you’re absolutely correct:
+let new2 = captains["Serenity", default: "N/A"]
+
+let tvShows = ["Archer", "Babylon 5", "Ted Lasso"]
+let favorite = tvShows.randomElement() ?? "None"
+
+//Or perhaps you have a struct with an optional property, and want to provide a sensible default for when it’s missing:
+struct TheBook {
+    let title: String
+    let author: String?
+}
+
+let book = TheBook(title: "Beowulf", author: nil)
+let author = book.author ?? "Anonymous"
+print(author)
+
+//It’s even useful if you create an integer from a string, where you actually get back an optional Int? because the conversion might have failed
+let input = ""
+let number4 = Int(input) ?? 0
+print(number4)
+
+// *** How to handle multiple optionals using optional chaining ***
+
+//Swift’s optional chaining lets us dig through several layers of optionals in a single line of code, and if any one of those layers is nil then the whole line becomes nil.
+
+let theNames = ["Arya", "Bran", "Robb", "Sansa"]
+
+let chosen = theNames.randomElement()?.uppercased() ?? "No one"
+print("Next in line: \(chosen)")
+
+struct ThisBook {
+    let title: String
+    let author: String?
+}
+
+var thisBook: ThisBook? = nil
+let thisAuthor = thisBook?.author?.first?.uppercased() ?? "A"
+print(thisAuthor)
+
+// *** How to handle function failure with optionals ***
+
+//If a function might throw errors, you can convert it into an optional using try? – you’ll either get back the function’s return value, or nil if an error is thrown.
+
+
+//hen we call a function that might throw errors, we either call it using try and handle errors appropriately, or if we’re certain the function will not fail we use try! and accept that if we were wrong our code will crash. (Spoiler: you should use try! very rarely.)
+// In constrast try?, However, if all we care about is whether the function succeeded or failed, we can use an optional try to have the function return an optional value.
+//If error occurs, the function will return nil, otherwise you'll return the value wrapped in an optional
+
+enum UserError: Error {
+    case badID, networkFailed
+}
+
+func getUser(id: Int) throws -> String {
+    throw UserError.networkFailed
+}
+
+if let user = try? getUser(id: 23) {
+    print("User: \(user)")
+}
+
+//note extra parans for nil coalescing with try?
+let user232 = (try? getUser(id: 23)) ?? "Anonymous"
+print(user232)
+
+
+// Try? is often sued in three places
+
+//In combination with guard let to exit the current function if the try? call returns nil.
+//In combination with nil coalescing to attempt something or provide a default value on failure.
+//When calling any throwing function without a return value, when you genuinely don’t care if it succeeded or not – maybe you’re writing to a log file or sending analytics to a server, for example.
+
+//So, rather than writing this:
+
+
+//do {
+//    let result = try runRiskyFunction()
+//    print(result)
+//} catch {
+//    // it failed!
+//}
+////You can instead write this:
+//
+//if let result = try? runRiskyFunction() {
+//    print(result)
+//}
+
+enum PasswordError1: Error {
+    case obvious
+}
+
+func checkPassword (password: String) throws -> Bool
+    {
+    if password == "password" {
+        throw PasswordError1.obvious
+    }
+    return true
+}
+
+do {
+//    When using try you must catch all errors that can be thrown.
+    try checkPassword(password: "password")
+    print("That password looks good")
+} catch {
+    print("You can't use that password")
+}
+
+//Using try? converts a function's return value into an optional.
+if let result = try? checkPassword(password: "password") {
+    print("Result was \(result)")
+    //elese isn't required
+} else {
+    print("D'oh")
+}
+
+try! checkPassword("sekret")
+print("OK")
+
+// *** Checkpoiint 9 ***
+
+//write a function that accepts an optional array of integers, and returns one randomly. If the array is missing or empty, return a random number in the range 1 through 100.
+//
+//If that sounds easy, it’s because I haven’t explained the catch yet: I want you to write your function in a single line of code. No, that doesn’t mean you should just write lots of code then remove all the line breaks – you should be able to write this whole thing in one line of code.
+
+func getRando(arr: [Int]?) -> Int { arr?.randomElement() ?? Int.random(in: 1...100)}
+
+let myArr: [Int]? = nil
+let hisArr = [1,2,3,4]
+getRando(arr: myArr)
+getRando(arr: hisArr)
