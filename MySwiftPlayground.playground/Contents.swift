@@ -1969,10 +1969,13 @@ print(getRandomNumber() == getRandomNumber())
 
 // ** How to create and use extensions **
 
+//extensions make your code easier to write, easier to read, and easier to maintain in the long term.
+
 var quote2 = "   The truth is rarely pure and never simple   "
 //The .whitespacesAndNewlines value comes from Apple’s Foundation API, and actually so does trimmingCharacters(in:)
 let trimmed = quote2.trimmingCharacters(in: .whitespacesAndNewlines)
 
+//return a new string
 extension String {
     func trimmed() -> String {
         //Notice how we can use self here – that automatically refers to the current string. This is possible because we’re currently in a string extension.
@@ -1983,15 +1986,122 @@ extension String {
 let trimmed2 = quote2.trimmed()
 print(trimmed2)
 
-//alternative with func
+//alternative with global func
 func trim(_ string: String) -> String {
     string.trimmingCharacters(in: .whitespacesAndNewlines)
 }
 
 let trimmed3 = trim(quote2)
 
-//so why? When you type quote. Xcode brings up a list of methods on the string, including all the ones we add in extensions. This makes our extra functionality easy to find.
+//so why? Code completion!
 //Writing global functions makes your code rather messy – they are hard to organize and hard to keep track of. On the other hand, extensions are naturally grouped by the data type they are extending.
 //Because your extension methods are a full part of the original type, they get full access to the type’s internal data. That means they can use properties and methods marked with private access control, for example.
-//👀 What’s more, extensions make it easier to modify values in place – i.e., to change a value directly, rather than return a new value.
 
+//return same string
+extension String {
+    mutating func trim() -> String {
+        //Notice how we can use self here – that automatically refers to the current string. This is possible because we’re currently in a string extension.
+        self.trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+}
+
+quote2.trim()
+
+//👀 What’s more, extensions make it easier to modify values in place – i.e., to change a value directly, rather than return a new value.
+//: 👀 if you’re returning a new value rather than changing it in place, you should use word endings like ed or ing, like reversed().
+//trim = same value, trimmed/trimming = new value
+
+
+//You can also use extensions to add computed properties, not stored properties. Why? Adding new stored properties would affect the actual size of the data types – if we added a bunch of stored properties to an integer then every integer everywhere would need to take up more space in memory, which would cause all sorts of problems.
+
+extension String {
+    //computed property
+    var lines: [String] {
+        self.components(separatedBy: .newlines)
+    }
+    var spaces: [String] {
+        self.components(separatedBy: " ")
+    }
+}
+
+let lyrics = """
+But I keep cruising
+Can't stop, won't stop moving
+It's like I got this music in my mind
+Saying it's gonna be alright
+"""
+//as extending property, no need for () func call.
+print(lyrics.lines.count)
+print(lyrics.spaces.count)
+
+//you can even extend inits
+struct Book {
+    let title: String
+    let pageCount: Int
+    let readingHours: Int
+}
+
+extension Book {
+    init(title: String, pageCount: Int) {
+        self.title = title
+        self.pageCount = pageCount
+        self.readingHours = pageCount / 50
+    }
+}
+
+let lotr = Book(title: "Lord of the Rings", pageCount: 1178, readingHours: 24)
+
+// OOP vs. Protocol Oriented Programming
+// important difference between the two is one of mindset: POP developers lean heavily on the protocol extension functionality of Swift to build types that get a lot of their behavior from protocols. This makes it easier to share functionality across many types, which in turn lets us build bigger, more powerful software without having to write so much code.
+// not a difference between composing vs. inheritance as OOP prefers composing as well
+
+// *** Checkpoint 8 ***
+
+//make a protocol that describes a building, adding various properties and methods, then create two structs, House and Office, that conform to it. Your protocol should require the following:
+
+//A property storing how many rooms it has.
+//A property storing the cost as an integer (e.g. 500,000 for a building costing $500,000.)
+//A property storing the name of the estate agent responsible for selling the building.
+//A method for printing the sales summary of the building, describing what it is along with its other properties.
+
+protocol Building {
+    var rooms: Int {get}
+    var cost: Int {get}
+    var agent: String {get set}
+    func salesSummary() -> Void
+}
+
+struct House: Building {
+    var rooms: Int
+    var cost: Int
+    var agent: String
+    init(rooms: Int, cost: Int, agent: String){
+        self.rooms = rooms
+        self.cost = cost
+        self.agent = agent
+    }
+    func salesSummary() {
+        print("This house is with \(rooms) rooms, cost \(cost) and is being handled by estate agent \(agent)")
+    }
+}
+
+struct Office: Building {
+    var rooms: Int
+    var cost: Int
+    var agent: String
+    init(rooms: Int, cost: Int, agent: String){
+        self.rooms = rooms
+        self.cost = cost
+        self.agent = agent
+    }
+    func salesSummary() {
+        print("This office is with \(rooms) rooms, cost \(cost) and is being handled by estate agent \(agent)")
+    }
+}
+
+var myOffice = Office(rooms: 1, cost: 20_000, agent: "Frank")
+myOffice.salesSummary()
+var myHouse = House(rooms: 3, cost: 200_000, agent: "Anne")
+myHouse.salesSummary()
+myHouse.agent = "Mary"
+myHouse.salesSummary()

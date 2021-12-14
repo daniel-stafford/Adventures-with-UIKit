@@ -12,7 +12,7 @@ Todo:
   ✔ NEW: Day 10 – structs, computed properties, and property observers @started(21-12-12 15:11) @done(21-12-12 17:44) @lasted(2h33m28s)
   ✔ NEW: Day 11 – access control, static properties and methods, and checkpoint 6 @done(21-12-12 19:53)
   ✔ NEW: Day 12 – classes, inheritance, and checkpoint 7 @started(21-12-12 19:56) @done(21-12-13 19:03) @lasted(23h7m49s)
-  ☐ NEW: Day 13 – protocols, extensions, and checkpoint 8
+  ✔ NEW: Day 13 – protocols, extensions, and checkpoint 8 @done(21-12-14 09:22)
   ☐ NEW: Day 14 – optionals, nil coalescing, and checkpoint 9
   ☐ Day 15: Consolidation I
   You just learned a lot about Swift in only 14 days, so before we continue it's important you reflect on what you've learned.
