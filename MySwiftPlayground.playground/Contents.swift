@@ -996,7 +996,7 @@ func getSquare(num: Int) throws -> Int {
     }
     return Int(dbl)
 }
-
+    
 
 let myInt = 15
 
@@ -1668,7 +1668,7 @@ class Car2: Vehicle2 {
 }
 
 let teslaX = Car2(isElectric: true, isConvertible: false)
-
+ 
 //if no custom intializer, will automatically inherent intializer of parents
 class Car3: Vehicle2 {
     let isConvertiable = false
@@ -1797,7 +1797,7 @@ print(user11.name)
 // *** Summary Classes ***
 
 // 👀 Classes aren’t quite as commonly used as structs, but they serve an invaluable purpose for sharing data, and if you ever choose to learn Apple’s older 🔥 UIKit 🔥 framework you’ll find yourself using them extensively.
-
+ 
 //First, classes can inherit from other classes, which means they get access to the properties and methods of their parent class. You can optionally override methods in child classes if you want, or mark a class as being final to stop others subclassing it.
 
 //Second, Swift doesn’t generate a memberwise initializer for classes, so you need to do it yourself. If a subclass has its own initializer, it must always call the parent class’s initializer at some point.
@@ -2171,7 +2171,7 @@ if let peachOpposite = opposites["Peach"]{
 }
 
 var username2: String? = nil
-
+ 
 if let unwrappedName = username2 {
     print("We got a user: \(unwrappedName)")
 } else {
@@ -2402,3 +2402,4 @@ let myArr: [Int]? = nil
 let hisArr = [1,2,3,4]
 getRando(arr: myArr)
 getRando(arr: hisArr)
+
