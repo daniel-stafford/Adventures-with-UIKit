@@ -7,22 +7,22 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		DD1770702769204E00DE9CF6 /* WeSplitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD17706F2769204E00DE9CF6 /* WeSplitApp.swift */; };
-		DD1770722769204E00DE9CF6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD1770712769204E00DE9CF6 /* ContentView.swift */; };
-		DD1770742769205300DE9CF6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD1770732769205300DE9CF6 /* Assets.xcassets */; };
-		DD1770772769205300DE9CF6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD1770762769205300DE9CF6 /* Preview Assets.xcassets */; };
+		DD898C7C276A7CAB0037A446 /* WeSplitApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD898C7B276A7CAB0037A446 /* WeSplitApp.swift */; };
+		DD898C7E276A7CAB0037A446 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD898C7D276A7CAB0037A446 /* ContentView.swift */; };
+		DD898C80276A7CAC0037A446 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD898C7F276A7CAC0037A446 /* Assets.xcassets */; };
+		DD898C83276A7CAC0037A446 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD898C82276A7CAC0037A446 /* Preview Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		DD17706C2769204E00DE9CF6 /* WeSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		DD17706F2769204E00DE9CF6 /* WeSplitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeSplitApp.swift; sourceTree = "<group>"; };
-		DD1770712769204E00DE9CF6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		DD1770732769205300DE9CF6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		DD1770762769205300DE9CF6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		DD898C78276A7CAB0037A446 /* WeSplit.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WeSplit.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		DD898C7B276A7CAB0037A446 /* WeSplitApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WeSplitApp.swift; sourceTree = "<group>"; };
+		DD898C7D276A7CAB0037A446 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		DD898C7F276A7CAC0037A446 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		DD898C82276A7CAC0037A446 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		DD1770692769204E00DE9CF6 /* Frameworks */ = {
+		DD898C75276A7CAB0037A446 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -32,37 +32,37 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		DD1770632769204E00DE9CF6 = {
+		DD898C6F276A7CAB0037A446 = {
 			isa = PBXGroup;
 			children = (
-				DD17706E2769204E00DE9CF6 /* WeSplit */,
-				DD17706D2769204E00DE9CF6 /* Products */,
+				DD898C7A276A7CAB0037A446 /* WeSplit */,
+				DD898C79276A7CAB0037A446 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		DD17706D2769204E00DE9CF6 /* Products */ = {
+		DD898C79276A7CAB0037A446 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				DD17706C2769204E00DE9CF6 /* WeSplit.app */,
+				DD898C78276A7CAB0037A446 /* WeSplit.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		DD17706E2769204E00DE9CF6 /* WeSplit */ = {
+		DD898C7A276A7CAB0037A446 /* WeSplit */ = {
 			isa = PBXGroup;
 			children = (
-				DD17706F2769204E00DE9CF6 /* WeSplitApp.swift */,
-				DD1770712769204E00DE9CF6 /* ContentView.swift */,
-				DD1770732769205300DE9CF6 /* Assets.xcassets */,
-				DD1770752769205300DE9CF6 /* Preview Content */,
+				DD898C7B276A7CAB0037A446 /* WeSplitApp.swift */,
+				DD898C7D276A7CAB0037A446 /* ContentView.swift */,
+				DD898C7F276A7CAC0037A446 /* Assets.xcassets */,
+				DD898C81276A7CAC0037A446 /* Preview Content */,
 			);
 			path = WeSplit;
 			sourceTree = "<group>";
 		};
-		DD1770752769205300DE9CF6 /* Preview Content */ = {
+		DD898C81276A7CAC0037A446 /* Preview Content */ = {
 			isa = PBXGroup;
 			children = (
-				DD1770762769205300DE9CF6 /* Preview Assets.xcassets */,
+				DD898C82276A7CAC0037A446 /* Preview Assets.xcassets */,
 			);
 			path = "Preview Content";
 			sourceTree = "<group>";
@@ -70,13 +70,13 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		DD17706B2769204E00DE9CF6 /* WeSplit */ = {
+		DD898C77276A7CAB0037A446 /* WeSplit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = DD17707A2769205300DE9CF6 /* Build configuration list for PBXNativeTarget "WeSplit" */;
+			buildConfigurationList = DD898C86276A7CAC0037A446 /* Build configuration list for PBXNativeTarget "WeSplit" */;
 			buildPhases = (
-				DD1770682769204E00DE9CF6 /* Sources */,
-				DD1770692769204E00DE9CF6 /* Frameworks */,
-				DD17706A2769204E00DE9CF6 /* Resources */,
+				DD898C74276A7CAB0037A446 /* Sources */,
+				DD898C75276A7CAB0037A446 /* Frameworks */,
+				DD898C76276A7CAB0037A446 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -84,25 +84,25 @@
 			);
 			name = WeSplit;
 			productName = WeSplit;
-			productReference = DD17706C2769204E00DE9CF6 /* WeSplit.app */;
+			productReference = DD898C78276A7CAB0037A446 /* WeSplit.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		DD1770642769204E00DE9CF6 /* Project object */ = {
+		DD898C70276A7CAB0037A446 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1310;
-				LastUpgradeCheck = 1310;
+				LastSwiftUpdateCheck = 1320;
+				LastUpgradeCheck = 1320;
 				TargetAttributes = {
-					DD17706B2769204E00DE9CF6 = {
-						CreatedOnToolsVersion = 13.1;
+					DD898C77276A7CAB0037A446 = {
+						CreatedOnToolsVersion = 13.2;
 					};
 				};
 			};
-			buildConfigurationList = DD1770672769204E00DE9CF6 /* Build configuration list for PBXProject "WeSplit" */;
+			buildConfigurationList = DD898C73276A7CAB0037A446 /* Build configuration list for PBXProject "WeSplit" */;
 			compatibilityVersion = "Xcode 13.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -110,42 +110,42 @@
 				en,
 				Base,
 			);
-			mainGroup = DD1770632769204E00DE9CF6;
-			productRefGroup = DD17706D2769204E00DE9CF6 /* Products */;
+			mainGroup = DD898C6F276A7CAB0037A446;
+			productRefGroup = DD898C79276A7CAB0037A446 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				DD17706B2769204E00DE9CF6 /* WeSplit */,
+				DD898C77276A7CAB0037A446 /* WeSplit */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		DD17706A2769204E00DE9CF6 /* Resources */ = {
+		DD898C76276A7CAB0037A446 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD1770772769205300DE9CF6 /* Preview Assets.xcassets in Resources */,
-				DD1770742769205300DE9CF6 /* Assets.xcassets in Resources */,
+				DD898C83276A7CAC0037A446 /* Preview Assets.xcassets in Resources */,
+				DD898C80276A7CAC0037A446 /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		DD1770682769204E00DE9CF6 /* Sources */ = {
+		DD898C74276A7CAB0037A446 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				DD1770722769204E00DE9CF6 /* ContentView.swift in Sources */,
-				DD1770702769204E00DE9CF6 /* WeSplitApp.swift in Sources */,
+				DD898C7E276A7CAB0037A446 /* ContentView.swift in Sources */,
+				DD898C7C276A7CAB0037A446 /* WeSplitApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		DD1770782769205300DE9CF6 /* Debug */ = {
+		DD898C84276A7CAC0037A446 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -196,7 +196,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -206,7 +206,7 @@
 			};
 			name = Debug;
 		};
-		DD1770792769205300DE9CF6 /* Release */ = {
+		DD898C85276A7CAC0037A446 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -251,7 +251,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
@@ -261,7 +261,7 @@
 			};
 			name = Release;
 		};
-		DD17707B2769205300DE9CF6 /* Debug */ = {
+		DD898C87276A7CAC0037A446 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -277,7 +277,6 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -291,7 +290,7 @@
 			};
 			name = Debug;
 		};
-		DD17707C2769205300DE9CF6 /* Release */ = {
+		DD898C88276A7CAC0037A446 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
@@ -307,7 +306,6 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -324,25 +322,25 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		DD1770672769204E00DE9CF6 /* Build configuration list for PBXProject "WeSplit" */ = {
+		DD898C73276A7CAB0037A446 /* Build configuration list for PBXProject "WeSplit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DD1770782769205300DE9CF6 /* Debug */,
-				DD1770792769205300DE9CF6 /* Release */,
+				DD898C84276A7CAC0037A446 /* Debug */,
+				DD898C85276A7CAC0037A446 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		DD17707A2769205300DE9CF6 /* Build configuration list for PBXNativeTarget "WeSplit" */ = {
+		DD898C86276A7CAC0037A446 /* Build configuration list for PBXNativeTarget "WeSplit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				DD17707B2769205300DE9CF6 /* Debug */,
-				DD17707C2769205300DE9CF6 /* Release */,
+				DD898C87276A7CAC0037A446 /* Debug */,
+				DD898C88276A7CAC0037A446 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = DD1770642769204E00DE9CF6 /* Project object */;
+	rootObject = DD898C70276A7CAB0037A446 /* Project object */;
 }
