@@ -9,26 +9,41 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        //Tip: When we were using the background() modifier, SwiftUI was able to figure out that .red actually meant Color.red. When we’re using the color as a free-standing view Swift has no context to help it figure out what .red means so we need to be specific that we mean Color.red.
-        ZStack{
-            VStack (spacing: 0) {
-                LinearGradient(gradient: Gradient(colors: [.white, .black]), startPoint: .top, endPoint: .bottom)
-                LinearGradient(gradient: Gradient(stops: [
-                    Gradient.Stop(color: .white, location: 0.45),
-                    Gradient.Stop(color: .black, location: 0.55),
-                ]), startPoint: .top, endPoint: .bottom)
-                LinearGradient(gradient: Gradient(stops: [
-                     .init(color: .white, location: 0.45),
-                     .init(color: .black, location: 0.55),
-                 ]), startPoint: .top, endPoint: .bottom)
-                RadialGradient(gradient: Gradient(colors: [.blue, .black]), center: .center, startRadius: 20, endRadius: 200)
-                AngularGradient(gradient: Gradient(colors: [.red, .yellow, .green, .blue, .purple, .red]), center: .center)
+        VStack {
+            Button("Button 1", role: .destructive) {}
+            .buttonStyle(.bordered)
+            Button("Button 2") {}
+            .buttonStyle(.bordered)
+            //Important: Apple explicitly recommends against using too many prominent buttons, because when everything is prominent nothing is.
+            Button("Button 3") {}
+            .buttonStyle(.borderedProminent)
+            .tint(.mint)
+            Button("Delete Section", role: .destructive, action: runDelete)
+            //custom, button This is particularly common when you want to incorporate images into your buttons.
+            Button {
+                print("Button was tapped")
+            } label: {
+                Text("Tap Me")
+                    .padding()
+                    .foregroundStyle(.white)
+                    .background(.red)
             }
-//            Text("ZStack Content")
-//                .foregroundStyle(.secondary)
-//                .padding(100)
-//                .background(.ultraThinMaterial)
-        }.ignoresSafeArea()
+            Button {
+                print("Edit button was tapped")
+            } label: {
+                Image(systemName: "pencil")
+            }
+            Button {
+                print("Edit button was tapped")
+            } label: {
+                Label("Edit", systemImage: "pencil")
+            }
+            //Tip: If you find that your images have become filled in with a color, for example showing as solid blue rather than your actual picture, this is probably SwiftUI coloring them to show that they are tappable. To fix the problem, use the renderingMode(.original) modifier to force SwiftUI to show the original image rather than the recolored version.
+            Image(systemName: "pencil").renderingMode(.original)
+        }
+    }
+    func runDelete(){
+        print("I am deleting")
     }
 }
 
