@@ -12,15 +12,17 @@ var backgroundBottom = Color(red: 0.76, green: 0.15, blue: 0.26)
 
 struct ContentView: View {
     @State private var isScoreAlertShown = false
+    @State private var isSummaryShown = false
     @State private var scoreAlertTitle = ""
+    @State private var summaryAlertTitle = ""
     @State private var playerScore = 0
+    @State private var playerTurns = 0
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain","UK", "US" ].shuffled()
     @State private var correctAnswer = Int.random(in: 0...2)
+    var lengthOfGame = 5
 
     var body: some View {
-//        Self._printChanges()
-//        print("Scoreshown", self._isScoreAlertShown, "ScoreTitle", scoreAlertTitle, "countries", countries)
-        
+        // Self._printChanges()
         return ZStack{
             LinearGradient(gradient: Gradient(colors: [backgroundTop, backgroundBottom]), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
@@ -59,7 +61,6 @@ struct ContentView: View {
                 Text("Score: \(playerScore)")
                     .foregroundColor(.white)
                     .font(.largeTitle)
-                    .border(Color.green)
                 Spacer()
             }
             .padding()
@@ -67,24 +68,44 @@ struct ContentView: View {
             Button("Continue", action: askNewQuestion)
         } message: {
             Text("Your score is \(playerScore)")
-    }
+        }
+        .alert(summaryAlertTitle, isPresented: $isSummaryShown) {
+            Button("Start over", action: resetGame)
+        } message: {
+           Text("You got \(playerScore) out of \(lengthOfGame) correct.")
+        }
 }
-    
+
     func flagTapped(_ number: Int){
         if number == correctAnswer {
             playerScore += 1
-            scoreAlertTitle = "Correct"
+            scoreAlertTitle = "Correct."
         } else {
-            scoreAlertTitle = "Wrong"
+            scoreAlertTitle = "Wrong! That's the flag of \(countries[number])"
         }
-        isScoreAlertShown = true
+        isScoreAlertShown.toggle()
+        playerTurns += 1
     }
-    
+
     func askNewQuestion(){
+        if playerTurns == lengthOfGame {
+            summaryAlertTitle = "Game over"
+            isSummaryShown.toggle()
+        } else {
+            shuffleCountries()
+        }
+    }
+
+    func resetGame(){
+        shuffleCountries()
+        playerTurns = 0
+        playerScore = 0
+    }
+
+    func shuffleCountries(){
         countries = countries.shuffled()
         correctAnswer = Int.random(in: 0..<3)
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {
