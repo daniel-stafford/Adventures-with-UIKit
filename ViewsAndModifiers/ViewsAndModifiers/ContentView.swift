@@ -12,9 +12,10 @@ struct ContentView: View {
     var body: some View {
         VStack {
             Text("Gryffindor")
-                // the child’s version takes priority.
+                // in the case of an enviromental modifier, the child’s modifier overrides.
                 .font(.largeTitle)
             Text("Hufflepuff")
+                // in the case of a normal modifier, the child's modifier is additive.
                 .blur(radius: 0)
             Text("Ravenclaw")
             Text("Slytherin")
