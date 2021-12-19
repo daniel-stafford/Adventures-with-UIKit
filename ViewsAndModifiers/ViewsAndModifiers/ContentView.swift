@@ -7,60 +7,33 @@
 
 import SwiftUI
 
+// let us create any number of views inside a fixed grid.
+// The first line – struct GridStack<Content: View>: View – uses a more advanced feature of Swift called generics, which in this case means “you can provide any kind of content you like, but whatever it is it must conform to the View protocol.” After the colon we repeat View again to say that GridStack itself also conforms to the View protocol.
+struct GridStack<Content: View>: View {
+    let rows: Int
+    let columns: Int
+    // closure that must be able to accept two integers and return some sort of content we can show.
+    @ViewBuilder let content: (Int, Int) -> Content
 
-
-// Custom modifiers
-struct Title: ViewModifier {
-    func body(content: Content) -> some View {
-        content
-            .font(.largeTitle)
-            .foregroundColor(.white)
-            .padding()
-            .background(.blue)
-            .clipShape(RoundedRectangle(cornerRadius: 10))
-    }
-}
-
-//add extension to make use of custom modifier cleaner
-extension View {
-    func titleStyle() -> some View {
-        modifier(Title())
-    }
-}
-
-//Tip: Often folks wonder when it’s better to add a custom view modifier versus just adding a new method extension to View, and really it comes down to one main reason: custom view modifiers can have their own stored properties, whereas extensions to View cannot.
-struct Watermark: ViewModifier {
-    //new struct ViewModifier can take a parameter
-    var text: String
-
-    func body(content: Content) -> some View {
-        ZStack(alignment: .bottomTrailing) {
-            content
-            Text(text)
-                .font(.caption)
-                .foregroundColor(.white)
-                .padding(5)
-                .background(.black)
+    var body: some View {
+        VStack {
+            ForEach(0 ..< rows, id: \.self) { row in
+                HStack {
+                    ForEach(0 ..< columns, id: \.self) { column in
+                        content(row, column)
+                    }
+                }
+            }
         }
-    }
-}
-
-extension View {
-    func watermarked(with text: String) -> some View {
-        modifier(Watermark(text: text))
     }
 }
 
 struct ContentView: View {
     var body: some View {
-        VStack(spacing: 10) {
-            Text("custom modifier")
-                .modifier(Title())
-            Text("custom modifier with extension").titleStyle()
-            Color.blue
-                .frame(width: 300, height: 200)
-                .watermarked(with: "Modifier that creates a new view structure")
+        GridStack(rows: 3, columns: 4, content: { row, col in
+            Text("R\(row), C\(col)")
         }
+        )
     }
 }
 
@@ -69,4 +42,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-
