@@ -8,26 +8,51 @@
 import SwiftUI
 
 struct ContentView: View {
-   @State private var useRedText = false
+    //keeping views outside of the body = cleaner code
+    let motto1 = Text("Draco dormiens")
+    let motto2 = Text("nunquam titillandus")
+    //you can create computed properties
+    //Swift won’t automatically apply the @ViewBuilder attribute here, so if more than one view, change technique
+    var motto3: some View {
+        Text("Blah blah")
+    }
+    var spells: some View {
+        //can place them in a stack
+        VStack {
+            Text("Lumos")
+            Text("Obliviate")
+        }
+    }
+    //can also place in a group
+    var spells2: some View {
+        //will ineherit whatever stack inside of (e.g. VStack from body below)
+        Group {
+            Text("Stuff")
+            Text("Other stuff")
+        }
+    }
+    //I prefer to use @ViewBuilder because it mimics the way body works
+    //Will wrap in tuple
+    //Don't make too complex
+    @ViewBuilder var spells3: some View {
+        Text("Lumos")
+        Text("Obliviate")
+    }
+    
     var body: some View {
         VStack {
-            Text("Gryffindor")
-                // in the case of an enviromental modifier, the child’s modifier overrides.
-                .font(.largeTitle)
-            Text("Hufflepuff")
-                // in the case of a normal modifier, the child's modifier is additive.
-                .blur(radius: 0)
-            Text("Ravenclaw")
-            Text("Slytherin")
+            motto1
+                //can modify
+                .foregroundColor(.red)
+            motto2
+                .foregroundColor(.blue)
+            motto3
+            spells
+            spells2
+            spells3
         }
-        //.Font is an environment modifier, and is different from a regular modifier that is applied to a view.
-        .font(.title)
-        //blur() is a regular modifier, so any blurs applied to child views are added to the VStack blur rather than replacing it.
-        .blur(radius: 5)
-        // 👀 To the best of my knowledge there is no way of knowing ahead of time which modifiers are environment modifiers and which are regular modifiers other than reading the individual documentation for each modifier and hope it’s mentioned. Still, I’d rather have them than not: being able to apply one modifier everywhere is much better than copying and pasting the same thing into multiple places.
     }
 }
-    
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
