@@ -7,46 +7,74 @@
 
 import SwiftUI
 
+var objects = ["rock", "paper", "scissors"]
+
 struct ContentView: View {
-    @State private var selection = 0
-    @State var agreedToTerms = false
-    @State var agreedToPrivacyPolicy = false
-    @State var agreedToEmails = false
+    @State private var isSummaryShown = false
+    @State private var object = objects[Int.random(in: 0 ..< objects.count)]
+    @State private var shouldWin = Bool.random()
+    @State private var playerChoice = ""
+    @State private var playerScore = 0
+    @State private var totalTurns = 0
+    private var numQuestions = 4
 
     var body: some View {
-        // However, notice that the picker is now made using selection: binding – no dollar sign required. We don’t need to explicitly ask for the two-way binding here because it already is one.
-        let binding = Binding(
-            get: { selection },
-            set: { selection = $0 }
-        )
-
-        let agreedToAll = Binding(
-            get: {
-                agreedToTerms && agreedToPrivacyPolicy && agreedToEmails
-            },
-            set: {
-                agreedToTerms = $0
-                agreedToPrivacyPolicy = $0
-                agreedToEmails = $0
-            }
-        )
-        print(binding)
-        return Group {
-            VStack {
-                Picker("Select a number", selection: binding) {
-                    ForEach(0 ..< 3) {
-                        Text("Item \($0)")
+        return VStack {
+            Text(object)
+            Text(shouldWin ? "Win" : "Lose")
+            HStack {
+                ForEach(objects, id: \.self) { object in
+                    Button {
+                        choiceTapped(object)
+                    }
+                    label: {
+                        Image(object).resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .padding(12)
                     }
                 }
-                .pickerStyle(.segmented)
             }
-            VStack {
-                Toggle("Agree to terms", isOn: $agreedToTerms)
-                Toggle("Agree to privacy policy", isOn: $agreedToPrivacyPolicy)
-                Toggle("Agree to receive shipping emails", isOn: $agreedToEmails)
-                Toggle("Agree to all", isOn: agreedToAll)
-            }
+            Text("Your score: \(playerScore)")
+        }.alert("Game Over", isPresented: $isSummaryShown) {
+            Button("OK", action: resetGame)
+        } message: {
+            Text("Your total score is \(playerScore).")
         }
+    }
+
+    func choiceTapped(_ playerChoice: String) {
+        var isCorrect = false
+        if (object == "rock" && shouldWin && playerChoice == "paper") ||
+            (object == "rock" && !shouldWin && playerChoice == "scissors") ||
+            (object == "paper" && shouldWin && playerChoice == "scissors") ||
+            (object == "paper" && !shouldWin && playerChoice == "rock") ||
+            (object == "scissors" && shouldWin && playerChoice == "rock") ||
+            (object == "scissors" && !shouldWin && playerChoice == "paper")
+        {
+            isCorrect.toggle()
+        }
+        if isCorrect { playerScore += 1 } else { playerScore -= 1 }
+        shouldWin.toggle()
+        getRandomObject()
+        totalTurns += 1
+        checkTurns()
+    }
+
+    func getRandomObject() {
+        object = objects[Int.random(in: 0 ..< objects.count)]
+    }
+
+    func resetGame() {
+        shouldWin = Bool.random()
+        getRandomObject()
+        playerScore = 0
+        totalTurns = 0
+    }
+
+    func checkTurns() {
+        print("totalTurns")
+        print(totalTurns)
+        if totalTurns == numQuestions { isSummaryShown.toggle() }
     }
 }
 
