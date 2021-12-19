@@ -10,6 +10,34 @@ import SwiftUI
 var backgroundTop = Color(red: 0.1, green: 0.2, blue: 0.45)
 var backgroundBottom = Color(red: 0.76, green: 0.15, blue: 0.26)
 
+// challenge from day 24 using view composition 🔥
+struct ImageFlag: View {
+    var country: String
+
+    var body: some View {
+        Image(country)
+            .renderingMode(.original)
+            .clipShape(Capsule())
+            .shadow(radius: 5)
+    }
+}
+
+struct WhiteTitle: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.largeTitle)
+            .foregroundColor(.white)
+            .padding()
+            .clipShape(RoundedRectangle(cornerRadius: 20))
+    }
+}
+
+extension View {
+    func WhiteTitleStyle() -> some View {
+        modifier(WhiteTitle())
+    }
+}
+
 struct ContentView: View {
     @State private var isScoreAlertShown = false
     @State private var isSummaryShown = false
@@ -17,54 +45,51 @@ struct ContentView: View {
     @State private var summaryAlertTitle = ""
     @State private var playerScore = 0
     @State private var playerTurns = 0
-    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain","UK", "US" ].shuffled()
-    @State private var correctAnswer = Int.random(in: 0...2)
+    @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
+    @State private var correctAnswer = Int.random(in: 0 ... 2)
     var lengthOfGame = 5
 
     var body: some View {
         // Self._printChanges()
-        return ZStack{
+        return ZStack {
             LinearGradient(gradient: Gradient(colors: [backgroundTop, backgroundBottom]), startPoint: .top, endPoint: .bottom)
                 .ignoresSafeArea()
             VStack {
                 Spacer()
                 Text("Guess the Flag!")
                     .font(.largeTitle.bold())
-                    .foregroundColor(.white)
+                    .WhiteTitleStyle()
                 Spacer()
                 Spacer()
-                VStack(spacing: 15){
+                VStack(spacing: 15) {
                     VStack {
                         Text("Tap the flag")
                             .font(.subheadline.weight(.heavy))
                             .foregroundColor(.secondary)
                         Text(countries[correctAnswer])
-                            .font(.largeTitle.weight(.semibold))}
-                    ForEach(0..<3) { number in
+                            .font(.largeTitle.weight(.semibold))
+                    }
+                    ForEach(0 ..< 3) { number in
                         Button {
                             flagTapped(number)
                         }
-                            label: {
-                                Image(countries[number])
-                                    .renderingMode(.original)
-                                    .clipShape(Capsule())
-                                    .shadow(radius: 5)
-                            }
+                        label: {
+                            ImageFlag(country: countries[number])
                         }
                     }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 20)
-                    .background(.regularMaterial)
-                    .clipShape(RoundedRectangle(cornerRadius: 20))
+                }
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 20)
+                .background(.regularMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: 20))
                 Spacer()
                 Spacer()
                 Text("Score: \(playerScore)")
-                    .foregroundColor(.white)
-                    .font(.largeTitle)
+                    .WhiteTitleStyle()
                 Spacer()
             }
             .padding()
-        }.alert(scoreAlertTitle, isPresented: $isScoreAlertShown){
+        }.alert(scoreAlertTitle, isPresented: $isScoreAlertShown) {
             Button("Continue", action: askNewQuestion)
         } message: {
             Text("Your score is \(playerScore)")
@@ -72,11 +97,11 @@ struct ContentView: View {
         .alert(summaryAlertTitle, isPresented: $isSummaryShown) {
             Button("Start over", action: resetGame)
         } message: {
-           Text("You got \(playerScore) out of \(lengthOfGame) correct.")
+            Text("You got \(playerScore) out of \(lengthOfGame) correct.")
         }
-}
+    }
 
-    func flagTapped(_ number: Int){
+    func flagTapped(_ number: Int) {
         if number == correctAnswer {
             playerScore += 1
             scoreAlertTitle = "Correct."
@@ -87,7 +112,7 @@ struct ContentView: View {
         playerTurns += 1
     }
 
-    func askNewQuestion(){
+    func askNewQuestion() {
         if playerTurns == lengthOfGame {
             summaryAlertTitle = "Game over"
             isSummaryShown.toggle()
@@ -96,15 +121,15 @@ struct ContentView: View {
         }
     }
 
-    func resetGame(){
+    func resetGame() {
         shuffleCountries()
         playerTurns = 0
         playerScore = 0
     }
 
-    func shuffleCountries(){
+    func shuffleCountries() {
         countries = countries.shuffled()
-        correctAnswer = Int.random(in: 0..<3)
+        correctAnswer = Int.random(in: 0 ..< 3)
     }
 }
 

@@ -72,6 +72,8 @@ struct ContentView: View {
                 Section {
                     Text(getTotalAmount, format:
                     .currency(code: Locale.current.currencyCode ?? "USD"))
+                        //conditional modifier for day 24 😁
+                        .foregroundColor(tipPercentage == 0 ? .red : .primary)
                 } header: {
                     Text("Total Cost")
                 }
