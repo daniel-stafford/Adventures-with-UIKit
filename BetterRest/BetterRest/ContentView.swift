@@ -13,9 +13,6 @@ struct ContentView: View {
     @State private var wakeUp = defaultWakeTime
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
-    @State private var alertTitle = ""
-    @State private var alertMessage = ""
-    @State private var showingAlert = false
     // a default wake up time somewhere between 6am and 8am is going to be more useful to the vast majority of users.
     // we can make defaultWakeTime a static variable, which means it belongs to the ContentView struct itself rather than a single instance of that struct. This in turn means defaultWakeTime can be read whenever we want, because it doesn’t rely on the existence of any other properties.
     static var defaultWakeTime: Date {
@@ -28,36 +25,39 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             Form {
-                //remove dividing lines between each view (Text - DatePicker/Stepper)
-                VStack(alignment: .leading, spacing: 10) {
+                // remove dividing lines between each view (Text - DatePicker/Stepper)
+                Section {
                     Text("When do you want to wake up?")
                         .font(.headline)
                     DatePicker("Please enter a time", selection: $wakeUp, displayedComponents: .hourAndMinute)
                         .labelsHidden()
                 }
-                VStack(alignment: .leading, spacing: 10) {
+                Section {
                     Text("Desired amount of sleep")
                         .font(.headline)
                     Stepper("\(sleepAmount.formatted()) hours", value: $sleepAmount, in: 4 ... 12, step: 0.25)
                 }
-                VStack(alignment: .leading, spacing: 10) {
+                Section {
                     Text("Daily coffee intake")
                         .font(.headline)
-                    Stepper(coffeeAmount == 1 ? "1 cup" : "\(coffeeAmount) cups", value: $coffeeAmount, in: 1 ... 20)
+                    // challenge convert stepper to picker
+                    Picker("", selection: $coffeeAmount) {
+                        ForEach(1 ..< 21) { number in
+                            number == 1 ? Text("1 cup") : Text("\(number) cups")
+                        }
+                    }
                 }
+                Section {
+                    Text("Recommended Bedtime:").font(.headline)
+                    Text(calculateBedtime())
+                        .font(.largeTitle)
+                }.multilineTextAlignment(.center)
             }
             .navigationTitle("BetterRest")
-            .toolbar {
-                Button("Calculate", action: calculateBedtime)
-            }
-        }.alert(alertTitle, isPresented: $showingAlert) {
-            Button("OK") { }
-        } message: {
-            Text(alertMessage)
         }
     }
 
-    func calculateBedtime() {
+    func calculateBedtime() -> String {
         do {
             // unlikely you will need to change the config
             let config = MLModelConfiguration()
@@ -71,14 +71,11 @@ struct ContentView: View {
             let prediction = try model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
             // However, it’s not a helpful value for users – it will be some number in seconds. What we want is to convert that into the time they should go to bed, which means we need to subtract that value in seconds from the time they need to wake up.
             let sleepTime = wakeUp - prediction.actualSleep
-            alertTitle = "Your ideal bedtime is…"
-            alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
-            showingAlert = true
+            return sleepTime.formatted(date: .omitted, time: .shortened)
+
             // errors are rare but do catch them
         } catch {
-            alertTitle = "Error"
-            alertMessage = "Sorry, there was a problem calculating your bedtime."
-            showingAlert = true
+            return "Unavailable"
         }
     }
 }
