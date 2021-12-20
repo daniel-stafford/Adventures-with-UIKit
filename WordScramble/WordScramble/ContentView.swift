@@ -11,17 +11,13 @@ struct ContentView: View {
     let people = ["Finn", "Leia", "Luke", "Rey"]
 
     var body: some View {
-        Section {
-            //👀 List is for presenting data, Form is for getting user input
-            List(people, id: \.self) {
-                Text($0)
-            }.listStyle(.grouped)
-            List {
-                Text("Static Row")
-                ForEach(people, id: \.self) {
-                    Text($0)
-                }
-                Text("Static Row")
+        Text("Loading Assets")
+    }
+
+    func loadFile() {
+        if let fileURL = Bundle.main.url(forResource: "some-file", withExtension: "txt") {
+            if let fileContents = try? String(contentsOf: fileURL) {
+                // we laded the file into the string
             }
         }
     }
