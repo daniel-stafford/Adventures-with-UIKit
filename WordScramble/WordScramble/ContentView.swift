@@ -12,6 +12,7 @@ struct ContentView: View {
 
     var body: some View {
         Section {
+            //👀 List is for presenting data, Form is for getting user input
             List(people, id: \.self) {
                 Text($0)
             }.listStyle(.grouped)
