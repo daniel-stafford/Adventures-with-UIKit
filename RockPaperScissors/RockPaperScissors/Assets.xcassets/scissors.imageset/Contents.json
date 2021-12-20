@@ -1,16 +1,15 @@
 {
   "images" : [
     {
+      "filename" : "scissors.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "scissors@2x.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "scissors@3x.png",
       "idiom" : "universal",
       "scale" : "3x"
     }

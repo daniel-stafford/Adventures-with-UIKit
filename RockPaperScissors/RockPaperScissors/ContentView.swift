@@ -7,34 +7,43 @@
 
 import SwiftUI
 
-var objects = ["rock", "paper", "scissors"]
 
 struct ContentView: View {
+    private var objects = ["rock", "paper", "scissors"]
+    @State private var randomObj = Int.random(in: 0 ..< 3)
     @State private var isSummaryShown = false
-    @State private var object = objects[Int.random(in: 0 ..< objects.count)]
     @State private var shouldWin = Bool.random()
     @State private var playerChoice = ""
     @State private var playerScore = 0
     @State private var totalTurns = 0
-    private var numQuestions = 4
+    private var numQuestions = 8
 
     var body: some View {
         return VStack {
-            Text(object)
-            Text(shouldWin ? "Win" : "Lose")
+            VStack{
+                Spacer()
+                Text(shouldWin ? "Win Against" : "Lose Against").fontWeight(.bold).font(.largeTitle)
+                Image(objects[randomObj]).resizable().frame(width: 200, height: 200)
+                Spacer()
+            }
             HStack {
                 ForEach(objects, id: \.self) { object in
                     Button {
                         choiceTapped(object)
                     }
                     label: {
-                        Image(object).resizable()
+                        Image(object)
+                            .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .padding(12)
+                            .frame(width: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/)
+
+
                     }
                 }
             }
-            Text("Your score: \(playerScore)")
+            Spacer()
+            Text("Your score: \(playerScore)").font(.largeTitle).padding(70)
+
         }.alert("Game Over", isPresented: $isSummaryShown) {
             Button("OK", action: resetGame)
         } message: {
@@ -44,6 +53,7 @@ struct ContentView: View {
 
     func choiceTapped(_ playerChoice: String) {
         var isCorrect = false
+        let object = objects[randomObj]
         if (object == "rock" && shouldWin && playerChoice == "paper") ||
             (object == "rock" && !shouldWin && playerChoice == "scissors") ||
             (object == "paper" && shouldWin && playerChoice == "scissors") ||
@@ -61,7 +71,13 @@ struct ContentView: View {
     }
 
     func getRandomObject() {
-        object = objects[Int.random(in: 0 ..< objects.count)]
+        randomObj = Int.random(in: 0 ..< 3)
+    }
+
+    func checkTurns() {
+        print("totalTurns")
+        print(totalTurns)
+        if totalTurns == numQuestions { isSummaryShown.toggle() }
     }
 
     func resetGame() {
@@ -69,12 +85,6 @@ struct ContentView: View {
         getRandomObject()
         playerScore = 0
         totalTurns = 0
-    }
-
-    func checkTurns() {
-        print("totalTurns")
-        print(totalTurns)
-        if totalTurns == numQuestions { isSummaryShown.toggle() }
     }
 }
 
