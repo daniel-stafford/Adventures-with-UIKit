@@ -5,13 +5,18 @@
 //  Created by Daniel Stafford on 12/20/21.
 //
 
+// alphabetical import is a good idea
+import CoreML
 import SwiftUI
 
 struct ContentView: View {
     @State private var wakeUp = Date.now
     @State private var sleepAmount = 8.0
     @State private var coffeeAmount = 1
-
+    @State private var alertTitle = ""
+    @State private var alertMessage = ""
+    @State private var showingAlert = false
+    
     var body: some View {
         NavigationView {
             VStack {
@@ -30,10 +35,36 @@ struct ContentView: View {
             .toolbar {
                 Button("Calculate", action: calculateBedtime)
             }
+        }.alert(alertTitle, isPresented: $showingAlert) {
+            Button("OK") { }
+        } message: {
+            Text(alertMessage)
         }
     }
-    
+
     func calculateBedtime() {
+        do {
+            // unlikely you will need to change the config
+            let config = MLModelConfiguration()
+            let model = try SleepCalculator(configuration: config)
+            let components = Calendar.current.dateComponents([.hour, .minute], from: wakeUp)
+            // That code uses 0 if either the hour or minute can’t be read, but realistically that’s never going to happen so it will result in hour and minute being set to those values in seconds.
+            // in seconds
+            let hour = (components.hour ?? 0) * 60 * 60
+            // in seconds
+            let minute = (components.minute ?? 0) * 60
+            let prediction = try model.prediction(wake: Double(hour + minute), estimatedSleep: sleepAmount, coffee: Double(coffeeAmount))
+            // However, it’s not a helpful value for users – it will be some number in seconds. What we want is to convert that into the time they should go to bed, which means we need to subtract that value in seconds from the time they need to wake up.
+            let sleepTime = wakeUp - prediction.actualSleep
+            alertTitle = "Your ideal bedtime is…"
+            alertMessage = sleepTime.formatted(date: .omitted, time: .shortened)
+            showingAlert = true
+            // errors are rare but do catch them
+        } catch {
+            alertTitle = "Error"
+            alertMessage = "Sorry, there was a problem calculating your bedtime."
+            showingAlert = true
+        }
     }
 }
 
