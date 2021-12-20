@@ -16,3 +16,7 @@
 #### Guess the Flag
 
 ![GuessTheFlag](https://user-images.githubusercontent.com/33048490/146649191-51ff5224-e311-44bd-83c1-64ad44deca96.gif)
+
+#### Rock Paper Scissors 
+
+![rockpaperscissors](https://user-images.githubusercontent.com/33048490/146742740-b7718afa-7c79-4886-b7a5-239096ce3c0b.gif)
