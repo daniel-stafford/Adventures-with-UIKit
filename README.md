@@ -24,4 +24,4 @@
 
 ## Word Scramble
 
-![WordScramble](https://user-images.githubusercontent.com/33048490/146979925-b5853c4b-4f1a-4ab2-8736-bf306918822f.gif)
+![WordScramble](https://user-images.githubusercontent.com/33048490/146980103-dc658683-6afd-4da3-8122-519c94397dc2.gif)
