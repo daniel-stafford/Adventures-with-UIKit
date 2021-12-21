@@ -8,42 +8,46 @@
 import SwiftUI
 
 struct ContentView: View {
-    let people = ["Finn", "Leia", "Luke", "Rey"]
+    @State private var usedWords = [String]()
+    @State private var rootWord = ""
+    @State private var newWord = ""
 
     var body: some View {
-        Button("Press me") {
-            getText()
+        NavigationView {
+            List {
+                Section {
+                    TextField("Enter your word", text: $newWord)
+                        // default lowercase
+                        .autocapitalization(.none)
+                }
+
+                Section {
+                    ForEach(usedWords, id: \.self) { word in
+                        HStack {
+                            Image(systemName: "\(word.count).circle.fill")
+                            Text(word)
+                        }
+                    }
+                }
+            }
+            .navigationTitle(rootWord)
+            .onSubmit(addNewWord)
         }
     }
 
-    func getText() {
-        //chopping up strings, trimming, etc.
-        let input = "a b c"
-        let letters = input.components(separatedBy: " ")
-        print(letters)
-        let input2 = """
-        a
-        b
-        c
-        """
-        let letters2 = input2.components(separatedBy: "\n")
-        print(letters2)
-        let letter = letters2.randomElement() ?? "a"
-        let trimmed = letter.trimmingCharacters(in: .whitespacesAndNewlines)
-        print(trimmed)
-        
-        //spell check
-        let word = "swift"
-        let checker = UITextChecker()
-        print(checker)
-        
-        let range = NSRange(location: 0, length: word.utf16.count)
-        print(range)
-        let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
-        print(misspelledRange)
-        // NSNotFound is an empty optional i.e. no spelling mistakes
-        let allGood = misspelledRange.location == NSNotFound
-        print(allGood)
+    func addNewWord() {
+        // lowercase and trim the word, to make sure we don't add duplicate words with case differences
+        let answer = newWord.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+
+        // exit if the remaining string is empty
+        guard answer.count > 0 else { return }
+
+        // very simople animation
+        withAnimation {
+            // insert at 0 rather than append to avoid new words running off screen
+            usedWords.insert(answer, at: 0)
+        }
+        newWord = ""
     }
 }
 
