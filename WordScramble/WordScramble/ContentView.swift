@@ -19,11 +19,13 @@ struct ContentView: View {
         NavigationView {
             List {
                 Section {
-                    TextField("Enter your word", text: $newWord)
-                        // default lowercase
-                        .autocapitalization(.none)
+                    HStack {
+                        TextField("Enter your word", text: $newWord)
+                            // default lowercase
+                            .autocapitalization(.none)
+                        Text("Your score: \(getScore())")
+                    }
                 }
-
                 Section {
                     ForEach(usedWords, id: \.self) { word in
                         HStack {
@@ -35,14 +37,28 @@ struct ContentView: View {
             }
             .navigationTitle(rootWord)
             .onSubmit(addNewWord)
-            // run when app renders
             .onAppear(perform: startGame)
             .alert(errorTitle, isPresented: $showingError) {
                 Button("OK", role: .cancel) { }
             } message: {
                 Text(errorMessage)
             }
+            .toolbar {
+                ToolbarItem(placement: .bottomBar) {
+                    Button("Start a New Game") {
+                        startGame()
+                    }
+                }
+            }
         }
+    }
+
+    func getScore() -> Int {
+        var totalScore = 0
+        for word in usedWords {
+            totalScore = totalScore + Array(word).count
+        }
+        return totalScore
     }
 
     func addNewWord() {
@@ -64,6 +80,11 @@ struct ContentView: View {
 
         guard isReal(word: answer) else {
             wordError(title: "Word not recognized", message: "You can't just make them up, you know!")
+            return
+        }
+
+        guard isLongEnough(word: answer) else {
+            wordError(title: "Word too short", message: "Please use words longer than two characters")
             return
         }
 
@@ -104,6 +125,10 @@ struct ContentView: View {
         return misspelledRange.location == NSNotFound
     }
 
+    func isLongEnough(word: String) -> Bool {
+        !(Array(word).count < 3)
+    }
+
     func wordError(title: String, message: String) {
         errorTitle = title
         errorMessage = message
@@ -121,12 +146,16 @@ struct ContentView: View {
                 // 4. Pick one random word, or use "silkworm" as a sensible default (which will never be used)
                 rootWord = allWords.randomElement() ?? "silkworm"
 
+                // clear any used words (when starting a new game)
+                usedWords = [String]()
+
                 // If we are here everything has worked, so we can exit
                 return
             }
         }
 
         // If were are *here* then there was a problem – trigger a crash and report the error
+        // The key to this technique – the thing that stops it from being recklessly dangerous – is knowing when a specific condition ought to be impossible.
         fatalError("Could not load start.txt from bundle.")
     }
 }
