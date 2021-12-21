@@ -21,3 +21,7 @@
 ## Better Rest
 
 ![BetterRest](https://user-images.githubusercontent.com/33048490/146816629-747c9fc0-a304-4272-b6a0-e5ccfd55de1f.gif)
+
+## Word Scramble
+
+![WordScramble](https://user-images.githubusercontent.com/33048490/146979925-b5853c4b-4f1a-4ab2-8736-bf306918822f.gif)
