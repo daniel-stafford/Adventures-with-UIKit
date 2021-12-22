@@ -12,7 +12,7 @@
 
 ## Guess the Flag
 
-![GuessTheFlag](https://user-images.githubusercontent.com/33048490/146649191-51ff5224-e311-44bd-83c1-64ad44deca96.gif)
+![GuessTheFlag](https://user-images.githubusercontent.com/33048490/147143915-2da7b197-39c6-43f2-8bdd-476b559c4b24.gif)
 
 ## Rock Paper Scissors 
 
