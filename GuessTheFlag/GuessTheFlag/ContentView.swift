@@ -47,6 +47,10 @@ struct ContentView: View {
     @State private var playerTurns = 0
     @State private var countries = ["Estonia", "France", "Germany", "Ireland", "Italy", "Nigeria", "Poland", "Russia", "Spain", "UK", "US"].shuffled()
     @State private var correctAnswer = Int.random(in: 0 ... 2)
+    @State private var tappedButton = 0
+    @State private var spinValue = 0.0
+    @State private var opacityValue = 1.0
+    @State private var scaleValue = 1.0
     var lengthOfGame = 5
 
     var body: some View {
@@ -71,11 +75,23 @@ struct ContentView: View {
                     }
                     ForEach(0 ..< 3) { number in
                         Button {
+                            // created a seperate function to update state, so state would update
+                            trackPressedButton(number)
+                            withAnimation {
+                                spinValue += 360
+                                opacityValue -= 0.75
+                                scaleValue -= 0.20
+                            }
                             flagTapped(number)
                         }
                         label: {
                             ImageFlag(country: countries[number])
                         }
+                        // rotate the user tapped button
+                        .rotation3DEffect(.degrees(number == tappedButton ? spinValue : 0.0), axis: (x: 0, y: 1, z: 0))
+                        // dim and shrink the untapped buttons
+                        .opacity(number != tappedButton ? opacityValue : 1.0)
+                        .scaleEffect(number != tappedButton ? scaleValue : 1.0)
                     }
                 }
                 .frame(maxWidth: .infinity)
@@ -99,6 +115,10 @@ struct ContentView: View {
         } message: {
             Text("You got \(playerScore) out of \(lengthOfGame) correct.")
         }
+    }
+
+    func trackPressedButton(_ number: Int) {
+        tappedButton = number
     }
 
     func flagTapped(_ number: Int) {
@@ -130,6 +150,8 @@ struct ContentView: View {
     func shuffleCountries() {
         countries = countries.shuffled()
         correctAnswer = Int.random(in: 0 ..< 3)
+        opacityValue = 1.0
+        scaleValue = 1.0
     }
 }
 
