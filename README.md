@@ -1,10 +1,13 @@
-# Adventures-with-Swift
+![image](https://user-images.githubusercontent.com/33048490/147287552-bc2125fb-1dc5-4844-aed7-c5cade1e503f.png)
 
-#### As I have experience working with React Native and have dabbled a bit with Flutter, I've decided to dive in the world of native iOS development!  Following along with the above course, 100 days of SwiftUI, and plan to create some apps as I learn. 😄
+
+# Adventures with Swift and SwiftUI 
+
+#### As I have experience working with React Native and have dabbled a bit with Flutter, I've decided to dive in the world of native iOS development!  Following along with the course, 100 days of SwiftUI, and plan to create some apps as I learn. 😄 Following this course, I'll move to UIKit, the older iOS framework used by most companies.
 
 ## We Split
 
-![WeSplit](https://user-images.githubusercontent.com/33048490/146649155-20de9f28-a54a-4694-a815-65c9d27fff0f.gif)
+![WeSplit](https://user-images.githubusercontent.com/33048490/146649155-20de9f28-a54a-4694-a815-65c9d27fff0f.gif) 
 
 ## We Convert
 
