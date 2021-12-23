@@ -7,6 +7,16 @@
 
 import SwiftUI
 
+struct ButtonBasic: View {
+    var text: String
+    var function: () -> Void
+    var body: some View {
+        Button(text) {
+            function()
+        }
+    }
+}
+
 struct ContentView: View {
     @State private var chosenTable: Double = 2
     @State private var chosenNumQuestions = 5
@@ -16,9 +26,10 @@ struct ContentView: View {
     @State private var secondNum = 0
     @State private var correctAnswer = ""
     @State private var playerAnswer = ""
-    @State private var showingSettings = true
+    @State private var showingSettings = false
     @State private var showingGame = false
-    @State private var showingEnd = false
+    @State private var showingEnd = true
+    @State private var animationAmount = 0.0
     @FocusState private var keyboardFocused: Bool
 
     let numQuesOpts = [5, 10, 20]
@@ -29,34 +40,35 @@ struct ContentView: View {
                 VStack {
                     List {
                         Stepper("Tables up to: \(chosenTable.formatted())", value: $chosenTable, in: 2 ... 12)
+                            .font(.headline)
                         HStack {
                             Text("Number of questions: \(chosenNumQuestions)")
                             Spacer()
                             ForEach(numQuesOpts, id: \.self) { num in
-                                Button {
-                                    print("\(num) tapped")
-                                    chosenNumQuestions = num
-                                }
-                                label: {
-                                    Text("\(num)")
-                                }
-                                .buttonStyle(BorderlessButtonStyle())
+                                ButtonBasic(text: String(num), function: { chosenNumQuestions = num })
+                                    .buttonStyle(BorderlessButtonStyle())
+                                    .padding(20)
+                                    .background(.blue)
+                                    .foregroundColor(.white)
+                                    .clipShape(Circle())
                             }
                         }
-                    }
+                    }.padding(.top, 200)
                     HStack {
                         Spacer()
-                        Button {
-                            print("Let's play tapped")
+                        ButtonBasic(text: "Let's Play", function: {
                             generateQuestion()
                             showingSettings.toggle()
                             showingGame.toggle()
-                        }
-                        label: {
-                            Text("Let's play!")
-                        }
+
+                        })
+                            .padding(50)
+                            .background(.green)
+                            .foregroundColor(.white)
+                            .clipShape(Circle())
                         Spacer()
                     }
+                    Spacer()
                 }.navigationTitle("MultiplyThis")
             }
         }
@@ -81,7 +93,6 @@ struct ContentView: View {
                     ToolbarItemGroup(placement: .keyboard) {
                         Spacer()
                         Button("Done") {
-                            print("playerAnswer", playerAnswer, correctAnswer)
                             if playerAnswer == correctAnswer {
                                 playerScore += 1
                             }
@@ -91,19 +102,21 @@ struct ContentView: View {
                         }
                     }
                 }
-                //prevent keyboard from pushing up views
+                // prevent keyboard from pushing up views
                 .ignoresSafeArea(.keyboard)
             }
         }
         if showingEnd {
             NavigationView {
                 VStack {
-                    Text("The game is over")
-                    Text("You got \(playerScore) out of \(chosenNumQuestions) questions")
-                    Button("Start a New Game") {
-                        print(playerScore / chosenNumQuestions)
-                        resetGame()
-                    }
+                    Text("You got \(playerScore) out of \(chosenNumQuestions) questions correct.").padding(20).font(.largeTitle).padding(.top, 50)
+                    Spacer()
+                    ButtonBasic(text: "Start a New Game", function: resetGame)
+                        .padding(100)
+                        .background(.blue)
+                        .foregroundColor(.white)
+                        .clipShape(Circle())
+                        .padding(.bottom, 100)
                 }.navigationTitle("Summary")
             }
         }
