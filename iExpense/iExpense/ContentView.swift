@@ -7,23 +7,25 @@
 
 import SwiftUI
 
-class User: ObservableObject {
-    //any view using these values, will get updated
-    @Published var firstName = "Bilbo"
-    @Published var lastName = "Baggins"
+struct SecondView: View {
+    @Environment(\.dismiss) var dismiss
+    let name: String
+    var body: some View {
+        Text("Second View \(name)")
+        Button("Dismiss") {
+            dismiss()
+        }
+    }
 }
 
 struct ContentView: View {
-    //instance of our class, can be shared
-    //only when making object (e.g. User()
-    //when reading or modifying @ObservedObject instead
-    @StateObject var user = User()
-
+    @State private var showingSheet = false
     var body: some View {
-        VStack {
-            Text("Your name is \(user.firstName) \(user.lastName).")
-            TextField("First name", text: $user.firstName)
-            TextField("Last name", text: $user.lastName)
+        Button("Show Sheet") {
+            showingSheet.toggle()
+        }
+        .sheet(isPresented: $showingSheet) {
+            SecondView(name: "@danielstafford")
         }
     }
 }
