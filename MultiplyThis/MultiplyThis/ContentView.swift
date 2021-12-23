@@ -17,6 +17,20 @@ struct ButtonBasic: View {
     }
 }
 
+struct MegaBig: ViewModifier {
+    func body(content: Content) -> some View {
+        content
+            .font(.system(size: 60))
+
+    }
+}
+
+extension View {
+    func megaBigStyle() -> some View {
+        modifier(MegaBig())
+    }
+}
+
 struct ContentView: View {
     @State private var chosenTable: Double = 2
     @State private var chosenNumQuestions = 5
@@ -27,8 +41,8 @@ struct ContentView: View {
     @State private var correctAnswer = ""
     @State private var playerAnswer = ""
     @State private var showingSettings = false
-    @State private var showingGame = false
-    @State private var showingEnd = true
+    @State private var showingGame = true
+    @State private var showingEnd = false
     @State private var animationAmount = 0.0
     @FocusState private var keyboardFocused: Bool
 
@@ -77,16 +91,17 @@ struct ContentView: View {
                 VStack {
                     Form {
                         HStack {
-                            Text(String(firstNum))
-                            Text("*")
-                            Text(String(secondNum))
-                            Text("=")
+                            Text(String(firstNum)).megaBigStyle()
+                            Text("*").megaBigStyle()
+                            Text(String(secondNum)).megaBigStyle()
+                            Text("=").megaBigStyle()
                             TextField("???", text: $playerAnswer)
+                                .megaBigStyle()
                                 .keyboardType(.numberPad)
                                 .focused($keyboardFocused)
                         }
-                    }
-                    Text("Your score: \(playerScore)")
+                    }.padding(.top, 100)
+                    Text("Score: \(playerScore)").megaBigStyle().padding(.bottom, 10)
                 }
                 .navigationTitle("Problem \(numAttempts) of \(chosenNumQuestions)")
                 .toolbar {
