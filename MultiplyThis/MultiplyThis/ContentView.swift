@@ -40,8 +40,8 @@ struct ContentView: View {
     @State private var secondNum = 0
     @State private var correctAnswer = ""
     @State private var playerAnswer = ""
-    @State private var showingSettings = false
-    @State private var showingGame = true
+    @State private var showingSettings = true
+    @State private var showingGame = false
     @State private var showingEnd = false
     @State private var animationAmount = 0.0
     @FocusState private var keyboardFocused: Bool
