@@ -10,12 +10,14 @@ import SwiftUI
 struct AddView: View {
     // store an Expenses object. It won’t create the object there, which means we need to use @ObservedObject rather than @StateObject.
     @ObservedObject var expenses: Expenses
-    
+    @Environment(\.dismiss) var dismiss
+
     @State private var name = ""
     @State private var type = "Personal"
     @State private var amount = 0.0
-
     @State private var showingAddExpense = false
+    
+
     let types = ["Business", "Personal"]
 
     var body: some View {
@@ -33,6 +35,13 @@ struct AddView: View {
                     .keyboardType(.decimalPad)
             }
             .navigationTitle("Add new expense")
+            .toolbar {
+                Button("Save") {
+                    let item = ExpenseItem(name: name, type: type, amount: amount)
+                    expenses.items.append(item)
+                    dismiss()
+                }
+            }
         }
     }
 }
