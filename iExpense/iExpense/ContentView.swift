@@ -12,6 +12,8 @@ struct ContentView: View {
     // as we are creating the class instance, we use @StateObject
     // all other times we used @ObservableObject when reading/modifying a class
     @StateObject var expenses = Expenses()
+    // track whether or not AddView is being shown
+    @State private var showingAddExpense = false
 
     var body: some View {
         NavigationView {
@@ -24,11 +26,13 @@ struct ContentView: View {
             .navigationTitle("iExpense")
             .toolbar {
                 Button {
-                    let expense = ExpenseItem(name: "Test", type: "Personal", amount: 5)
-                    expenses.items.append(expense)
+                    showingAddExpense = true
                 } label: {
                     Image(systemName: "plus")
                 }
+            }
+            .sheet(isPresented: $showingAddExpense) {
+                AddView(expenses: expenses)
             }
         }
     }
