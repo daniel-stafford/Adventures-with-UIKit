@@ -16,8 +16,7 @@ struct ContentView: View {
     var body: some View {
         NavigationView {
             List {
-                //ForEach<Array<ExpenseItem>, String, Text>: the ID Test occurs multiple times within the collection, this will give undefined results! 😦  Fix in next section! 
-                ForEach(expenses.items, id: \.name) { item in
+                ForEach(expenses.items) { item in
                     Text(item.name)
                 }
                 .onDelete(perform: removeItems)
