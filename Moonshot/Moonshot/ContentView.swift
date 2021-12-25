@@ -8,19 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    @State private var counter = 0 {
-        didSet {
-            print("counter", counter)
-        }
-    }
     var body: some View {
-        Button("Up One"){
-        counter += 1
+        GeometryReader { Geo in
+            Image("xmas")
+                .resizable()
+                .scaledToFit().frame(width: Geo.size.width * 0.8)
+                .frame(width: Geo.size.width, height: Geo.size.height)
         }
-        Button("Down") {
-            counter -= 1
-        }
-        Text("Counter\(counter)")
     }
 }
 
