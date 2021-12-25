@@ -9,11 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        GeometryReader { Geo in
-            Image("xmas")
-                .resizable()
-                .scaledToFit().frame(width: Geo.size.width * 0.8)
-                .frame(width: Geo.size.width, height: Geo.size.height)
+        ScrollView(.horizontal) {
+            LazyHStack(spacing: 10) {
+                ForEach(0 ..< 100) { item in
+                    Text("Item #\(item)")
+                }
+            }
         }
     }
 }
