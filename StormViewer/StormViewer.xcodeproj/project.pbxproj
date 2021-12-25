@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD849DF127773BB20073CB5E /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD849DF027773BB20073CB5E /* DetailViewController.swift */; };
 		DDA1509D27767567003E589F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA1509C27767567003E589F /* AppDelegate.swift */; };
 		DDA1509F27767567003E589F /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA1509E27767567003E589F /* SceneDelegate.swift */; };
 		DDA150A127767567003E589F /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA150A027767567003E589F /* ViewController.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD849DF027773BB20073CB5E /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 		DDA1509927767567003E589F /* StormViewer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StormViewer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDA1509C27767567003E589F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDA1509E27767567003E589F /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -76,6 +78,7 @@
 		DDA1509B27767567003E589F /* StormViewer */ = {
 			isa = PBXGroup;
 			children = (
+				DD849DF027773BB20073CB5E /* DetailViewController.swift */,
 				DDA1509C27767567003E589F /* AppDelegate.swift */,
 				DDA1509E27767567003E589F /* SceneDelegate.swift */,
 				DDA150A027767567003E589F /* ViewController.swift */,
@@ -189,6 +192,7 @@
 				DDA150A127767567003E589F /* ViewController.swift in Sources */,
 				DDA1509D27767567003E589F /* AppDelegate.swift in Sources */,
 				DDA1509F27767567003E589F /* SceneDelegate.swift in Sources */,
+				DD849DF127773BB20073CB5E /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
