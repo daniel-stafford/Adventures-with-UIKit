@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD4378AD2778DEA400BF6F9B /* missions.json in Resources */ = {isa = PBXBuildFile; fileRef = DD4378AC2778DEA400BF6F9B /* missions.json */; };
+		DD4378AF2778DEAC00BF6F9B /* astronauts.json in Resources */ = {isa = PBXBuildFile; fileRef = DD4378AE2778DEAC00BF6F9B /* astronauts.json */; };
+		DD4378B12778DEB700BF6F9B /* Astronaut.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4378B02778DEB700BF6F9B /* Astronaut.swift */; };
+		DD4378B32778DEC100BF6F9B /* Bundle-Decorder.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4378B22778DEC100BF6F9B /* Bundle-Decorder.swift */; };
+		DD4378B52778DECB00BF6F9B /* Mission.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD4378B42778DECB00BF6F9B /* Mission.swift */; };
 		DDC65C632776621D006B105C /* MoonshotApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC65C622776621D006B105C /* MoonshotApp.swift */; };
 		DDC65C652776621D006B105C /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDC65C642776621D006B105C /* ContentView.swift */; };
 		DDC65C6727766220006B105C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DDC65C6627766220006B105C /* Assets.xcassets */; };
@@ -14,6 +19,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD4378AC2778DEA400BF6F9B /* missions.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = missions.json; sourceTree = "<group>"; };
+		DD4378AE2778DEAC00BF6F9B /* astronauts.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = astronauts.json; sourceTree = "<group>"; };
+		DD4378B02778DEB700BF6F9B /* Astronaut.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Astronaut.swift; sourceTree = "<group>"; };
+		DD4378B22778DEC100BF6F9B /* Bundle-Decorder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Bundle-Decorder.swift"; sourceTree = "<group>"; };
+		DD4378B42778DECB00BF6F9B /* Mission.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Mission.swift; sourceTree = "<group>"; };
 		DDC65C5F2776621D006B105C /* Moonshot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Moonshot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDC65C622776621D006B105C /* MoonshotApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoonshotApp.swift; sourceTree = "<group>"; };
 		DDC65C642776621D006B105C /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -53,6 +63,11 @@
 			children = (
 				DDC65C622776621D006B105C /* MoonshotApp.swift */,
 				DDC65C642776621D006B105C /* ContentView.swift */,
+				DD4378B02778DEB700BF6F9B /* Astronaut.swift */,
+				DD4378B22778DEC100BF6F9B /* Bundle-Decorder.swift */,
+				DD4378B42778DECB00BF6F9B /* Mission.swift */,
+				DD4378AE2778DEAC00BF6F9B /* astronauts.json */,
+				DD4378AC2778DEA400BF6F9B /* missions.json */,
 				DDC65C6627766220006B105C /* Assets.xcassets */,
 				DDC65C6827766220006B105C /* Preview Content */,
 			);
@@ -126,7 +141,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				DDC65C6A27766220006B105C /* Preview Assets.xcassets in Resources */,
+				DD4378AD2778DEA400BF6F9B /* missions.json in Resources */,
 				DDC65C6727766220006B105C /* Assets.xcassets in Resources */,
+				DD4378AF2778DEAC00BF6F9B /* astronauts.json in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,8 +154,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD4378B12778DEB700BF6F9B /* Astronaut.swift in Sources */,
 				DDC65C652776621D006B105C /* ContentView.swift in Sources */,
 				DDC65C632776621D006B105C /* MoonshotApp.swift in Sources */,
+				DD4378B52778DECB00BF6F9B /* Mission.swift in Sources */,
+				DD4378B32778DEC100BF6F9B /* Bundle-Decorder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
