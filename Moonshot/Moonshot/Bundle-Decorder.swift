@@ -20,6 +20,12 @@ extension Bundle {
         }
 
         let decoder = JSONDecoder()
+        
+        //when you find dates, they will be y-MM-dd, format them into Dates
+        let formatter = DateFormatter()
+        //y-MM-dd is case sensitive!!ººº
+        formatter.dateFormat = "y-MM-dd"
+        decoder.dateDecodingStrategy = .formatted(formatter)
 
         guard let loaded = try? decoder.decode(T.self, from: data) else {
             fatalError("Failed to decode \(file) from bundle.")
