@@ -6,14 +6,33 @@
 //
 
 import UIKit
+import SwiftUI
 
 class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        view.backgroundColor = .blue
     }
 
 
 }
 
+struct VCPreview: PreviewProvider {
+
+    static var previews: some View {
+        VCContainerView().edgesIgnoringSafeArea(.all)
+    }
+    struct VCContainerView: UIViewControllerRepresentable {
+        func makeUIViewController(context: Context) -> UIViewController {
+            return ViewController()
+        }
+
+        func updateUIViewController(_ uiViewController: UIViewController, context: Context) {
+        }
+
+        typealias UIViewControllerType = UIViewController
+
+    }
+
+}
