@@ -12,39 +12,48 @@ class ViewController: UIViewController {
     @IBOutlet var button1: UIButton!
     @IBOutlet var button2: UIButton!
     @IBOutlet var button3: UIButton!
-
+    @IBOutlet var buttons: [UIButton]!
     var countries = [String]()
     var score = 0
     var correctAnswer = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
-
-        func askQuestion() {
-            countries.shuffle()
-            correctAnswer = Int.random(in: 0 ... 2)
-            // for: .normal The setImage() method takes a second parameter that describes which state of the button should be changed. We're specifying .normal, which means "the standard state of the button."
-            // .normal is a static property of a struct called UIControlState
-            button1.setImage(UIImage(named: countries[0]), for: .normal)
-            button2.setImage(UIImage(named: countries[1]), for: .normal)
-            button3.setImage(UIImage(named: countries[2]), for: .normal)
-        }
-
-        button1.layer.borderWidth = 1
-        button2.layer.borderWidth = 1
-        button3.layer.borderWidth = 1
-
-        // CALayer has its own way of setting colors called CGColor, which comes from Apple's Core Graphics framework. This, like CALayer, is at a lower level than UIButton, so the two can talk happily – again, as long as you're happy with the extra complexity.
-        button1.layer.borderColor = UIColor.lightGray.cgColor
-        button2.layer.borderColor = UIColor.lightGray.cgColor
-        button3.layer.borderColor = UIColor.lightGray.cgColor
-
         askQuestion()
+    }
+    
+    //UIAlertAction! = nil, force unwrap and set to nil, allows askQuestion() to work without writing askQuestion(action:nil)
+    func askQuestion(action: UIAlertAction! = nil) {
+        countries.shuffle()
+        correctAnswer = Int.random(in: 0 ... 2)
+        
+        getTitle()
+        // https://programmingwithswift.com/how-to-get-index-and-value-from-for-loop-with-swift/
+        for (index, button) in buttons.enumerated() {
+            button.layer.borderWidth = 1
+            button.setImage(UIImage(named: countries[index]), for: .normal)
+        }
+    }
+
+    func getTitle(){
         title = countries[correctAnswer].capitalized
-        if title == "Us" {title = "United States"}
-        if title == "Uk" {title = "United Kingdom"}
+           if title == "Us" { title = "United States" }
+           if title == "Uk" { title = "United Kingdom" }
+    }
+    
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        var title: String
+        if sender.tag == correctAnswer + 1 {
+            score += 1
+            title = "Correct"
+        } else {
+            score -= 1
+            title = "Wrong"
+        }
+        
+        let ac = UIAlertController(title: title, message: "Your score is now \(score)", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: ("Continue"), style: .default, handler: askQuestion))
+        present(ac, animated: true)
     }
 }
-
