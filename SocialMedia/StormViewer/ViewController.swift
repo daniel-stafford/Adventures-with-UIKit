@@ -20,6 +20,8 @@ class ViewController: UITableViewController {
         
         navigationController?.navigationBar.prefersLargeTitles = true
         
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sharedTapped))
+        
         let fm = FileManager.default
         let path = Bundle.main.resourcePath!
         let items = try! fm.contentsOfDirectory(atPath: path)
@@ -51,5 +53,12 @@ class ViewController: UITableViewController {
             // 3: now push it onto the navigation controller
             navigationController?.pushViewController(vc, animated: true)
         }
+    }
+    
+    @objc func sharedTapped() {
+        // Share the app challenge👍
+        let vc = UIActivityViewController(activityItems: ["Hey, check out the Storm Viewer App on the AppStore"], applicationActivities: [])
+        vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
+        present(vc, animated: true)
     }
 }

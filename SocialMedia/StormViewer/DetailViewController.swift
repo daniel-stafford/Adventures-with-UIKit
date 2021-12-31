@@ -37,12 +37,14 @@ class DetailViewController: UIViewController {
 
     // when Objective-C code needs to call a Swift method – and that’s any time it gets called by one of Apple’s UI components, for example – then the @objc is required.
     @objc func sharedTapped() {
-        guard let image = imageView.image?.jpegData(compressionQuality: 0.8) else {
+        //add imageName challenge 👍
+        guard let image = imageView.image?.jpegData(compressionQuality: 0.8), let imageName = selectedImage else {
             print("No image found")
             return
         }
+        print("imageName", imageName)
 
-        let vc = UIActivityViewController(activityItems: [image], applicationActivities: [])
+        let vc = UIActivityViewController(activityItems: [image, imageName], applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(vc, animated: true)
     }
