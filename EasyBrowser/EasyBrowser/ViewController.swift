@@ -11,6 +11,7 @@ import WebKit
 class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView: UIProgressView!
+    var websites = ["apple.com", "hackingwithswift.com"]
 
     override func loadView() {
         // https://www.hackingwithswift.com/read/4/2/creating-a-simple-browser-with-wkwebview
@@ -45,15 +46,18 @@ class ViewController: UIViewController, WKNavigationDelegate {
         // 👀 Warning: in more complex applications, all calls to addObserver() should be matched with a call to removeObserver() when you're finished observing
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
 
-        let url = URL(string: "https://www.hackingwithswift.com/100")!
+        let url = URL(string: "https://" + websites[0])!
         webView.load(URLRequest(url: url))
         webView.allowsBackForwardNavigationGestures = true
     }
 
     @objc func openTapped() {
         let ac = UIAlertController(title: "Open page…", message: nil, preferredStyle: .actionSheet)
-        ac.addAction(UIAlertAction(title: "apple.com", style: .default, handler: openPage))
-        ac.addAction(UIAlertAction(title: "hackingwithswift.com", style: .default, handler: openPage))
+
+        for website in websites {
+            ac.addAction(UIAlertAction(title: website, style: .default, handler: openPage))
+        }
+
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         ac.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(ac, animated: true)
@@ -76,5 +80,23 @@ class ViewController: UIViewController, WKNavigationDelegate {
             // Minor note: estimatedProgress is a Double, which as you should remember is one way of representing decimal numbers like 0.5 or 0.55555. Unhelpfully, UIProgressView's progress property is a Float, which is another (lower-precision) way of representing decimal numbers. Swift doesn't let you put a Double into a Float, so we need to create a new Float from the Double.
             progressView.progress = Float(webView.estimatedProgress)
         }
+    }
+
+    // Because you might call the decisionHandler closure straight away, or you might call it later on (perhaps after asking the user what they want to do), Swift considers it to be an escaping closure. That is, the closure has the potential to escape the current method, and be used at a later date. We won’t be using it that way, but it has the potential and that’s what matters.
+    func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
+        let url = navigationAction.request.url
+
+        // , "if there is a host for this URL, pull it out" – and by "host" it means "website domain" like apple.com. Note: we need to unwrap this carefully because not all URLs have hosts.
+        if let host = url?.host {
+            for website in websites {
+                // hasPrefix() isn't suitable here because our safe site name could appear anywhere in the URL. For example, slashdot.org redirects to m.slashdot.org for mobile devices, and hasPrefix() would fail that test.
+                if host.contains(website) {
+                    decisionHandler(.allow)
+                    return
+                }
+            }
+        }
+
+        decisionHandler(.cancel)
     }
 }
