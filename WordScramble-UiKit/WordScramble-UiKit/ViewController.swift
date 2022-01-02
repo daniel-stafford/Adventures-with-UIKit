@@ -84,14 +84,32 @@ class ViewController: UITableViewController {
     }
 
     func isPossible(word: String) -> Bool {
+        guard var tempWord = title?.lowercased() else { return false }
+
+        for letter in word {
+            if let position = tempWord.firstIndex(of: letter) {
+                tempWord.remove(at: position)
+            } else {
+                return false
+            }
+        }
+
         return true
     }
 
     func isOriginal(word: String) -> Bool {
-        return true
+        return !usedWords.contains(word)
     }
 
     func isReal(word: String) -> Bool {
-        return true
+        let checker = UITextChecker()
+        // 👀 when you’re working with UIKit, SpriteKit, or any other Apple framework, use utf16.count for the character count. If it’s just your own code - i.e. looping over characters and processing each one individually – then use count instead.
+        let range = NSRange(location: 0, length: word.utf16.count)
+
+        // Next, we call the rangeOfMisspelledWord(in:) method of our UITextChecker instance. This wants five parameters, but we only care about the first two and the last one: the first parameter is our string, word, the second is our range to scan (the whole string), and the last is the language we should be checking with, where en selects English.
+        // Parameters three and four aren't useful here, but for the sake of completeness: parameter three selects a point in the range where the text checker should start scanning, and parameter four lets us set whether the UITextChecker should start at the beginning of the range if no misspelled words were found starting from parameter three. Neat, but not helpful here.
+        let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
+
+        return misspelledRange.location == NSNotFound
     }
 }
