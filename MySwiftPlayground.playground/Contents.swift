@@ -1,7 +1,37 @@
 import Cocoa
 import Darwin
 
-w// *** VARIABLES ***
+
+//Capture lists in Swift: what’s the difference between weak, strong, and unowned references?
+
+class Singer {
+    func playSong() {
+        print("Shake it off!")
+    }
+}
+
+func sing() -> () -> Void {
+    //That taylor constant is made inside the sing() function, so normally it would be destroyed when the function ends. However, it gets used inside the closure, which means Swift will automatically make sure it stays alive for as long as the closure exists somewhere, even after the function has returned.
+    let taylor = Singer()
+
+    //This is strong capturing in action
+//    let singing = {
+    //weak capturing
+//    let singing = { [weak taylor] in\
+        //unowned
+        let singing = { [unowned taylor] in
+        taylor.playSong()
+        return
+    }
+
+    return singing
+}
+
+//
+let singFunction = sing()
+singFunction()
+
+// *** VARIABLES ***
 
 var name = "Daniel"
 name = "Bob"
