@@ -11,7 +11,8 @@ import WebKit
 class ViewController: UIViewController, WKNavigationDelegate {
     var webView: WKWebView!
     var progressView: UIProgressView!
-    var websites = ["apple.com", "hackingwithswift.com"]
+    var websites: [String]?
+    var selectedWebsite: String?
 
     override func loadView() {
         // https://www.hackingwithswift.com/read/4/2/creating-a-simple-browser-with-wkwebview
@@ -24,6 +25,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         super.viewDidLoad()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Open", style: .plain, target: self, action: #selector(openTapped))
+        
 
         // creates a new UIProgressView instance, giving it the default style. There is an alternative style called .bar, which doesn't draw an unfilled line to show the extent of the progress view, but the default style looks best here.
         progressView = UIProgressView(progressViewStyle: .default)
@@ -36,8 +38,12 @@ class ViewController: UIViewController, WKNavigationDelegate {
         let spacer = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: nil, action: nil)
 
         let refresh = UIBarButtonItem(barButtonSystemItem: .refresh, target: webView, action: #selector(webView.reload))
+       
+        let back = UIBarButtonItem(title: "Back", style: .plain, target: webView, action: #selector(webView.goBack))
 
-        toolbarItems = [progressButton, spacer, refresh]
+        let foward = UIBarButtonItem(title: "Foward", style: .plain, target: webView, action: #selector(webView.goForward))
+        
+        toolbarItems = [back, progressButton, spacer, foward, refresh]
         navigationController?.isToolbarHidden = false
 
         // Although WKWebView tells us how much of the page has loaded using its estimatedProgress property, the WKNavigationDelegate system doesn't tell us when this value has changed. So, we're going to ask iOS to tell us using a powerful technique called key-value observing, or KVO.
@@ -46,7 +52,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
         // 👀 Warning: in more complex applications, all calls to addObserver() should be matched with a call to removeObserver() when you're finished observing
         webView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
 
-        let url = URL(string: "https://" + websites[0])!
+        let url = URL(string: "https://" + selectedWebsite! )!
         webView.load(URLRequest(url: url))
         webView.allowsBackForwardNavigationGestures = true
     }
@@ -54,7 +60,7 @@ class ViewController: UIViewController, WKNavigationDelegate {
     @objc func openTapped() {
         let ac = UIAlertController(title: "Open page…", message: nil, preferredStyle: .actionSheet)
 
-        for website in websites {
+        for website in websites! {
             ac.addAction(UIAlertAction(title: website, style: .default, handler: openPage))
         }
 
@@ -87,16 +93,25 @@ class ViewController: UIViewController, WKNavigationDelegate {
         let url = navigationAction.request.url
 
         // , "if there is a host for this URL, pull it out" – and by "host" it means "website domain" like apple.com. Note: we need to unwrap this carefully because not all URLs have hosts.
-        if let host = url?.host {
-            for website in websites {
-                // hasPrefix() isn't suitable here because our safe site name could appear anywhere in the URL. For example, slashdot.org redirects to m.slashdot.org for mobile devices, and hasPrefix() would fail that test.
-                if host.contains(website) {
-                    decisionHandler(.allow)
-                    return
-                }
-            }
+        guard let host = url?.host else {
+            decisionHandler(.cancel)
+            return
         }
 
+        for website in websites! {
+            if host.contains(website) {
+                decisionHandler(.allow)
+                return
+            }
+        }
+        
+        getDeniedAlert()
         decisionHandler(.cancel)
+    }
+
+    func getDeniedAlert() {
+        let alert = UIAlertController(title: "Denied", message: "This external link is blocked.", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alert, animated: true, completion: nil)
     }
 }
