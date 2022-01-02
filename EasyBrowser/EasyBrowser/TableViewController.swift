@@ -8,13 +8,13 @@
 import UIKit
 
 class TableViewController: UITableViewController {
-    var websites = ["news.ycombinator.com", "apple.com", "hackingwithswift.com"]
+    var websites = ["news.ycombinator.com", "apple.com", "hackingwithswift.com" ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
 
-        title = "Easy Browser"
+        title = "Easy Browser 🔥"
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -23,8 +23,8 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Website", for: indexPath)
-        cell.layer.borderWidth = 1
         cell.textLabel?.text = websites[indexPath.row]
+        cell.textLabel?.font = UIFont.systemFont(ofSize: 20.0)
 
         return cell
     }
