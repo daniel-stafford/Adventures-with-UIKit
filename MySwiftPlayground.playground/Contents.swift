@@ -2,6 +2,11 @@ import Cocoa
 import Darwin
 
 
+
+func printName(name: String) -> {
+    rurn "Yi"
+
+
 //Capture lists in Swift: what’s the difference between weak, strong, and unowned references?
 
 class Singer {
@@ -29,7 +34,7 @@ func sing() -> () -> Void {
 
 //
 let singFunction = sing()
-singFunction()
+//singFunction()
 
 // *** VARIABLES ***
 
