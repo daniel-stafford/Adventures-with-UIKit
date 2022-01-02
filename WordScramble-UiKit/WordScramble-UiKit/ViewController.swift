@@ -59,12 +59,39 @@ class ViewController: UITableViewController {
             // Implicit capture of self in closures is that place when using self is required and meaningful: Swift won't let you avoid it here. By restricting your use of self to closures you can easily check your code doesn’t have any reference cycles by searching for "self" – there ought not to be too many to look through!
             self?.submit(answer)
         }
-        
+
         ac.addAction(submitAction)
         present(ac, animated: true)
     }
 
     func submit(_ answer: String) {
         print(answer, "answer")
+
+        let lowerAnswer = answer.lowercased()
+
+        if isPossible(word: lowerAnswer) {
+            if isOriginal(word: lowerAnswer) {
+                if isReal(word: lowerAnswer) {
+                    usedWords.insert(answer, at: 0)
+
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    // much smarter than reloading(), adds an animation and less work
+                    // Whenever you're adding and removing things from a table, the .automatic value means "do whatever is the standard system animation for this change." In this case, it means "slide the new row in from the top."
+                    tableView.insertRows(at: [indexPath], with: .automatic)
+                }
+            }
+        }
+    }
+
+    func isPossible(word: String) -> Bool {
+        return true
+    }
+
+    func isOriginal(word: String) -> Bool {
+        return true
+    }
+
+    func isReal(word: String) -> Bool {
+        return true
     }
 }
