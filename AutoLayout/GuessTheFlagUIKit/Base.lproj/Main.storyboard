@@ -3,7 +3,6 @@
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="19519"/>
-        <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -19,6 +18,9 @@
                         <subviews>
                             <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6OJ-gu-h22">
                                 <rect key="frame" x="95" y="237" width="224" height="114"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="6OJ-gu-h22" secondAttribute="height" multiplier="112:57" id="azu-Vu-KWg"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="uk"/>
                                 <connections>
@@ -27,6 +29,9 @@
                             </button>
                             <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="cdQ-ko-t4D">
                                 <rect key="frame" x="95" y="381" width="224" height="114"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="cdQ-ko-t4D" secondAttribute="height" multiplier="112:57" id="gvr-OW-W7e"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="uk"/>
                                 <connections>
@@ -35,27 +40,26 @@
                             </button>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" misplaced="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AqK-Xg-bpZ">
                                 <rect key="frame" x="95" y="99" width="224" height="114"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="AqK-Xg-bpZ" secondAttribute="height" multiplier="112:57" id="L67-dM-NhJ"/>
+                                </constraints>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" image="uk" title=""/>
                                 <connections>
                                     <action selector="buttonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="O5h-tS-nMc"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Your score: 0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="58s-fe-izt">
-                                <rect key="frame" x="157" y="617" width="100.5" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <color key="textColor" name="AccentColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="6OJ-gu-h22" firstAttribute="top" secondItem="AqK-Xg-bpZ" secondAttribute="bottom" constant="23" id="EHO-ih-wTj"/>
                             <constraint firstItem="6OJ-gu-h22" firstAttribute="centerX" secondItem="AqK-Xg-bpZ" secondAttribute="centerX" id="Ogv-I9-nMI"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" relation="greaterThanOrEqual" secondItem="cdQ-ko-t4D" secondAttribute="bottom" constant="20" id="YlP-ps-ibr"/>
                             <constraint firstItem="cdQ-ko-t4D" firstAttribute="top" secondItem="6OJ-gu-h22" secondAttribute="bottom" constant="30" id="bKV-eQ-N17"/>
-                            <constraint firstItem="58s-fe-izt" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="eCp-rR-jVb"/>
+                            <constraint firstItem="cdQ-ko-t4D" firstAttribute="height" secondItem="6OJ-gu-h22" secondAttribute="height" id="rJB-Qt-VYf"/>
                             <constraint firstItem="AqK-Xg-bpZ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="12" id="uAz-Vy-PXD"/>
+                            <constraint firstItem="6OJ-gu-h22" firstAttribute="height" secondItem="AqK-Xg-bpZ" secondAttribute="height" id="xZP-ah-xdT"/>
                             <constraint firstItem="cdQ-ko-t4D" firstAttribute="centerX" secondItem="6OJ-gu-h22" secondAttribute="centerX" id="zXE-tK-QbE"/>
                             <constraint firstItem="AqK-Xg-bpZ" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="zx4-82-B8i"/>
                         </constraints>
@@ -65,7 +69,6 @@
                         <outlet property="button1" destination="AqK-Xg-bpZ" id="sBM-ck-LnD"/>
                         <outlet property="button2" destination="6OJ-gu-h22" id="ZFd-Ps-2k0"/>
                         <outlet property="button3" destination="cdQ-ko-t4D" id="xMP-tT-brj"/>
-                        <outlet property="scoreText" destination="58s-fe-izt" id="1pk-1Z-0Au"/>
                         <outletCollection property="Buttons" destination="AqK-Xg-bpZ" collectionClass="NSMutableArray" id="5cn-wi-7Mx"/>
                         <outletCollection property="Buttons" destination="6OJ-gu-h22" collectionClass="NSMutableArray" id="Qxn-UT-tvS"/>
                         <outletCollection property="Buttons" destination="cdQ-ko-t4D" collectionClass="NSMutableArray" id="2wI-RZ-M20"/>
@@ -99,9 +102,6 @@
     </scenes>
     <resources>
         <image name="uk" width="200" height="100"/>
-        <namedColor name="AccentColor">
-            <color red="0.0" green="0.46000000000000002" blue="0.89000000000000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-        </namedColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>

@@ -13,8 +13,6 @@ class ViewController: UIViewController {
     @IBOutlet var button2: UIButton!
     @IBOutlet var button3: UIButton!
     @IBOutlet var buttons: [UIButton]!
-    // not sure why this isn't appearing 😕
-    @IBOutlet var scoreText: UILabel!
 
     var countries = [String]()
     var score = 0
@@ -27,7 +25,6 @@ class ViewController: UIViewController {
 
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
 
-        if score == 0 { scoreText.text = "Your score: 0" }
         askQuestion()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(sharedTapped))
@@ -43,7 +40,6 @@ class ViewController: UIViewController {
 
         getTitle()
         for (index, button) in buttons.enumerated() {
-            button.layer.borderWidth = 1
             button.setImage(UIImage(named: countries[index]), for: .normal)
         }
     }
@@ -75,8 +71,6 @@ class ViewController: UIViewController {
             let tappedFlag = formatCountry(country: countries[sender.tag - 1])
             title = "Wrong. That's the flag of \(tappedFlag)"
         }
-
-        scoreText.text = "Your score: \(score)"
 
         alertTurn(title: title)
     }
@@ -110,7 +104,7 @@ class ViewController: UIViewController {
 
         askQuestion()
     }
-    
+
     @objc func sharedTapped() {
         // Share the app challenge👍
         let vc = UIActivityViewController(activityItems: ["Hey, I scored \(score) on the Guess the Flag app!"], applicationActivities: [])
