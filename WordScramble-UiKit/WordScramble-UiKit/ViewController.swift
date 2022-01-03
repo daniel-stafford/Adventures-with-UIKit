@@ -73,7 +73,7 @@ class ViewController: UITableViewController {
                 if isReal(word: lowerAnswer) {
                     if isLong(word: lowerAnswer) {
                         if isDifferent(word: lowerAnswer) {
-                            usedWords.insert(answer, at: 0)
+                            usedWords.insert(lowerAnswer, at: 0)
 
                             let indexPath = IndexPath(row: 0, section: 0)
                             tableView.insertRows(at: [indexPath], with: .automatic)
@@ -83,7 +83,7 @@ class ViewController: UITableViewController {
                             showErrorMessage(title: "Same as start word!", message: "Use your brain")
                         }
                     } else {
-                        showErrorMessage(title: "Word too short", message: "Use words longer than three characters.")
+                        showErrorMessage(title: "Word too short", message: "Use words longer than two characters.")
                     }
                 } else {
                     showErrorMessage(title: "Word not recognised", message: "You can't just make them up, you know!")
@@ -130,7 +130,7 @@ class ViewController: UITableViewController {
     }
 
     func isLong(word: String) -> Bool {
-        return word.count > 3
+        return word.count > 2
     }
 
     func isDifferent(word: String) -> Bool {
