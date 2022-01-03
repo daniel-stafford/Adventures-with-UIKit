@@ -1,0 +1,3 @@
+news.ycombinator.com
+apple.com
+hackingwithswift.com

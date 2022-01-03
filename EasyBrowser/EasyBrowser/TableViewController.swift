@@ -8,22 +8,31 @@
 import UIKit
 
 class TableViewController: UITableViewController {
-    var websites = ["news.ycombinator.com", "apple.com", "hackingwithswift.com" ]
+    var allWebsites = [String]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         navigationController?.navigationBar.prefersLargeTitles = true
-
         title = "Easy Browser 🔥"
+        
+        if let websitesURL = Bundle.main.url(forResource: "websites", withExtension: "txt") {
+            if let startWebsites = try? String(contentsOf: websitesURL) {
+                allWebsites = startWebsites.components(separatedBy: "\n")
+            }
+        }
+
+        if allWebsites.isEmpty {
+            allWebsites = ["news.ycombinator.com"]
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return websites.count
+        return allWebsites.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Website", for: indexPath)
-        cell.textLabel?.text = websites[indexPath.row]
+        cell.textLabel?.text = allWebsites[indexPath.row]
         cell.textLabel?.font = UIFont.systemFont(ofSize: 20.0)
 
         return cell
@@ -31,8 +40,8 @@ class TableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let browserView = storyboard?.instantiateViewController(withIdentifier: "Browser") as? ViewController {
-            browserView.websites = websites
-            browserView.selectedWebsite = websites[indexPath.row]
+            browserView.websites = allWebsites
+            browserView.selectedWebsite = allWebsites[indexPath.row]
             navigationController?.pushViewController(browserView, animated: true)
         }
     }
