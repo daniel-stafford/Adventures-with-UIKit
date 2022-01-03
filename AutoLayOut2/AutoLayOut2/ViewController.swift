@@ -47,14 +47,16 @@ class ViewController: UIViewController {
         // All five views then get added to the view belonging to our view controller by using view.addSubview().
         [label1, label2, label3, label4, label5].forEach { view.addSubview($0) }
 
-        
+
         // optional for getting previous label inside below loop
         var previous: UILabel?
         // That loops over each of the five labels, setting them to have the same width as our main view, and to have a height of exactly 88 points.
         for label in [label1, label2, label3, label4, label5] {
-            label.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-            label.heightAnchor.constraint(equalToConstant: 88).isActive = true
-            
+            label.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor).isActive = true
+            label.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor).isActive = true
+//            label.heightAnchor.constraint(equalToConstant: view.frame.height * 0.2 - 10).isActive = true
+            label.heightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.heightAnchor, multiplier: 0.2, constant: -10).isActive = true
+
             if let previous = previous {
                 // we have a previous label – create a height constraint
                 label.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
