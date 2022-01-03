@@ -45,13 +45,9 @@ class ViewController: UIViewController {
         label5.sizeToFit()
 
         // All five views then get added to the view belonging to our view controller by using view.addSubview().
-        view.addSubview(label1)
-        view.addSubview(label2)
-        view.addSubview(label3)
-        view.addSubview(label4)
-        view.addSubview(label5)
+        [label1, label2, label3, label4, label5].forEach { view.addSubview($0) }
 
-        // reates a dictionary with strings for its keys and our labels as its values (the values). So, to get access to label1, we can now use viewsDictionary["label1"].
+        // creates a dictionary with strings for its keys and our labels as its values (the values). So, to get access to label1, we can now use viewsDictionary["label1"].
         let viewsDictionary = ["label1": label1, "label2": label2, "label3": label3, "label4": label4, "label5": label5]
 
         for label in viewsDictionary.keys {
@@ -66,8 +62,13 @@ class ViewController: UIViewController {
             view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[\(label)]|", options: [], metrics: nil, views: viewsDictionary))
         }
 
+        // will be referred to in metrics parameter below
+        let metrics = ["labelHeight": 88]
+
         // V:, meaning that these constraints are vertical.
         // he - symbol, which means "space". It's 10 points by default, but you can customize it.
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[label1]-[label2]-[label3]-[label4]-[label5]", options: [], metrics: nil, views: viewsDictionary))
+        // (==88) for the labels, and (>=10) for the space to the bottom. Note that when specifying the size of a space, you need to use the - before and after the size: a simple space, -, becomes -(>=10)-.
+        // We're going to make the first label use labelHeight at a priority of 999, then have the other labels adopt the same height as the first label.
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[label1(labelHeight@999)]-[label2(label1)]-[label3(label1)]-[label4(label1)]-[label5(label1)]->=10-|", options: [], metrics: metrics, views: viewsDictionary))
     }
 }
