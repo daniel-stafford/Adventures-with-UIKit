@@ -73,12 +73,22 @@ class ViewController: UITableViewController {
         if isPossible(word: lowerAnswer) {
             if isOriginal(word: lowerAnswer) {
                 if isReal(word: lowerAnswer) {
-                    usedWords.insert(answer, at: 0)
+                    if isLong(word: lowerAnswer) {
+                        if isDifferent(word: lowerAnswer) {
+                            usedWords.insert(answer, at: 0)
 
-                    let indexPath = IndexPath(row: 0, section: 0)
-                    tableView.insertRows(at: [indexPath], with: .automatic)
+                            let indexPath = IndexPath(row: 0, section: 0)
+                            tableView.insertRows(at: [indexPath], with: .automatic)
 
-                    return
+                            return
+                        } else {
+                            errorTitle = "Same as start word"
+                            errorMessage = "Use your brain!"
+                        }
+                    } else {
+                        errorTitle = "Word too short"
+                        errorMessage = "Use words longer than three characters."
+                    }
                 } else {
                     errorTitle = "Word not recognised"
                     errorMessage = "You can't just make them up, you know!"
@@ -118,14 +128,22 @@ class ViewController: UITableViewController {
 
     func isReal(word: String) -> Bool {
         let checker = UITextChecker()
-        
+
         // 👀 when you’re working with UIKit, SpriteKit, or any other Apple framework, use utf16.count for the character count. If it’s just your own code - i.e. looping over characters and processing each one individually – then use count instead.
         let range = NSRange(location: 0, length: word.utf16.count)
 
         // Next, we call the rangeOfMisspelledWord(in:) method of our UITextChecker instance. This wants five parameters, but we only care about the first two and the last one: the first parameter is our string, word, the second is our range to scan (the whole string), and the last is the language we should be checking with, where en selects English.
         // Parameters three and four aren't useful here, but for the sake of completeness: parameter three selects a point in the range where the text checker should start scanning, and parameter four lets us set whether the UITextChecker should start at the beginning of the range if no misspelled words were found starting from parameter three. Neat, but not helpful here.
         let misspelledRange = checker.rangeOfMisspelledWord(in: word, range: range, startingAt: 0, wrap: false, language: "en")
-        
+
         return misspelledRange.location == NSNotFound
+    }
+
+    func isLong(word: String) -> Bool {
+        return word.count > 3
+    }
+
+    func isDifferent(word: String) -> Bool {
+        return !(title == word)
     }
 }
