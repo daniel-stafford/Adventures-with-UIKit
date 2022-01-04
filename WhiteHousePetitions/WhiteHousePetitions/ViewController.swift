@@ -14,7 +14,7 @@ class ViewController: UITableViewController {
         super.viewDidLoad()
 
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showInfo))
-
+        navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(promptFilter))
         // let urlString = "https://api.whitehouse.gov/v1/petitions.json?limit=100"
         let urlString: String
         if navigationController?.tabBarItem.tag == 0 {
@@ -34,7 +34,32 @@ class ViewController: UITableViewController {
         showError()
     }
 
-    @objc func showInfo(){
+    @objc func promptFilter() {
+        let ac = UIAlertController(title: "Search", message: "What kind of petition are you looking for? Enter a keyword.", preferredStyle: .alert)
+        ac.addTextField()
+
+        let submitAction = UIAlertAction(title: "Search", style: .default) { [weak self, weak ac] _ in
+            guard let userText = ac?.textFields?[0].text else { return }
+            self?.submit(userText)
+        }
+
+        ac.addAction(submitAction)
+        present(ac, animated: true)
+    }
+
+    // MARK: - -
+
+    func submit(_ userText: String) {
+        print("Here is the user text", userText)
+//        var filteredPetitions: [Petitions]?
+        let filtered = petitions.filter { p in
+            p.body.contains(userText)
+        }
+        petitions = filtered
+        tableView.reloadData()
+    }
+
+    @objc func showInfo() {
         let ac = UIAlertController(title: "Info", message: "This app is powerd by the White House Petitions API", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
