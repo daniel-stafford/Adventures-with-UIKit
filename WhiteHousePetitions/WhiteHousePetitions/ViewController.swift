@@ -13,6 +13,8 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showInfo))
+
         // let urlString = "https://api.whitehouse.gov/v1/petitions.json?limit=100"
         let urlString: String
         if navigationController?.tabBarItem.tag == 0 {
@@ -30,6 +32,12 @@ class ViewController: UITableViewController {
         }
 
         showError()
+    }
+
+    @objc func showInfo(){
+        let ac = UIAlertController(title: "Info", message: "This app is powerd by the White House Petitions API", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 
     func showError() {
@@ -64,6 +72,4 @@ class ViewController: UITableViewController {
         vc.detailItem = petitions[indexPath.row]
         navigationController?.pushViewController(vc, animated: true)
     }
-
-
 }
