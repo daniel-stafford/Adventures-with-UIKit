@@ -11,7 +11,7 @@ import WebKit
 class DetailViewController: UIViewController {
     var webView: WKWebView!
     var detailItem: Petition?
-    
+
     override func loadView() {
         webView = WKWebView()
         view = webView
@@ -26,10 +26,17 @@ class DetailViewController: UIViewController {
         <html>
         <head>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <style> body { font-size: 150%; } </style>
+        <style>
+        body {
+        font-size: 150%;
+        text-align: justify;
+        text-justify: inter-word;
+        padding: 10px;
+        </style>
         </head>
         <body>
-        \(detailItem.body)
+        <h3>\(detailItem.signatureCount) signatures</h3>
+        <p>\(detailItem.body)</p>
         </body>
         </html>
         """
