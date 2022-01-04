@@ -9,10 +9,10 @@ import UIKit
 
 class ViewController: UITableViewController {
     var petitions = [Petition]()
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // let urlString = "https://api.whitehouse.gov/v1/petitions.json?limit=100"
         let urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
 
@@ -23,7 +23,7 @@ class ViewController: UITableViewController {
             }
         }
     }
-    
+
     func parse(json: Data) {
         let decoder = JSONDecoder()
 
@@ -32,7 +32,6 @@ class ViewController: UITableViewController {
             tableView.reloadData()
         }
     }
-
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return petitions.count
@@ -44,5 +43,11 @@ class ViewController: UITableViewController {
         cell.textLabel?.text = petition.title
         cell.detailTextLabel?.text = petition.body
         return cell
+    }
+
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let vc = DetailViewController()
+        vc.detailItem = petitions[indexPath.row]
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
