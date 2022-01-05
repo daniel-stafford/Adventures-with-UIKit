@@ -216,9 +216,9 @@ class ViewController: UIViewController {
         // remove final line breaks
         cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
         answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
-        
+
         letterBits.shuffle()
-        
+
         // check we have same number of buttons and bits
         if letterBits.count == letterButtons.count {
             for i in 0 ..< letterButtons.count {
@@ -228,14 +228,65 @@ class ViewController: UIViewController {
     }
 
     @objc func letterTapped(_ sender: UIButton) {
-        print("letter tapped")
+        // let's be safe when getting the button title
+        guard let buttonTitle = sender.titleLabel?.text else { return }
+        currentAnswer.text = currentAnswer.text?.appending(buttonTitle)
+        // hold all the hiden buttons during a single answer
+        activatedButtons.append(sender)
+        // hide the button
+        sender.isHidden = true
     }
 
     @objc func submitTapped(_ sender: UIButton) {
-        print("submit tapped")
+        guard let answerText = currentAnswer.text else { return }
+
+        // if no anoswer is found, no value back, so unwrap carefully
+        if let solutionPosition = solutions.firstIndex(of: answerText) {
+            activatedButtons.removeAll()
+
+            // get answer list array
+            var splitAnswers = answersLabel.text?.components(separatedBy: "\n")
+
+            // reaplce answer text inside the solutions strings
+            splitAnswers?[solutionPosition] = answerText
+
+            // put array back into string
+            answersLabel.text = splitAnswers?.joined(separator: "\n")
+
+            // clear out input (but not buttons!)
+            currentAnswer.text = ""
+            score += 1
+
+            // If the score is evenly divisible by 7, we know they have found all seven words so we're going to show a UIAlertController that will prompt the user to go to the next level.
+            if score % 7 == 0 {
+                let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
+                present(ac, animated: true)
+            }
+        }
     }
 
     @objc func clearTapped(_ sender: UIButton) {
-        print("clear tapped")
+        // clear out user input
+        currentAnswer.text = ""
+
+        // show all tapped buttons for last answer
+        for btn in activatedButtons {
+            btn.isHidden = false
+        }
+
+        activatedButtons.removeAll()
+    }
+
+    func levelUp(action: UIAlertAction) {
+        level += 1
+        // keep 7 elements ready to be filled, as we wil repopulate
+        solutions.removeAll(keepingCapacity: true)
+
+        loadLevel()
+
+        for letterButton in letterButtons {
+            letterButton.isHidden = false
+        }
     }
 }
