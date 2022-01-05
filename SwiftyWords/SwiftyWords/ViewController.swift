@@ -267,13 +267,18 @@ class ViewController: UIViewController {
             score += 1
 
             // If the score is evenly divisible by 7, we know they have found all seven words so we're going to show a UIAlertController that will prompt the user to go to the next level.
-            if score % 7 == 0 {
+            if letterButtons.allSatisfy({$0.isHidden == true}) {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
                 present(ac, animated: true)
             }
+        } else {
+            let ac = UIAlertController(title: "Incorrect", message: "Keep on trying!", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default, handler: clearAfterWrong))
+            present(ac, animated: true)
         }
     }
+
 
     @objc func clearTapped(_ sender: UIButton) {
         // clear out user input
@@ -285,6 +290,18 @@ class ViewController: UIViewController {
         }
 
         activatedButtons.removeAll()
+    }
+
+    func clearAfterWrong(action: UIAlertAction) {
+        // clear out user input
+        currentAnswer.text = ""
+
+        // show all tapped buttons for last answer
+        for btn in activatedButtons {
+            btn.isHidden = false
+        }
+        activatedButtons.removeAll()
+        score -= 1
     }
 
     func levelUp(action: UIAlertAction) {
