@@ -14,6 +14,12 @@ class ViewController: UIViewController {
     var scoreLabel: UILabel!
     var letterButtons = [UIButton]()
 
+    var activatedButtons = [UIButton]()
+    var solutions = [String]()
+
+    var score = 0
+    var level = 1
+
     override func loadView() {
         view = UIView()
         view.backgroundColor = .white
@@ -53,13 +59,15 @@ class ViewController: UIViewController {
         let submit = UIButton(type: .system)
         submit.translatesAutoresizingMaskIntoConstraints = false
         submit.setTitle("SUBMIT", for: .normal)
+        submit.addTarget(self, action: #selector(submitTapped), for: .touchUpInside)
         view.addSubview(submit)
 
         let clear = UIButton(type: .system)
         clear.translatesAutoresizingMaskIntoConstraints = false
         clear.setTitle("CLEAR", for: .normal)
+        clear.addTarget(self, action: #selector(clearTapped), for: .touchUpInside)
         view.addSubview(clear)
-        
+
         let buttonsView = UIView()
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(buttonsView)
@@ -102,47 +110,46 @@ class ViewController: UIViewController {
 
             // place it below the clues label, with 20 points of spacing so the two don’t touch.
             currentAnswer.topAnchor.constraint(equalTo: cluesLabel.bottomAnchor, constant: 20),
-            
+
             // top to bottom of the current answer text field,
             submit.topAnchor.constraint(equalTo: currentAnswer.bottomAnchor),
-            
+
             // center horizontally. To stop them overlapping, we’ll subtract 100 from the submit button’s X position, and add 100 to the clear button’s X position.
             submit.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: -100),
-            
+
             // within recommended button at size of at least 44x44 (iOs makes really small by default)
             submit.heightAnchor.constraint(equalToConstant: 44),
 
             // center horizatonlly. To stop them overlapping, we’ll subtract 100 from the submit button’s X position, and add 100 to the clear button’s X position.
             clear.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 100),
-            
+
             //  setting its Y anchor so that its stays aligned with the Y position of the submit button. This means both buttons will remain aligned even if we move one.
             clear.centerYAnchor.constraint(equalTo: submit.centerYAnchor),
-            
+
             clear.heightAnchor.constraint(equalToConstant: 44),
-           
+
             // width and height of 750x320 so that it precisely contains the buttons inside it.
             buttonsView.widthAnchor.constraint(equalToConstant: 750),
-            
+
             buttonsView.heightAnchor.constraint(equalToConstant: 320),
-        
+
             // centered horizontally.
             buttonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
+
             // top anchor to be the bottom of the submit button, plus 20 points to add a little spacing.
             buttonsView.topAnchor.constraint(equalTo: submit.bottomAnchor, constant: 20),
-            
+
             // bottom of our layout margins, -20 so that it doesn’t run quite to the edge.
-            buttonsView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20)
-            
+            buttonsView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
+
         ])
-        
+
         // set some values for the width and height of each button
         let width = 150
         let height = 80
 
-        // create 20 buttons as a 4x5 grid
-        for row in 0..<4 {
-            for col in 0..<5 {
+        for row in 0 ..< 4 {
+            for col in 0 ..< 5 {
                 // create a new button and give it a big font size
                 let letterButton = UIButton(type: .system)
                 letterButton.titleLabel?.font = UIFont.systemFont(ofSize: 36)
@@ -153,6 +160,7 @@ class ViewController: UIViewController {
                 // calculate the frame of this button using its column and row
                 let frame = CGRect(x: col * width, y: row * height, width: width, height: height)
                 letterButton.frame = frame
+                letterButton.addTarget(self, action: #selector(letterTapped), for: .touchUpInside)
 
                 // add it to the buttons view
                 buttonsView.addSubview(letterButton)
@@ -161,17 +169,63 @@ class ViewController: UIViewController {
                 letterButtons.append(letterButton)
             }
         }
-
-//        cluesLabel.backgroundColor = .red
-//        answersLabel.backgroundColor = .blue
-//        buttonsView.backgroundColor = .green
-
         cluesLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
         answersLabel.setContentHuggingPriority(UILayoutPriority(1), for: .vertical)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        loadLevel()
+    }
+
+    func loadLevel() {
+        var clueString = ""
+        var solutionString = ""
+        var letterBits = [String]()
+
+        if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
+            if let levelContents = try? String(contentsOf: levelFileURL) {
+                var lines = levelContents.components(separatedBy: "\n")
+                lines.shuffle()
+
+                for (index, line) in lines.enumerated() {
+                    let parts = line.components(separatedBy: ": ")
+                    let answer = parts[0]
+                    let clue = parts[1]
+
+                    clueString += "\(index + 1). \(clue)\n"
+
+                    let solutionWord = answer.replacingOccurrences(of: "|", with: "")
+                    solutionString += "\(solutionWord.count) letters\n"
+                    solutions.append(solutionWord)
+
+                    let bits = answer.components(separatedBy: "|")
+                    letterBits += bits
+                }
+            }
+        }
+
+        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+        answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        letterBits.shuffle()
+
+        if letterBits.count == letterButtons.count {
+            for i in 0 ..< letterButtons.count {
+                letterButtons[i].setTitle(letterBits[i], for: .normal)
+            }
+        }
+    }
+
+    @objc func letterTapped(_ sender: UIButton) {
+        print("letter tapped")
+    }
+
+    @objc func submitTapped(_ sender: UIButton) {
+        print("submit tapped")
+    }
+
+    @objc func clearTapped(_ sender: UIButton) {
+        print("clear tapped")
     }
 }

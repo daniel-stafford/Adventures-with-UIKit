@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		DD4A06122785B082000987E0 /* Layout.png in Resources */ = {isa = PBXBuildFile; fileRef = DD4A06112785B082000987E0 /* Layout.png */; };
+		DD4A06142785EF3C000987E0 /* level1.txt in Resources */ = {isa = PBXBuildFile; fileRef = DD4A06132785EF3C000987E0 /* level1.txt */; };
+		DD4A06162785F573000987E0 /* level2.txt in Resources */ = {isa = PBXBuildFile; fileRef = DD4A06152785F572000987E0 /* level2.txt */; };
 		DDEAB9052785078A00139AE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEAB9042785078A00139AE3 /* AppDelegate.swift */; };
 		DDEAB9072785078A00139AE3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEAB9062785078A00139AE3 /* SceneDelegate.swift */; };
 		DDEAB9092785078A00139AE3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEAB9082785078A00139AE3 /* ViewController.swift */; };
@@ -18,6 +20,8 @@
 
 /* Begin PBXFileReference section */
 		DD4A06112785B082000987E0 /* Layout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Layout.png; sourceTree = "<group>"; };
+		DD4A06132785EF3C000987E0 /* level1.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level1.txt; sourceTree = "<group>"; };
+		DD4A06152785F572000987E0 /* level2.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = level2.txt; sourceTree = "<group>"; };
 		DDEAB9012785078A00139AE3 /* SwiftyWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftyWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDEAB9042785078A00139AE3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDEAB9062785078A00139AE3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -66,6 +70,8 @@
 				DDEAB90F2785078C00139AE3 /* LaunchScreen.storyboard */,
 				DDEAB9122785078C00139AE3 /* Info.plist */,
 				DD4A06112785B082000987E0 /* Layout.png */,
+				DD4A06132785EF3C000987E0 /* level1.txt */,
+				DD4A06152785F572000987E0 /* level2.txt */,
 			);
 			path = SwiftyWords;
 			sourceTree = "<group>";
@@ -128,7 +134,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD4A06142785EF3C000987E0 /* level1.txt in Resources */,
 				DD4A06122785B082000987E0 /* Layout.png in Resources */,
+				DD4A06162785F573000987E0 /* level2.txt in Resources */,
 				DDEAB9112785078C00139AE3 /* LaunchScreen.storyboard in Resources */,
 				DDEAB90E2785078C00139AE3 /* Assets.xcassets in Resources */,
 				DDEAB90C2785078A00139AE3 /* Main.storyboard in Resources */,
