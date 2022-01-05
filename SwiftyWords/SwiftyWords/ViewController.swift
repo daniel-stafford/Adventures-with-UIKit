@@ -75,6 +75,10 @@ class ViewController: UIViewController {
 
         let buttonsView = UIView()
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
+        buttonsView.layer.borderWidth = 1
+        buttonsView.layer.borderColor = UIColor.gray.cgColor
+        buttonsView.layer.cornerRadius = 20
+        buttonsView.layer.cornerCurve = .continuous
         view.addSubview(buttonsView)
 
         // view.layoutMarginsGuide – that will make the score label have a little distance from the right edge of the screen.
