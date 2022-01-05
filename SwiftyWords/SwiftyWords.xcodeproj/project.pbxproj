@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD4A06122785B082000987E0 /* Layout.png in Resources */ = {isa = PBXBuildFile; fileRef = DD4A06112785B082000987E0 /* Layout.png */; };
 		DDEAB9052785078A00139AE3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEAB9042785078A00139AE3 /* AppDelegate.swift */; };
 		DDEAB9072785078A00139AE3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEAB9062785078A00139AE3 /* SceneDelegate.swift */; };
 		DDEAB9092785078A00139AE3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDEAB9082785078A00139AE3 /* ViewController.swift */; };
@@ -16,6 +17,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD4A06112785B082000987E0 /* Layout.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Layout.png; sourceTree = "<group>"; };
 		DDEAB9012785078A00139AE3 /* SwiftyWords.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SwiftyWords.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDEAB9042785078A00139AE3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDEAB9062785078A00139AE3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -63,6 +65,7 @@
 				DDEAB90D2785078C00139AE3 /* Assets.xcassets */,
 				DDEAB90F2785078C00139AE3 /* LaunchScreen.storyboard */,
 				DDEAB9122785078C00139AE3 /* Info.plist */,
+				DD4A06112785B082000987E0 /* Layout.png */,
 			);
 			path = SwiftyWords;
 			sourceTree = "<group>";
@@ -125,6 +128,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD4A06122785B082000987E0 /* Layout.png in Resources */,
 				DDEAB9112785078C00139AE3 /* LaunchScreen.storyboard in Resources */,
 				DDEAB90E2785078C00139AE3 /* Assets.xcassets in Resources */,
 				DDEAB90C2785078A00139AE3 /* Main.storyboard in Resources */,
@@ -306,7 +310,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Debug;
 		};
@@ -334,7 +338,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 2;
 			};
 			name = Release;
 		};
