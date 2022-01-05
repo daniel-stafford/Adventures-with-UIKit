@@ -102,7 +102,7 @@ class ViewController: UITableViewController {
         filteredPetitions = filteredPetitions.sorted(by: { $0.signatureCount > $1.signatureCount })
         let petition = filteredPetitions[indexPath.row]
         cell.textLabel?.text = petition.title
-        cell.textLabel?.lineBreakMode = .byWordWrapping
+        cell.textLabel?.numberOfLines = 0
         cell.detailTextLabel?.text = "\(petition.signatureCount.formatted()) signatures)"
         return cell
     }
