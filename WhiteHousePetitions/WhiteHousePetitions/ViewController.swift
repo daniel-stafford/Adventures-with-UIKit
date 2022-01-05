@@ -13,15 +13,16 @@ class ViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .bookmarks, target: self, action: #selector(showInfo))
-        
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(promptFilter))
-        
-        // let urlString = "https://api.whitehouse.gov/v1/petitions.json?limit=100"
+
         let urlString: String
         if navigationController?.tabBarItem.tag == 0 {
             urlString = "https://www.hackingwithswift.com/samples/petitions-1.json"
+//            urlString = "https://api.whitehouse.gov/v1/petitions.json?limit=100"
+
         } else {
             urlString = "https://www.hackingwithswift.com/samples/petitions-2.json"
         }
@@ -47,18 +48,31 @@ class ViewController: UITableViewController {
         }
 
         ac.addAction(submitAction)
+
+        if filteredPetitions.count != allPetitions.count {
+            let resetSearch = UIAlertAction(title: "Show all results", style: .default) { [weak self] _ in
+                self?.reset()
+            }
+            ac.addAction(resetSearch)
+        }
+
         present(ac, animated: true)
+    }
+
+    func reset() {
+        filteredPetitions = allPetitions
+        tableView.reloadData()
     }
 
     func submit(_ userText: String) {
         filteredPetitions = allPetitions.filter { p in
-            p.body.contains(userText)
+            p.body.lowercased().contains(userText.lowercased())
         }
         tableView.reloadData()
     }
 
     @objc func showInfo() {
-        let ac = UIAlertController(title: "Info", message: "This app is powerd by the White House Petitions API", preferredStyle: .alert)
+        let ac = UIAlertController(title: "Info", message: "This app is powerd by the We the People API. https://petitions.trumpwhitehouse.archives.gov/developers/get-code", preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
     }
@@ -85,9 +99,11 @@ class ViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        filteredPetitions = filteredPetitions.sorted(by: { $0.signatureCount > $1.signatureCount })
         let petition = filteredPetitions[indexPath.row]
         cell.textLabel?.text = petition.title
-        cell.detailTextLabel?.text = petition.body
+        cell.textLabel?.numberOfLines = 0
+        cell.detailTextLabel?.text = "\(petition.signatureCount.formatted()) signatures)"
         return cell
     }
 
