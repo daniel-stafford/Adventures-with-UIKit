@@ -179,37 +179,47 @@ class ViewController: UIViewController {
     }
 
     func loadLevel() {
+        // e.g.Head of state, British style
         var clueString = ""
+        // e.g. 7 letters
         var solutionString = ""
+        // e.g. ["ELI", "ZAB", "ETH", "LE"...  ]
         var letterBits = [String]()
 
         if let levelFileURL = Bundle.main.url(forResource: "level\(level)", withExtension: "txt") {
             if let levelContents = try? String(contentsOf: levelFileURL) {
+                // e.g. ["HA|UNT|ED: Ghosts in residence", "LE|PRO|SY: A Biblical skin disease"...]
                 var lines = levelContents.components(separatedBy: "\n")
                 lines.shuffle()
 
                 for (index, line) in lines.enumerated() {
+                    // e.g. parts = ["ELI|ZAB|ETH", "Head of state, British style"]
                     let parts = line.components(separatedBy: ": ")
                     let answer = parts[0]
                     let clue = parts[1]
 
+                    // e.g. 1. Head of state, British style
                     clueString += "\(index + 1). \(clue)\n"
 
+                    // e.g. ELIZABETH
                     let solutionWord = answer.replacingOccurrences(of: "|", with: "")
                     solutionString += "\(solutionWord.count) letters\n"
                     solutions.append(solutionWord)
 
+                    // e.g. ["ELI", "ZAB", "ETH"]
                     let bits = answer.components(separatedBy: "|")
                     letterBits += bits
                 }
             }
         }
 
+        // remove final line breaks
         cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
         answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
-
+        
         letterBits.shuffle()
-
+        
+        // check we have same number of buttons and bits
         if letterBits.count == letterButtons.count {
             for i in 0 ..< letterButtons.count {
                 letterButtons[i].setTitle(letterBits[i], for: .normal)
