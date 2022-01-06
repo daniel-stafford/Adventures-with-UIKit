@@ -7,24 +7,31 @@
 
 import UIKit
 
+extension Array where Element: Equatable {
+    func indexes(of element: Element) -> [Int] {
+        return self.enumerated().filter({ element == $0.element }).map({ $0.offset })
+    }
+}
+
 class ViewController: UIViewController {
     var answer = "Apple"
-    var numGuess = 0 {
+    var turnsLeft = 7 {
         didSet {
-            print(numGuess, "numGuess")
+            print(turnsLeft, "turnsLeft")
         }
     }
+
     var titleLabel: UILabel!
     var letterButton: UILabel!
     var letterButtons = [UIButton]()
-    var answerLabel : UILabel!
+    var answerLabel: UILabel!
     var turnsLeftLabel: UILabel!
 
     override func loadView() {
         view = UIView()
-        
+
         view.backgroundColor = UIColor.systemBackground
-        
+
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
         titleLabel.text = "Hangman"
@@ -32,12 +39,24 @@ class ViewController: UIViewController {
         titleLabel.font = UIFont.systemFont(ofSize: 50)
         view.addSubview(titleLabel)
 
+        answerLabel = UILabel()
+        answerLabel.translatesAutoresizingMaskIntoConstraints = false
+        answerLabel.font = UIFont.systemFont(ofSize: 40)
+        answerLabel.textColor = .none
+        answerLabel.text = createMaskedAnswer(answer)
+        view.addSubview(answerLabel)
+
+        turnsLeftLabel = UILabel()
+        turnsLeftLabel.translatesAutoresizingMaskIntoConstraints = false
+        turnsLeftLabel.font = UIFont.systemFont(ofSize: 25)
+        turnsLeftLabel.textColor = .none
+        turnsLeftLabel.text = "Mistakes Remaining: \(turnsLeft)"
+        view.addSubview(turnsLeftLabel)
+
         let buttonsView = UIView()
         buttonsView.translatesAutoresizingMaskIntoConstraints = false
 //        buttonsView.layer.borderWidth = 1
-//        buttonsView.layer.borderColor = UIColor.gray.cgColor
-//        buttonsView.layer.cornerRadius = 20
-//        buttonsView.layer.cornerCurve = .continuous
+        buttonsView.layer.borderColor = UIColor.gray.cgColor
         view.addSubview(buttonsView)
 
         let dimension = 51
@@ -60,12 +79,11 @@ class ViewController: UIViewController {
 
         let alphabet = "abcdefghijklmnopqrstuvwxyz"
         for (i, char) in alphabet.uppercased().enumerated() {
-            print("i", i)
             letterButtons[i].setTitle(String(char), for: .normal)
         }
         print(letterButtons.count)
-        
-        // hide and disable buttons beyond the 25 letter alphabet
+
+        // hide and disable buttons beyond the 26 letter alphabet
         for i in 26 ..< 28 {
             letterButtons[i].isEnabled = false
             letterButtons[i].isHidden = true
@@ -74,6 +92,14 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 50),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            answerLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 150),
+            answerLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            turnsLeftLabel.topAnchor.constraint(equalTo: answerLabel.bottomAnchor, constant: 150),
+
+            turnsLeftLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
             buttonsView.bottomAnchor.constraint(equalTo: view.layoutMarginsGuide.bottomAnchor, constant: -20),
             buttonsView.widthAnchor.constraint(equalTo: view.layoutMarginsGuide.widthAnchor),
             buttonsView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
@@ -86,7 +112,16 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
-    @objc func letterTapped() {
-        print("letter tapped!")
+    @objc func letterTapped(_ sender: UIButton) {
+        guard let guessedLetter = sender.titleLabel?.text else { return }
+        print("guessLetter", guessedLetter)
+    }
+
+    func createMaskedAnswer(_ str: String) -> String {
+        var maskedAnswer = [String]()
+        for _ in str {
+            maskedAnswer.append("?")
+        }
+        return maskedAnswer.joined(separator: "")
     }
 }
