@@ -27,15 +27,20 @@ class ViewController: UITableViewController {
             urlString = "https://www.hackingwithswift.com/samples/petitions-2.json"
         }
 
-        if let url = URL(string: urlString) {
-            if let data = try? Data(contentsOf: url) {
-                // we're OK to parse!
-                parse(json: data)
-                return
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            if let url = URL(string: urlString) {
+                // contentsOF -> blocking call! Causes the entire program to freeze!
+                if let data = try? Data(contentsOf: url) {
+                    // OK to parse on a background thread
+                    self?.parse(json: data)
+                    // this return is now useless, returning form  async closure, not whole method
+                    return
+                }
             }
+            // we're now calling this on bacground thread, place on main thread inside func
+            self?.showError()
         }
 
-        showError()
     }
 
     @objc func promptFilter() {
@@ -65,10 +70,16 @@ class ViewController: UITableViewController {
     }
 
     func submit(_ userText: String) {
-        filteredPetitions = allPetitions.filter { p in
-            p.body.lowercased().contains(userText.lowercased())
+        // use background thread for filtering
+        DispatchQueue.global(qos: .userInitiated).async { [weak self ] in
+            self?.filteredPetitions = (self?.allPetitions.filter { p in
+                p.body.lowercased().contains(userText.lowercased())
+            })!
+           // switch back to main thread for UI work
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
         }
-        tableView.reloadData()
     }
 
     @objc func showInfo() {
@@ -78,9 +89,11 @@ class ViewController: UITableViewController {
     }
 
     func showError() {
-        let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed; please check your connection and try again.", preferredStyle: .alert)
-        ac.addAction(UIAlertAction(title: "OK", style: .default))
-        present(ac, animated: true)
+        DispatchQueue.main.async { [weak self] in
+            let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed; please check your connection and try again.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            self?.present(ac, animated: true)
+        }
     }
 
     func parse(json: Data) {
@@ -89,7 +102,10 @@ class ViewController: UITableViewController {
         if let jsonPetitions = try? decoder.decode(Petitions.self, from: json) {
             allPetitions = jsonPetitions.results
             filteredPetitions = allPetitions
-            tableView.reloadData()
+            // 👀 Don't do UI work on a background thread!!!! Use main thread!
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
         }
     }
 
