@@ -184,10 +184,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        loadLevel()
+        performSelector(inBackground: #selector(loadLevel), with: nil)
     }
 
-    func loadLevel() {
+    @objc func loadLevel() {
         // e.g.Head of state, British style
         var clueString = ""
         // e.g. 7 letters
@@ -221,19 +221,23 @@ class ViewController: UIViewController {
                 }
             }
         }
+        //switch back to main thread fpr UI updates
+        DispatchQueue.main.async { [weak self] in
+            // remove final line breaks
+            self?.cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
+            self?.answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        // remove final line breaks
-        cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
-        answersLabel.text = solutionString.trimmingCharacters(in: .whitespacesAndNewlines)
+            letterBits.shuffle()
 
-        letterBits.shuffle()
-
-        // check we have same number of buttons and bits
-        if letterBits.count == letterButtons.count {
-            for i in 0 ..< letterButtons.count {
-                letterButtons[i].setTitle(letterBits[i], for: .normal)
+            // check we have same number of buttons and bits
+            guard let chckdLetterButtons = self?.letterButtons else {return}
+            if letterBits.count == chckdLetterButtons.count {
+                for i in 0 ..< chckdLetterButtons.count {
+                    chckdLetterButtons[i].setTitle(letterBits[i], for: .normal)
+                }
             }
         }
+
     }
 
     @objc func letterTapped(_ sender: UIButton) {
