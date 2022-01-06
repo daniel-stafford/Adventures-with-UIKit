@@ -70,10 +70,16 @@ class ViewController: UITableViewController {
     }
 
     func submit(_ userText: String) {
-        filteredPetitions = allPetitions.filter { p in
-            p.body.lowercased().contains(userText.lowercased())
+        // use background thread for filtering
+        DispatchQueue.global(qos: .userInitiated).async { [weak self ] in
+            self?.filteredPetitions = (self?.allPetitions.filter { p in
+                p.body.lowercased().contains(userText.lowercased())
+            })!
+           // switch back to main thread for UI work
+            DispatchQueue.main.async { [weak self] in
+                self?.tableView.reloadData()
+            }
         }
-        tableView.reloadData()
     }
 
     @objc func showInfo() {
