@@ -137,9 +137,8 @@ class ViewController: UIViewController {
                     answerLabel.text = maskedAnswer.joined(separator: "")
                     if !maskedAnswer.contains("?") {
                         let ac = UIAlertController(title: "You win!", message: "Well done. Let's try another word", preferredStyle: .alert)
-                        ac.addAction(UIAlertAction(title: "OK", style: .default))
-                        present(ac, animated: true)
-                        resetGame()
+                        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: resetGame))
+                                     present(ac, animated: true)
                         return
                     }
                 }
@@ -147,10 +146,9 @@ class ViewController: UIViewController {
         } else {
             mistakesLeft -= 1
             if mistakesLeft == 0 {
-                let ac = UIAlertController(title: "You lose!", message: "Go ahead and try again.", preferredStyle: .alert)
-                ac.addAction(UIAlertAction(title: "OK", style: .default))
+                let ac = UIAlertController(title: "Sorry! It was \(answer.joined(separator: ""))", message: "Go ahead and try again.", preferredStyle: .alert)
+                ac.addAction(UIAlertAction(title: "OK", style: .default, handler: resetGame))
                 present(ac, animated: true)
-                resetGame()
                 return
             }
         }
@@ -189,7 +187,7 @@ class ViewController: UIViewController {
         }
     }
 
-    func resetGame() {
+    func resetGame(action: UIAlertAction) {
         guard let newAnswer = allPokemon.popLast()?.name.uppercased() else { return }
         answer = newAnswer.map { String($0) }
         maskedAnswer = [String]()
