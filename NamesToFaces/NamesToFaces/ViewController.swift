@@ -20,15 +20,32 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
     // similar to numberOfRows
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         people.count
-
     }
 
     // design for each cell
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Person", for: indexPath) as? PersonCell else {
-            // something has gone very wrong if this happens
-            fatalError("Unable to dequeue Person Cell")
+            fatalError("Unable to dequeue PersonCell.")
         }
+
+        // pick out the person fomr the people array
+        let person = people[indexPath.item]
+
+        //assign the person's name to our custom UILabele cell's (PersonCell) name
+        cell.name.text = person.name
+
+        // get path for image
+        let path = getDocumentsDirectory().appendingPathComponent(person.image)
+        // set found image to cell image
+        cell.imageView.image = UIImage(contentsOfFile: path.path)
+
+        // a new UIColor initializer: UIColor(white:alpha:). This is useful when you only want grayscale colors.
+        cell.imageView.layer.borderColor = UIColor(white: 0, alpha: 0.3).cgColor
+        cell.imageView.layer.borderWidth = 2
+        // rounded corners
+        cell.imageView.layer.cornerRadius = 3
+        cell.layer.cornerRadius = 7
+
         return cell
     }
 
@@ -61,7 +78,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         let person = Person(name: "Unknown", image: imageName)
         people.append(person)
         collectionView.reloadData()
-        
+
         dismiss(animated: true)
     }
 
@@ -69,5 +86,23 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
+    }eeeee
+
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let person = people[indexPath.item]
+
+        let ac = UIAlertController(title: "Rename person", message: nil, preferredStyle: .alert)
+        ac.addTextField()
+
+        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
+
+        ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
+            guard let newName = ac?.textFields?[0].text else { return }
+            person.name = newName
+
+            self?.collectionView.reloadData()
+        })
+
+        present(ac, animated: true)
     }
 }
