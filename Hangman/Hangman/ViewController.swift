@@ -140,6 +140,7 @@ class ViewController: UIViewController {
                         ac.addAction(UIAlertAction(title: "OK", style: .default))
                         present(ac, animated: true)
                         resetGame()
+                        return
                     }
                 }
             }
@@ -156,19 +157,9 @@ class ViewController: UIViewController {
         sender.isHidden = true
     }
 
-    func createAnswerLabelText(_ anwswer: [String]) {
-        maskedAnswer = [String]()
-        for _ in answer {
-            maskedAnswer.append("?")
-        }
-        DispatchQueue.main.async { [weak self] in
-            self?.answerLabel.text = self?.maskedAnswer.joined(separator: "")
-        }
-    }
-    
-
     func parse(json: Data) {
         let decoder = JSONDecoder()
+
         if let jsonPetitions = try? decoder.decode(Pokemons.self, from: json) {
             allPokemon = jsonPetitions.results
             var shuffled = allPokemon.shuffled()
@@ -176,6 +167,17 @@ class ViewController: UIViewController {
             DispatchQueue.main.async { [weak self] in
                 self?.createAnswerLabelText(self!.answer)
             }
+        }
+    }
+
+    // use only intially when making Pokemon API call
+    func createAnswerLabelText(_ anwswer: [String]) {
+        maskedAnswer = [String]()
+        for _ in answer {
+            maskedAnswer.append("?")
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.answerLabel.text = self?.maskedAnswer.joined(separator: "")
         }
     }
 
@@ -188,7 +190,7 @@ class ViewController: UIViewController {
     }
 
     func resetGame() {
-        guard let newAnswer = allPokemon.popLast()?.name else { return }
+        guard let newAnswer = allPokemon.popLast()?.name.uppercased() else { return }
         answer = newAnswer.map { String($0) }
         maskedAnswer = [String]()
         for _ in answer {
