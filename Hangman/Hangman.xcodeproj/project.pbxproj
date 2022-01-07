@@ -13,6 +13,8 @@
 		DD066C262787634800E64D10 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD066C242787634800E64D10 /* Main.storyboard */; };
 		DD066C282787634B00E64D10 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DD066C272787634B00E64D10 /* Assets.xcassets */; };
 		DD066C2B2787634B00E64D10 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD066C292787634B00E64D10 /* LaunchScreen.storyboard */; };
+		DD066C33278848A900E64D10 /* Pokemons.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD066C32278848A900E64D10 /* Pokemons.swift */; };
+		DD066C3527884C0500E64D10 /* Pokemon.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD066C3427884C0500E64D10 /* Pokemon.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -24,6 +26,8 @@
 		DD066C272787634B00E64D10 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DD066C2A2787634B00E64D10 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DD066C2C2787634B00E64D10 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD066C32278848A900E64D10 /* Pokemons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemons.swift; sourceTree = "<group>"; };
+		DD066C3427884C0500E64D10 /* Pokemon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pokemon.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -59,6 +63,8 @@
 				DD066C1E2787634800E64D10 /* AppDelegate.swift */,
 				DD066C202787634800E64D10 /* SceneDelegate.swift */,
 				DD066C222787634800E64D10 /* ViewController.swift */,
+				DD066C32278848A900E64D10 /* Pokemons.swift */,
+				DD066C3427884C0500E64D10 /* Pokemon.swift */,
 				DD066C242787634800E64D10 /* Main.storyboard */,
 				DD066C272787634B00E64D10 /* Assets.xcassets */,
 				DD066C292787634B00E64D10 /* LaunchScreen.storyboard */,
@@ -138,7 +144,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD066C3527884C0500E64D10 /* Pokemon.swift in Sources */,
 				DD066C232787634800E64D10 /* ViewController.swift in Sources */,
+				DD066C33278848A900E64D10 /* Pokemons.swift in Sources */,
 				DD066C1F2787634800E64D10 /* AppDelegate.swift in Sources */,
 				DD066C212787634800E64D10 /* SceneDelegate.swift in Sources */,
 			);

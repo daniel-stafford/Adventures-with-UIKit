@@ -14,37 +14,34 @@ extension Array where Element: Equatable {
 }
 
 class ViewController: UIViewController {
-    var mistakesLeft = 7 {
+    var allPokemon = [Pokemon]()
+    var answer = [String]() {
         didSet {
-            mistakesLeftLabel.text = "Mistakes Remaining: \(mistakesLeft)"
+            print("answer", answer)
         }
     }
 
-    var answer = [String]()
     var maskedAnswer = [String]()
     var titleLabel: UILabel!
     var letterButton: UILabel!
     var letterButtons = [UIButton]()
     var answerLabel: UILabel!
     var mistakesLeftLabel: UILabel!
+    var mistakesLeft = 2 {
+        didSet {
+            mistakesLeftLabel.text = "Mistakes Remaining: \(mistakesLeft)"
+        }
+    }
 
     override func loadView() {
         view = UIView()
         view.backgroundColor = UIColor.systemBackground
 
-        // get 1000 words from API
-        // store words in an array, shuffle it
-        // pop the last one, take string, turn into array, set to answer
-
-        answer = ["A", "P", "P", "L", "E"]
-
-        createAnswerLabelText(answer)
-
         titleLabel = UILabel()
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.text = "Hangman"
+        titleLabel.text = "Guess That Pokemon!"
         titleLabel.textColor = .none
-        titleLabel.font = UIFont.boldSystemFont(ofSize: 40)
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 35)
         view.addSubview(titleLabel)
 
         answerLabel = UILabel()
@@ -114,6 +111,18 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let urlString = "https://pokeapi.co/api/v2/pokemon?limit=100"
+
+        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
+            if let url = URL(string: urlString) {
+                if let data = try? Data(contentsOf: url) {
+                    self?.parse(json: data)
+                    return
+                }
+            }
+            self?.showError()
+        }
     }
 
     @objc func letterTapped(_ sender: UIButton) {
@@ -126,6 +135,12 @@ class ViewController: UIViewController {
                 if foundIndices.contains(i) {
                     maskedAnswer[i] = guessedLetter
                     answerLabel.text = maskedAnswer.joined(separator: "")
+                    if !maskedAnswer.contains("?") {
+                        let ac = UIAlertController(title: "You win!", message: "Well done. Let's try another word", preferredStyle: .alert)
+                        ac.addAction(UIAlertAction(title: "OK", style: .default))
+                        present(ac, animated: true)
+                        resetGame()
+                    }
                 }
             }
         } else {
@@ -134,19 +149,62 @@ class ViewController: UIViewController {
                 let ac = UIAlertController(title: "You lose!", message: "Go ahead and try again.", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "OK", style: .default))
                 present(ac, animated: true)
-                // reset game
+                resetGame()
+                return
             }
         }
         sender.isHidden = true
     }
 
-    func correctAnswer() {
-        print("Noice!")
-    }
-
     func createAnswerLabelText(_ anwswer: [String]) {
+        maskedAnswer = [String]()
         for _ in answer {
             maskedAnswer.append("?")
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.answerLabel.text = self?.maskedAnswer.joined(separator: "")
+        }
+    }
+    
+
+    func parse(json: Data) {
+        let decoder = JSONDecoder()
+        if let jsonPetitions = try? decoder.decode(Pokemons.self, from: json) {
+            allPokemon = jsonPetitions.results
+            var shuffled = allPokemon.shuffled()
+            answer = shuffled.popLast()?.name.uppercased().map { String($0) } ?? ["B"]
+            DispatchQueue.main.async { [weak self] in
+                self?.createAnswerLabelText(self!.answer)
+            }
+        }
+    }
+
+    func showError() {
+        DispatchQueue.main.async { [weak self] in
+            let ac = UIAlertController(title: "Loading error", message: "There was a problem loading the feed; please check your connection and try again.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            self?.present(ac, animated: true)
+        }
+    }
+
+    func resetGame() {
+        guard let newAnswer = allPokemon.popLast()?.name else { return }
+        answer = newAnswer.map { String($0) }
+        maskedAnswer = [String]()
+        for _ in answer {
+            maskedAnswer.append("?")
+        }
+        answerLabel.text = maskedAnswer.joined(separator: "")
+        mistakesLeft = 7
+        resetKeyboard()
+    }
+
+    func resetKeyboard() {
+        for letterButton in letterButtons {
+            letterButton.isHidden = false
+        }
+        for i in 26 ..< 28 {
+            letterButtons[i].isHidden = true
         }
     }
 }
