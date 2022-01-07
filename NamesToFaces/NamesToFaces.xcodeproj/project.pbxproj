@@ -14,6 +14,7 @@
 		D849F2E12492A92600835E17 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D849F2E02492A92600835E17 /* Assets.xcassets */; };
 		D849F2E42492A92600835E17 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D849F2E22492A92600835E17 /* LaunchScreen.storyboard */; };
 		D849F2EC2492AA8F00835E17 /* PersonCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D849F2EB2492AA8E00835E17 /* PersonCell.swift */; };
+		DD3E51682788FFFE00B59564 /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3E51672788FFFE00B59564 /* Person.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		D849F2E32492A92600835E17 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D849F2E52492A92600835E17 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D849F2EB2492AA8E00835E17 /* PersonCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PersonCell.swift; sourceTree = "<group>"; };
+		DD3E51672788FFFE00B59564 /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Person.swift; path = ../../NamestoFaces/NamesToFaces/Person.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,6 +63,7 @@
 				D849F2D72492A92400835E17 /* AppDelegate.swift */,
 				D849F2D92492A92400835E17 /* SceneDelegate.swift */,
 				D849F2DB2492A92400835E17 /* ViewController.swift */,
+				DD3E51672788FFFE00B59564 /* Person.swift */,
 				D849F2DD2492A92400835E17 /* Main.storyboard */,
 				D849F2EB2492AA8E00835E17 /* PersonCell.swift */,
 				D849F2E02492A92600835E17 /* Assets.xcassets */,
@@ -141,6 +144,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD3E51682788FFFE00B59564 /* Person.swift in Sources */,
 				D849F2DC2492A92400835E17 /* ViewController.swift in Sources */,
 				D849F2D82492A92400835E17 /* AppDelegate.swift in Sources */,
 				D849F2EC2492AA8F00835E17 /* PersonCell.swift in Sources */,

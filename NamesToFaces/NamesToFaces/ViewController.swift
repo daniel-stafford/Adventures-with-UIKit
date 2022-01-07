@@ -9,14 +9,18 @@ import UIKit
 // UIImagePickerControllerDelegate tells us when the user either selected a picture or cancelled the picker
 // UINavigationControllerDelegate isn't important, simply whether users goes back or foward inside picker
 class ViewController: UICollectionViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+    var people = [Person]()
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
     }
 
     // similar to numberOfRows
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 10
+        people.count
+
     }
 
     // design for each cell
@@ -54,6 +58,10 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
             try? jpegData.write(to: imagePath)
         }
 
+        let person = Person(name: "Unknown", image: imageName)
+        people.append(person)
+        collectionView.reloadData()
+        
         dismiss(animated: true)
     }
 
