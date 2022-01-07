@@ -1,0 +1,13 @@
+//
+//  Pokemon.swift
+//  Hangman
+//
+//  Created by Daniel Stafford on 1/7/22.
+//
+
+import Foundation
+
+struct Pokemon: Codable {
+    var name: String
+    var url: String
+}
