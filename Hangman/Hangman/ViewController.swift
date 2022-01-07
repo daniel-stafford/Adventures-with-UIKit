@@ -27,7 +27,7 @@ class ViewController: UIViewController {
     var letterButtons = [UIButton]()
     var answerLabel: UILabel!
     var mistakesLeftLabel: UILabel!
-    var mistakesLeft = 2 {
+    var mistakesLeft = 7 {
         didSet {
             mistakesLeftLabel.text = "Mistakes Remaining: \(mistakesLeft)"
         }
