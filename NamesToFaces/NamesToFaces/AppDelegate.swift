@@ -2,12 +2,12 @@
 //  AppDelegate.swift
 //  NamesToFaces
 //
-//  Created by Daniel Stafford on 1/7/22.
+//  Created by Daniel Stafford on 1/7/22.//  Copyright © 2020 Shubham shah. All rights reserved.
 //
 
 import UIKit
 
-@main
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
@@ -33,4 +33,3 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 
 }
-
