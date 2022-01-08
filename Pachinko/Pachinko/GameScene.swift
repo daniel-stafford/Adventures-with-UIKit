@@ -102,7 +102,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 } else {
                     // edit is false
                     // create a ball
-                    let ball = SKSpriteNode(imageNamed: "ballRed")
+                    let colors = ["ballBlue", "ballCyan", "ballGreen", "ballGrey", "ballPurple", "ballRed", "ballYellow" ]
+                    let ball = SKSpriteNode(imageNamed: colors.randomElement() ?? "ballRed")
                     // circueOfRadius - will behave as ball rather than square
                     ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
                     // 0 to 1 (not bouncey to super boundey
