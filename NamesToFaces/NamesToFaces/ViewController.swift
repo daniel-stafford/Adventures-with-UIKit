@@ -37,6 +37,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
 
         // get path for image
         let path = getDocumentsDirectory().appendingPathComponent(person.image)
+        
         // set found image to cell image
         cell.imageView.image = UIImage(contentsOfFile: path.path)
 
@@ -52,6 +53,11 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
 
     @objc func addNewPerson() {
         let picker = UIImagePickerController()
+        
+        if (UIImagePickerController.isSourceTypeAvailable(.camera)) {
+            picker.sourceType = .camera
+        }
+        
         // allows the user to crop the picture they select.
         picker.allowsEditing = true
         // When you set self as the delegate (respond to the picker), you'll need to conform not only to the UIImagePickerControllerDelegate protocol, but also the UINavigationControllerDelegate protocol.
@@ -100,7 +106,6 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
             guard let newName = ac?.textFields?[0].text else { return }
             person.name = newName
-
             self?.collectionView.reloadData()
         })
 
