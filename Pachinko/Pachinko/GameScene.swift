@@ -21,12 +21,17 @@ class GameScene: SKScene {
         addChild(background)
         // apply physicsBody to the whole scene
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
-        
+
         makeBouncer(at: CGPoint(x: 0, y: 0))
         makeBouncer(at: CGPoint(x: 256, y: 0))
         makeBouncer(at: CGPoint(x: 512, y: 0))
         makeBouncer(at: CGPoint(x: 768, y: 0))
         makeBouncer(at: CGPoint(x: 1024, y: 0))
+        
+        makeSlot(at: CGPoint(x: 128, y: 0), isGood: true)
+        makeSlot(at: CGPoint(x: 384, y: 0), isGood: false)
+        makeSlot(at: CGPoint(x: 640, y: 0), isGood: true)
+        makeSlot(at: CGPoint(x: 896, y: 0), isGood: false)
     }
 
     // user touches the screen
@@ -35,9 +40,9 @@ class GameScene: SKScene {
         if let touch = touches.first {
             // where did the touch happen in the whole of my game scene
             let location = touch.location(in: self)
-            
+
             let ball = SKSpriteNode(imageNamed: "ballRed")
-            //circueOfRadius - will behave as ball rather than square
+            // circueOfRadius - will behave as ball rather than square
             ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
             // 0 to 1 (not bouncey to super boundey
             // note that physicsBody is optional (even though we just created it)
@@ -46,13 +51,37 @@ class GameScene: SKScene {
             addChild(ball)
         }
     }
-    
+
     func makeBouncer(at position: CGPoint) {
         let bouncer = SKSpriteNode(imageNamed: "bouncer")
         bouncer.position = position
         bouncer.physicsBody = SKPhysicsBody(circleOfRadius: bouncer.size.width / 2.0)
-        // object will be fixed in place (but can still collide with things) 
+        // object will be fixed in place (but can still collide with things)
         bouncer.physicsBody?.isDynamic = false
         addChild(bouncer)
+    }
+
+    func makeSlot(at position: CGPoint, isGood: Bool) {
+        var slotBase: SKSpriteNode
+        var slotGlow: SKSpriteNode
+
+        if isGood {
+            slotBase = SKSpriteNode(imageNamed: "slotBaseGood")
+            slotGlow = SKSpriteNode(imageNamed: "slotGlowGood")
+        } else {
+            slotBase = SKSpriteNode(imageNamed: "slotBaseBad")
+            slotGlow = SKSpriteNode(imageNamed: "slotGlowBad")
+        }
+
+        slotBase.position = position
+        slotGlow.position = position
+
+        addChild(slotBase)
+        addChild(slotGlow)
+        
+        // angle in radians, so pi radians = 180 degrees
+        let spin = SKAction.rotate(byAngle: .pi, duration: 10)
+        let spinForever = SKAction.repeatForever(spin)
+        slotGlow.run(spinForever)
     }
 }
