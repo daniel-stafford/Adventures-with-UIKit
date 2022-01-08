@@ -27,6 +27,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     var editLabel: SKLabelNode!
 
+    var isEdit = true
+
     var editingMode: Bool = false {
         didSet {
             if editingMode {
@@ -77,11 +79,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // top left of screen
         editLabel.position = CGPoint(x: 80, y: 700)
         addChild(editLabel)
-        
+
         numBallsLabel = SKLabelNode(fontNamed: "Chalkduster")
         numBallsLabel.text = "Balls left: 5"
         numBallsLabel.position = CGPoint(x: 480, y: 700)
         addChild(numBallsLabel)
+
+        // start game in edit mode
+        if isEdit {
+            editingMode = true
+        }
     }
 
     // user touches the screen
@@ -182,15 +189,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // SKNode is parent class of all dfifferent types of nodes, we don't really care what kind
     func collisionBetween(ball: SKNode, object: SKNode) {
         if object.name == "good" {
-            destroy(ball: ball)
-            score += 1
             numBalls += 1
-        } else if object.name == "bad" {
             destroy(ball: ball)
-            score -= 1
+            checkGame()
+        } else if object.name == "bad" {
             numBalls -= 1
-        }
-        else if object.name == "barrier" {
+            destroy(ball: ball)
+            checkGame()
+        } else if object.name == "barrier" {
             object.removeFromParent()
         }
     }
@@ -201,8 +207,36 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             fireParticles.position = ball.position
             addChild(fireParticles)
         }
-
         ball.removeFromParent()
+    }
+
+    func checkGame() {
+        print("checking game", numBalls)
+        let count = self["barrier"].count
+        if count == 0 {
+            resetGame(win: true)
+        }
+        if numBalls == 0 {
+            print("going to rest the game, you lose")
+            resetGame(win: false)
+        }
+    }
+
+    func resetGame(win: Bool) {
+        print("resetgame running", win, numBalls)
+        if win {
+            score += 1
+        } else {
+            score -= 1
+        }
+        // remove barriers
+        for child in children {
+            if child.name == "barrier" {
+                child.removeFromParent()
+            }
+        }
+        numBalls = 5
+        isEdit = true
     }
 
     //  check contact between ball - object or object - ball (not ball - ball)
