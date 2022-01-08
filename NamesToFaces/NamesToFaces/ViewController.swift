@@ -15,6 +15,18 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         super.viewDidLoad()
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPerson))
+
+        let defaults = UserDefaults.standard
+
+        // essentially opposite of writing to defaults
+        // get data object
+        if let savedPeople = defaults.object(forKey: "people") as? Data {
+            // decode data object to expected type
+            if let decodedPeople = try? NSKeyedUnarchiver.unarchiveTopLevelObjectWithData(savedPeople) as? [Person] {
+                // use in App!
+                people = decodedPeople
+            }
+        }
     }
 
     // similar to numberOfRows
@@ -32,12 +44,12 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         // pick out the person fomr the people array
         let person = people[indexPath.item]
 
-        //assign the person's name to our custom UILabele cell's (PersonCell) name
+        // assign the person's name to our custom UILabele cell's (PersonCell) name
         cell.name.text = person.name
 
         // get path for image
         let path = getDocumentsDirectory().appendingPathComponent(person.image)
-        
+
         // set found image to cell image
         cell.imageView.image = UIImage(contentsOfFile: path.path)
 
@@ -53,11 +65,11 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
 
     @objc func addNewPerson() {
         let picker = UIImagePickerController()
-        
-        if (UIImagePickerController.isSourceTypeAvailable(.camera)) {
+
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
             picker.sourceType = .camera
         }
-        
+
         // allows the user to crop the picture they select.
         picker.allowsEditing = true
         // When you set self as the delegate (respond to the picker), you'll need to conform not only to the UIImagePickerControllerDelegate protocol, but also the UINavigationControllerDelegate protocol.
@@ -84,6 +96,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
 
         let person = Person(name: "Unknown", image: imageName)
         people.append(person)
+        save()
         collectionView.reloadData()
 
         dismiss(animated: true)
@@ -97,7 +110,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
 
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let person = people[indexPath.item]
-        
+
         let ac = UIAlertController(title: nil, message: nil, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "Rename", style: .default) { [weak self] _ in
             self?.rename(person)
@@ -107,30 +120,41 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         })
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
-
     }
+
     func rename(_ person: Person) {
         let ac = UIAlertController(title: "Rename person", message: nil, preferredStyle: .alert)
         ac.addTextField()
 
-
         ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
             guard let newName = ac?.textFields?[0].text else { return }
             person.name = newName
+            self?.save()
             self?.collectionView.reloadData()
         })
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
 
         present(ac, animated: true)
     }
-    
+
     func delete(_ person: Person) {
         let ac = UIAlertController(title: "Are you sure?", message: nil, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self] _ in
             self?.people = self!.people.filter { $0 != person }
+            self?.save()
             self?.collectionView.reloadData()
         })
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
+    }
+
+    func save() {
+        // wrap inside data object called savedData
+        if let savedData = try? NSKeyedArchiver.archivedData(withRootObject: people, requiringSecureCoding: false) {
+            // get defaults
+            let defaults = UserDefaults.standard
+            // write data object under key "People"
+            defaults.set(savedData, forKey: "people")
+        }
     }
 }

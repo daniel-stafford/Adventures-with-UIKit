@@ -43,5 +43,7 @@ class ViewController: UIViewController {
         print(array2)
         let dict2 = defaults.object(forKey: "SavedDict") as? [String: String] ?? [String: String]()
         print(dict2)
+        
+        
     }
 }
