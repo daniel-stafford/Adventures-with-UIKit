@@ -7,7 +7,8 @@
 
 import SpriteKit
 
-class GameScene: SKScene {
+// allow us to use SKPhysicsContactDelegate
+class GameScene: SKScene, SKPhysicsContactDelegate {
     override func didMove(to view: SKView) {
         // if you want to place an image in your game, the class to use is called SKSpriteNode, and it can load any picture from your app bundle just like UIImage.
         let background = SKSpriteNode(imageNamed: "background.jpg")
@@ -22,16 +23,20 @@ class GameScene: SKScene {
         // apply physicsBody to the whole scene
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
 
+        // Set up delegate from SKScene
+        physicsWorld.contactDelegate = self
+
+        makeSlot(at: CGPoint(x: 128, y: 0), isGood: true)
+        makeSlot(at: CGPoint(x: 384, y: 0), isGood: false)
+        makeSlot(at: CGPoint(x: 640, y: 0), isGood: true)
+        makeSlot(at: CGPoint(x: 896, y: 0), isGood: false)
+        
         makeBouncer(at: CGPoint(x: 0, y: 0))
         makeBouncer(at: CGPoint(x: 256, y: 0))
         makeBouncer(at: CGPoint(x: 512, y: 0))
         makeBouncer(at: CGPoint(x: 768, y: 0))
         makeBouncer(at: CGPoint(x: 1024, y: 0))
-        
-        makeSlot(at: CGPoint(x: 128, y: 0), isGood: true)
-        makeSlot(at: CGPoint(x: 384, y: 0), isGood: false)
-        makeSlot(at: CGPoint(x: 640, y: 0), isGood: true)
-        makeSlot(at: CGPoint(x: 896, y: 0), isGood: false)
+
     }
 
     // user touches the screen
@@ -47,7 +52,13 @@ class GameScene: SKScene {
             // 0 to 1 (not bouncey to super boundey
             // note that physicsBody is optional (even though we just created it)
             ball.physicsBody?.restitution = 0.4
+            // collisionBitMask = which things should I bump into? By default, set to everything
+            // contactTestBitMask = which colliosions do you want to know about? by default set to nothing
+            // so, bounce off everything and tell us all about each bounce (OK for simple games)
+            ball.physicsBody!.contactTestBitMask = ball.physicsBody?.collisionBitMask ?? 0
             ball.position = location
+            // name for tracking
+            ball.name = "ball"
             addChild(ball)
         }
     }
@@ -58,6 +69,7 @@ class GameScene: SKScene {
         bouncer.physicsBody = SKPhysicsBody(circleOfRadius: bouncer.size.width / 2.0)
         // object will be fixed in place (but can still collide with things)
         bouncer.physicsBody?.isDynamic = false
+        // bouncer doesn't need name, as we don't care when get hit
         addChild(bouncer)
     }
 
@@ -68,20 +80,56 @@ class GameScene: SKScene {
         if isGood {
             slotBase = SKSpriteNode(imageNamed: "slotBaseGood")
             slotGlow = SKSpriteNode(imageNamed: "slotGlowGood")
+            // name for tracking
+            slotBase.name = "good"
         } else {
             slotBase = SKSpriteNode(imageNamed: "slotBaseBad")
             slotGlow = SKSpriteNode(imageNamed: "slotGlowBad")
+            // name for tracking
+            slotBase.name = "bad"
         }
 
         slotBase.position = position
         slotGlow.position = position
 
+        // allows us to recogize when the ball go through a slot
+        slotBase.physicsBody = SKPhysicsBody(rectangleOf: slotBase.size)
+        slotBase.physicsBody?.isDynamic = false
+
         addChild(slotBase)
         addChild(slotGlow)
-        
+
         // angle in radians, so pi radians = 180 degrees
         let spin = SKAction.rotate(byAngle: .pi, duration: 10)
         let spinForever = SKAction.repeatForever(spin)
         slotGlow.run(spinForever)
+    }
+
+    // SKNode is parent class of all dfifferent types of nodes, we don't really care what kind
+    func collisionBetween(ball: SKNode, object: SKNode) {
+        if object.name == "good" {
+            destroy(ball: ball)
+        } else if object.name == "bad" {
+            destroy(ball: ball)
+        }
+    }
+
+    func destroy(ball: SKNode) {
+        ball.removeFromParent()
+    }
+
+    //  check contact between ball - object or object - ball (not ball - ball)
+    func didBegin(_ contact: SKPhysicsContact) {
+        // double collision may occur (ball hits slot, slot hits ball), so this prevents running twice
+        guard let nodeA = contact.bodyA.node else { return }
+        guard let nodeB = contact.bodyB.node else { return }
+ 
+        // first node is ball
+        if nodeA.name == "ball" {
+            collisionBetween(ball: nodeA, object: nodeB)
+        // second node is ball
+        } else if nodeB.name == "ball" {
+            collisionBetween(ball: nodeB, object: nodeA)
+        }
     }
 }
