@@ -9,6 +9,14 @@ import SpriteKit
 
 // allow us to use SKPhysicsContactDelegate
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    var numBallsLabel: SKLabelNode!
+
+    var numBalls = 5 {
+        didSet {
+            numBallsLabel.text = "Balls left: \(numBalls)"
+        }
+    }
+
     var scoreLabel: SKLabelNode!
 
     var score = 0 {
@@ -69,6 +77,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // top left of screen
         editLabel.position = CGPoint(x: 80, y: 700)
         addChild(editLabel)
+        
+        numBallsLabel = SKLabelNode(fontNamed: "Chalkduster")
+        numBallsLabel.text = "Balls left: 5"
+        numBallsLabel.position = CGPoint(x: 480, y: 700)
+        addChild(numBallsLabel)
     }
 
     // user touches the screen
@@ -98,11 +111,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     box.position = location
                     box.physicsBody = SKPhysicsBody(rectangleOf: box.size)
                     box.physicsBody?.isDynamic = false
+                    box.name = "barrier"
                     addChild(box)
                 } else {
                     // edit is false
                     // create a ball
-                    let colors = ["ballBlue", "ballCyan", "ballGreen", "ballGrey", "ballPurple", "ballRed", "ballYellow" ]
+                    let colors = ["ballBlue", "ballCyan", "ballGreen", "ballGrey", "ballPurple", "ballRed", "ballYellow"]
                     let ball = SKSpriteNode(imageNamed: colors.randomElement() ?? "ballRed")
                     // circueOfRadius - will behave as ball rather than square
                     ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
@@ -170,9 +184,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if object.name == "good" {
             destroy(ball: ball)
             score += 1
+            numBalls += 1
         } else if object.name == "bad" {
             destroy(ball: ball)
             score -= 1
+            numBalls -= 1
+        }
+        else if object.name == "barrier" {
+            object.removeFromParent()
         }
     }
 
