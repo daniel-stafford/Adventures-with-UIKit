@@ -21,7 +21,12 @@ class GameScene: SKScene {
         addChild(background)
         // apply physicsBody to the whole scene
         physicsBody = SKPhysicsBody(edgeLoopFrom: frame)
-
+        
+        makeBouncer(at: CGPoint(x: 0, y: 0))
+        makeBouncer(at: CGPoint(x: 256, y: 0))
+        makeBouncer(at: CGPoint(x: 512, y: 0))
+        makeBouncer(at: CGPoint(x: 768, y: 0))
+        makeBouncer(at: CGPoint(x: 1024, y: 0))
     }
 
     // user touches the screen
@@ -30,14 +35,24 @@ class GameScene: SKScene {
         if let touch = touches.first {
             // where did the touch happen in the whole of my game scene
             let location = touch.location(in: self)
-            // create new sprite node box
-            let box = SKSpriteNode(color: UIColor.red, size: CGSize(width: 64, height: 64))
-           // gives physics body matching the box size tiself
-            box.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 64, height: 64))
-            // put new sprite node box at the location
-            box.position = location
-            // add to game scene
-            addChild(box)
+            
+            let ball = SKSpriteNode(imageNamed: "ballRed")
+            //circueOfRadius - will behave as ball rather than square
+            ball.physicsBody = SKPhysicsBody(circleOfRadius: ball.size.width / 2.0)
+            // 0 to 1 (not bouncey to super boundey
+            // note that physicsBody is optional (even though we just created it)
+            ball.physicsBody?.restitution = 0.4
+            ball.position = location
+            addChild(ball)
         }
+    }
+    
+    func makeBouncer(at position: CGPoint) {
+        let bouncer = SKSpriteNode(imageNamed: "bouncer")
+        bouncer.position = position
+        bouncer.physicsBody = SKPhysicsBody(circleOfRadius: bouncer.size.width / 2.0)
+        // object will be fixed in place (but can still collide with things) 
+        bouncer.physicsBody?.isDynamic = false
+        addChild(bouncer)
     }
 }
