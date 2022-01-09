@@ -8,7 +8,10 @@
 
 import UIKit
 
-class Person: NSObject {
+// NSCoding allow for saving in user defaults
+// We're not using a struct here, becuase we couldn't use it with NSCoding
+// Codable (not compataible with objC but very easy to use, tells Swift we went to read/write
+class Person: NSObject, Codable {
     var name: String
     var image: String
 
