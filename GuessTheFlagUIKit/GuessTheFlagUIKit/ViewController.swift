@@ -21,9 +21,23 @@ class ViewController: UIViewController {
     var correctAnswer = 0
     var turns = 0
     var numQuestions = 5
+    var highScore = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let defaults = UserDefaults.standard
+
+        if let avedHighScore = defaults.object(forKey: "highScore") as? Data {
+            let jsonDecoder = JSONDecoder()
+
+            do {
+                highScore = try jsonDecoder.decode(Int.self, from: avedHighScore)
+                print("high score loaded", highScore)
+            } catch {
+                print("Failed to load high score")
+            }
+        }
 
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
 
@@ -70,6 +84,8 @@ class ViewController: UIViewController {
         if sender.tag - 1 == correctAnswer {
             score += 1
             title = "Correct"
+            print("score", score)
+            print("highscore", highScore)
         } else {
             score -= 1
             let tappedFlag = formatCountry(country: countries[sender.tag - 1])
@@ -79,6 +95,16 @@ class ViewController: UIViewController {
         scoreText.text = "Your score: \(score)"
 
         alertTurn(title: title)
+    }
+
+    func checkHighScore(action: UIAlertAction! = nil) {
+       
+    }
+
+    func alertHighScore() {
+        let ac = UIAlertController(title: "High score", message: "Great job. That's a new high score!", preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default, handler: checkTurns))
+        present(ac, animated: true)
     }
 
     func checkTurns(action: UIAlertAction! = nil) {
@@ -97,11 +123,22 @@ class ViewController: UIViewController {
     }
 
     func alertSummary() {
-        let ac = UIAlertController(title: "Game Over", message: "That's it! Your score was \(score) out of \(numQuestions)", preferredStyle: .alert)
+        if score > highScore {
+            highScore = score
+            save()
+            let ac = UIAlertController(title: "Game Over", message: "Congrats! Your score of \(score) is a new high score!", preferredStyle: .alert)
 
-        ac.addAction(UIAlertAction(title: "New Game", style: .default, handler: resetGame))
-        present(ac, animated: true)
-    }
+            ac.addAction(UIAlertAction(title: "New Game", style: .default, handler: resetGame))
+            present(ac, animated: true)
+        } else {
+            let ac = UIAlertController(title: "Game Over", message: "That's it! Your score was \(score) out of \(numQuestions)", preferredStyle: .alert)
+
+            ac.addAction(UIAlertAction(title: "New Game", style: .default, handler: resetGame))
+            present(ac, animated: true)
+        }
+        }
+
+     
 
     func resetGame(action: UIAlertAction! = nil) {
         score = 0
@@ -110,11 +147,22 @@ class ViewController: UIViewController {
 
         askQuestion()
     }
-    
+
     @objc func sharedTapped() {
         // Share the app challenge👍
         let vc = UIActivityViewController(activityItems: ["Hey, I scored \(score) on the Guess the Flag app!"], applicationActivities: [])
         vc.popoverPresentationController?.barButtonItem = navigationItem.rightBarButtonItem
         present(vc, animated: true)
+    }
+
+    func save() {
+        print("saving")
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(highScore) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "highScore")
+        } else {
+            print("Failed to save high score.")
+        }
     }
 }
