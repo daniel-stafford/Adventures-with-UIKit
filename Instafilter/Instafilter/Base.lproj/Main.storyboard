@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOD-mS-syR">
-                                <rect key="frame" x="20" y="72" width="375" height="630"/>
+                                <rect key="frame" x="20" y="108" width="375" height="594"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Mja-Tj-FaF">
                                         <rect key="frame" x="10" y="10" width="355" height="612"/>
@@ -28,7 +28,7 @@
                                     <constraint firstItem="Mja-Tj-FaF" firstAttribute="centerX" secondItem="IOD-mS-syR" secondAttribute="centerX" id="JPe-Hq-a3i"/>
                                     <constraint firstItem="Mja-Tj-FaF" firstAttribute="top" secondItem="IOD-mS-syR" secondAttribute="top" constant="10" id="Rr1-fM-mKj"/>
                                     <constraint firstItem="Mja-Tj-FaF" firstAttribute="leading" secondItem="IOD-mS-syR" secondAttribute="leading" constant="10" id="V2w-bZ-9OE"/>
-                                    <constraint firstItem="Mja-Tj-FaF" firstAttribute="centerY" secondItem="IOD-mS-syR" secondAttribute="centerY" constant="1" id="oLf-Zd-Dq6"/>
+                                    <constraint firstItem="Mja-Tj-FaF" firstAttribute="centerY" secondItem="IOD-mS-syR" secondAttribute="centerY" constant="19" id="oLf-Zd-Dq6"/>
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Intensity:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bND-78-rEj">
@@ -70,7 +70,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="Wxj-dB-8FI" firstAttribute="baseline" secondItem="b59-q3-h08" secondAttribute="baseline" constant="-1" id="61h-DS-ug1"/>
-                            <constraint firstItem="IOD-mS-syR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="-16" id="7Ec-sC-Zhk"/>
+                            <constraint firstItem="IOD-mS-syR" firstAttribute="top" secondItem="8bC-Xf-vdC" secondAttribute="topMargin" constant="20" id="7Ec-sC-Zhk"/>
                             <constraint firstItem="IOD-mS-syR" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="C2a-lD-8av"/>
                             <constraint firstItem="IOD-mS-syR" firstAttribute="leading" secondItem="Wxj-dB-8FI" secondAttribute="leading" constant="8" id="HEc-In-Zke"/>
                             <constraint firstItem="X0r-Sw-3jc" firstAttribute="leading" secondItem="bND-78-rEj" secondAttribute="trailing" constant="36" id="IJq-KY-j6p"/>
