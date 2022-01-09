@@ -98,7 +98,6 @@ class ViewController: UIViewController {
     }
 
     func checkHighScore(action: UIAlertAction! = nil) {
-       
     }
 
     func alertHighScore() {
@@ -136,9 +135,7 @@ class ViewController: UIViewController {
             ac.addAction(UIAlertAction(title: "New Game", style: .default, handler: resetGame))
             present(ac, animated: true)
         }
-        }
-
-     
+    }
 
     func resetGame(action: UIAlertAction! = nil) {
         score = 0
