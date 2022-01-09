@@ -10,9 +10,32 @@ import UIKit
 class ViewController: UITableViewController {
     var allWords = [String]()
     var usedWords = [String]()
+    var currentWord = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let defaults = UserDefaults.standard
+        let jsonDecoder = JSONDecoder()
+
+        if let savedCurrentWord = defaults.object(forKey: "currentWord") as? Data {
+            do {
+                currentWord = try jsonDecoder.decode(String.self, from: savedCurrentWord)
+                print("loading saved currentWord", currentWord)
+            } catch {
+                print("Failed to load curren word")
+            }
+        }
+
+        if let savedWords = defaults.object(forKey: "usedWords") as? Data {
+            do {
+                usedWords = try jsonDecoder.decode([String].self, from: savedWords)
+                print("loading used words", usedWords)
+            } catch {
+                print("Failed to load used words")
+            }
+        }
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(promptForAnswer))
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .refresh, target: self, action: #selector(startGame))
 
@@ -27,7 +50,11 @@ class ViewController: UITableViewController {
             allWords = ["silkworm"]
         }
 
-        startGame()
+        if currentWord == "" {
+            startGame()
+        } else {
+            continueGame()
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -40,9 +67,15 @@ class ViewController: UITableViewController {
         return cell
     }
 
+    func continueGame() {
+        title = currentWord
+    }
+
     @objc func startGame() {
         title = allWords.randomElement()
+        currentWord = title ?? allWords[0]
         usedWords.removeAll(keepingCapacity: true)
+        save()
         // reloadData() forces it to call numberOfRowsInSection again, as well as calling cellForRowAt repeatedly.
         tableView.reloadData()
     }
@@ -69,7 +102,7 @@ class ViewController: UITableViewController {
                     if isLong(word: lowerAnswer) {
                         if isDifferent(word: lowerAnswer) {
                             usedWords.insert(lowerAnswer, at: 0)
-
+                            save()
                             let indexPath = IndexPath(row: 0, section: 0)
                             tableView.insertRows(at: [indexPath], with: .automatic)
 
@@ -90,7 +123,6 @@ class ViewController: UITableViewController {
             guard let title = title?.lowercased() else { return }
             showErrorMessage(title: "Word not possible", message: "You can't spell that word from \(title)")
         }
-
     }
 
     func isPossible(word: String) -> Bool {
@@ -132,9 +164,28 @@ class ViewController: UITableViewController {
         return !(title == word)
     }
 
-    func showErrorMessage(title: String, message: String){
+    func showErrorMessage(title: String, message: String) {
         let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
         present(ac, animated: true)
+    }
+
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        let defaults = UserDefaults.standard
+
+        if let savedData = try? jsonEncoder.encode(currentWord) {
+            defaults.set(savedData, forKey: "currentWord")
+            print("Saved current word:", currentWord)
+        } else {
+            print("Failed to save current word.")
+        }
+
+        if let savedData = try? jsonEncoder.encode(usedWords) {
+            defaults.set(savedData, forKey: "usedWords")
+            print("Saved used words:", usedWords)
+        } else {
+            print("Failed to save used words.")
+        }
     }
 }
