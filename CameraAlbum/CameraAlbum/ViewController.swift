@@ -12,6 +12,19 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        title = "Photo Album"
+
+        let defaults = UserDefaults.standard
+
+                if let savedPhotos = defaults.object(forKey: "photos") as? Data {
+                    let jsonDecoder = JSONDecoder()
+
+                    do {
+                        photos = try jsonDecoder.decode([Photo].self, from: savedPhotos)
+                    } catch {
+                        print("Failed to load photos")
+                    }
+                }
 
         navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewPhoto))
     }
@@ -24,21 +37,20 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "Photo", for: indexPath) as? PhotoCell else {
             fatalError("Unable to dequeue PhotoCell")
         }
-        
+
         let photo = photos[indexPath.item]
-        
+
         let path = getDocumentsDirectory().appendingPathComponent(photo.image)
         cell.iamgeView.image = UIImage(contentsOfFile: path.path)
         cell.fileName.text = photo.fileName
 
         return cell
     }
-    
+
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "PhotoDetail") as? PhotoDetailViewController {
-            // 2: success! Set its selectedImage property
-            vc.selectedImage = photos[indexPath.row]
-            // 3: now push it onto the navigation controller
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
+            vc.photo = photos[indexPath.item]
+
             navigationController?.pushViewController(vc, animated: true)
         }
     }
@@ -47,6 +59,7 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         let picker = UIImagePickerController()
 
         // MARK: TODO: Switch back to using camera
+
         if !UIImagePickerController.isSourceTypeAvailable(.camera) {
             picker.sourceType = .photoLibrary
             picker.allowsEditing = true
@@ -77,19 +90,28 @@ class ViewController: UICollectionViewController, UIImagePickerControllerDelegat
         let ac = UIAlertController(title: "Caption", message: "Please enter a caption for your new photo", preferredStyle: .alert)
         ac.addTextField()
 
-            ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
-                guard let newCaption = ac?.textFields?[0].text else { return }
-                photo.fileName = newCaption
-//                self?.save()
-                self?.collectionView.reloadData()
-            })
-        ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
-
+        ac.addAction(UIAlertAction(title: "OK", style: .default) { [weak self, weak ac] _ in
+            guard let newCaption = ac?.textFields?[0].text else { return }
+            photo.fileName = newCaption
+            self?.save()
+            self?.collectionView.reloadData()
+        })
         present(ac, animated: true)
     }
 
     func getDocumentsDirectory() -> URL {
         let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         return paths[0]
+    }
+
+    func save() {
+        let jsonEncoder = JSONEncoder()
+        if let savedData = try? jsonEncoder.encode(photos) {
+            let defaults = UserDefaults.standard
+            defaults.set(savedData, forKey: "photos")
+            print("saving photos:", photos)
+        } else {
+            print("Failed to save photos.")
+        }
     }
 }

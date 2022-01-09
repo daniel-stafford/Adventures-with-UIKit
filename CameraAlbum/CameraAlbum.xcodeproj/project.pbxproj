@@ -15,6 +15,7 @@
 		DD5FE0F3278B2D610030C5D1 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD5FE0F1278B2D610030C5D1 /* LaunchScreen.storyboard */; };
 		DD5FE0FB278B2E030030C5D1 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5FE0FA278B2E030030C5D1 /* PhotoCell.swift */; };
 		DD5FE0FD278B3F1E0030C5D1 /* Photo.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD5FE0FC278B3F1E0030C5D1 /* Photo.swift */; };
+		DDA2B682278B615100AA46EA /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDA2B681278B615100AA46EA /* DetailViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +29,7 @@
 		DD5FE0F4278B2D610030C5D1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DD5FE0FA278B2E030030C5D1 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		DD5FE0FC278B3F1E0030C5D1 /* Photo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Photo.swift; sourceTree = "<group>"; };
+		DDA2B681278B615100AA46EA /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -63,6 +65,7 @@
 				DD5FE0E6278B2D5F0030C5D1 /* AppDelegate.swift */,
 				DD5FE0E8278B2D5F0030C5D1 /* SceneDelegate.swift */,
 				DD5FE0EA278B2D5F0030C5D1 /* ViewController.swift */,
+				DDA2B681278B615100AA46EA /* DetailViewController.swift */,
 				DD5FE0FC278B3F1E0030C5D1 /* Photo.swift */,
 				DD5FE0FA278B2E030030C5D1 /* PhotoCell.swift */,
 				DD5FE0EC278B2D5F0030C5D1 /* Main.storyboard */,
@@ -147,6 +150,7 @@
 				DD5FE0FB278B2E030030C5D1 /* PhotoCell.swift in Sources */,
 				DD5FE0EB278B2D5F0030C5D1 /* ViewController.swift in Sources */,
 				DD5FE0E7278B2D5F0030C5D1 /* AppDelegate.swift in Sources */,
+				DDA2B682278B615100AA46EA /* DetailViewController.swift in Sources */,
 				DD5FE0E9278B2D5F0030C5D1 /* SceneDelegate.swift in Sources */,
 				DD5FE0FD278B3F1E0030C5D1 /* Photo.swift in Sources */,
 			);

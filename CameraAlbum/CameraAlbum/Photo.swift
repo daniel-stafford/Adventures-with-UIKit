@@ -7,7 +7,7 @@
 
 import UIKit
 
-class Photo: NSObject {
+class Photo: NSObject, Codable {
     var fileName: String
     var image: String
 
