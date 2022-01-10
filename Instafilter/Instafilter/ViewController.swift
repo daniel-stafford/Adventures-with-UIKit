@@ -16,9 +16,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     @IBOutlet var changeFilterLabel: UIButton!
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var intensity: UISlider!
+    @IBOutlet var radius: UISlider!
     // delete this properly (just erasing causing a compile error)
     @IBOutlet var intensityChanged: NSLayoutConstraint!
-
+    @IBOutlet var radiusChanged: UISlider!
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -52,6 +53,10 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         applyProcessing()
     }
 
+    @IBAction func radiusChanged(_ sender: Any) {
+        applyProcessing()
+    }
+
     @IBAction func intensityChanged(_ sender: Any) {
         // start processing when slider is moved
         applyProcessing()
@@ -65,13 +70,11 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     func applyProcessing() {
-        print(currentFilter.inputKeys, "inputKeys")
-
         let inputKeys = currentFilter.inputKeys
         // uses the value of our intensity slider to set the kCIInputIntensityKey value of our current Core Image filter. For sepia toning a value of 0 means "no effect" and 1 means "fully sepia."
         if inputKeys.contains(kCIInputIntensityKey) { currentFilter.setValue(intensity.value, forKey: kCIInputIntensityKey) }
         // raidus takes values from 0 - 200
-        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(intensity.value * 200, forKey: kCIInputRadiusKey) }
+        if inputKeys.contains(kCIInputRadiusKey) { currentFilter.setValue(radius.value * 200, forKey: kCIInputRadiusKey) }
         // scale from 0 to 10
         if inputKeys.contains(kCIInputScaleKey) { currentFilter.setValue(intensity.value * 10, forKey: kCIInputScaleKey) }
         // centering by halving size and width
