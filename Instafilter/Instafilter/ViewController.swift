@@ -116,6 +116,25 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBAction func save(_ sender: Any) {
-        // code to come
+        guard let image = imageView.image else { return }
+        // write a UI image to the photos album
+        // takes UIimage, notify self (our View Controller, very specfic #selector call)
+        // nil context
+         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+    }
+    
+    // must call this to save photo. very ugly
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            // we got back an error!
+            // use user's own language
+            let ac = UIAlertController(title: "Save error", message: error.localizedDescription, preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        } else {
+            let ac = UIAlertController(title: "Saved!", message: "Your altered image has been saved to your photos.", preferredStyle: .alert)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            present(ac, animated: true)
+        }
     }
 }
