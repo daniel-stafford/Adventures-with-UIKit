@@ -40,6 +40,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         currentImage = image
 
         // CIImage is the CoreImage equivalent of UIImage in this context
+        // CIImage is like a recipe describing what kind of transformations to apply.
         let beginImage = CIImage(image: currentImage)
         // lots of random keys in CoreImage, this is the input key
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
@@ -92,8 +93,8 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         ac.addAction(UIAlertAction(title: "CIVignette", style: .default, handler: setFilter))
         ac.addAction(UIAlertAction(title: "Cancel", style: .cancel))
         present(ac, animated: true)
-        
-        //ipad options
+
+        // ipad options
         if let popoverController = ac.popoverPresentationController {
             popoverController.sourceView = sender
             popoverController.sourceRect = sender.bounds
@@ -116,13 +117,18 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     @IBAction func save(_ sender: Any) {
-        guard let image = imageView.image else { return }
+        guard let image = imageView.image else {
+            let ac = UIAlertController(title: "Error", message: "Please import a photo before saving", preferredStyle: .alert)
+            present(ac, animated: true)
+            ac.addAction(UIAlertAction(title: "OK", style: .default))
+            return
+        }
         // write a UI image to the photos album
         // takes UIimage, notify self (our View Controller, very specfic #selector call)
         // nil context
-         UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
+        UIImageWriteToSavedPhotosAlbum(image, self, #selector(image(_:didFinishSavingWithError:contextInfo:)), nil)
     }
-    
+
     // must call this to save photo. very ugly
     @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
         if let error = error {
