@@ -13,6 +13,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     var currentFilter: CIFilter!
     var currentImage: UIImage!
 
+    @IBOutlet var changeFilterLabel: UIButton!
     @IBOutlet var imageView: UIImageView!
     @IBOutlet var intensity: UISlider!
     // delete this properly (just erasing causing a compile error)
@@ -28,6 +29,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         context = CIContext()
         // example filter to apply sepa effect to images
         currentFilter = CIFilter(name: "CISepiaTone")
+        setChangeFilterLabel()
     }
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
@@ -44,6 +46,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         let beginImage = CIImage(image: currentImage)
         // lots of random keys in CoreImage, this is the input key
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
+        print(currentFilter.inputKeys, "inputKeys")
 
         // start porcessing when photo is imported
         applyProcessing()
@@ -62,8 +65,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     }
 
     func applyProcessing() {
-        let inputKeys = currentFilter.inputKeys
+        print(currentFilter.inputKeys, "inputKeys")
 
+        let inputKeys = currentFilter.inputKeys
         // uses the value of our intensity slider to set the kCIInputIntensityKey value of our current Core Image filter. For sepia toning a value of 0 means "no effect" and 1 means "fully sepia."
         if inputKeys.contains(kCIInputIntensityKey) { currentFilter.setValue(intensity.value, forKey: kCIInputIntensityKey) }
         // raidus takes values from 0 - 200
@@ -109,6 +113,7 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
         guard let actionTitle = action.title else { return }
 
         currentFilter = CIFilter(name: actionTitle)
+        setChangeFilterLabel()
 
         let beginImage = CIImage(image: currentImage)
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
@@ -142,5 +147,9 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
             ac.addAction(UIAlertAction(title: "OK", style: .default))
             present(ac, animated: true)
         }
+    }
+
+    func setChangeFilterLabel() {
+        changeFilterLabel.setTitle(String(currentFilter.name.dropFirst(2)), for: .normal)
     }
 }
