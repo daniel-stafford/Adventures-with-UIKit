@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        imageView = UIImageView(image: UIImage(named: "penguin"))
+        imageView = UIImageView(image: UIImage(named: "cage"))
         imageView.center = CGPoint(x: 512, y: 384)
         view.addSubview(imageView)
     }
