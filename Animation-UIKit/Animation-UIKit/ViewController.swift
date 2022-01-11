@@ -19,7 +19,28 @@ class ViewController: UIViewController {
         view.addSubview(imageView)
     }
 
-    @IBAction func buttonTapped(_ sender: Any) {
+    // change Any to UIButton
+    @IBAction func buttonTapped(_ sender: UIButton) {
+        // hide the button when tapped
+        sender.isHidden = true
+
+        //start animation, lasts one second, no delay, no special pptions
+        UIView.animate(withDuration: 1, delay: 0, options: [],
+        // provide animation as closure
+        // no chance of retention cycle as animation is temporary, no need for weak
+           animations: {
+            switch self.currentAnimation {
+            case 0:
+                break
+
+            default:
+                break
+            }
+            // closure when finished, show button
+        }) { finished in
+            sender.isHidden = false
+        }
+
         currentAnimation += 1
 
         if currentAnimation > 7 {
