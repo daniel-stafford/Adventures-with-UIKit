@@ -23,6 +23,7 @@ class ViewController: UIViewController {
             scoreLabel.text = "Score: \(score)"
         }
     }
+
     var level = 1
 
     override func loadView() {
@@ -221,7 +222,7 @@ class ViewController: UIViewController {
                 }
             }
         }
-        //switch back to main thread fpr UI updates
+        // switch back to main thread fpr UI updates
         DispatchQueue.main.async { [weak self] in
             // remove final line breaks
             self?.cluesLabel.text = clueString.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -230,14 +231,13 @@ class ViewController: UIViewController {
             letterBits.shuffle()
 
             // check we have same number of buttons and bits
-            guard let chckdLetterButtons = self?.letterButtons else {return}
+            guard let chckdLetterButtons = self?.letterButtons else { return }
             if letterBits.count == chckdLetterButtons.count {
                 for i in 0 ..< chckdLetterButtons.count {
                     chckdLetterButtons[i].setTitle(letterBits[i], for: .normal)
                 }
             }
         }
-
     }
 
     @objc func letterTapped(_ sender: UIButton) {
@@ -246,8 +246,10 @@ class ViewController: UIViewController {
         currentAnswer.text = currentAnswer.text?.appending(buttonTitle)
         // hold all the hiden buttons during a single answer
         activatedButtons.append(sender)
-        // hide the button
-        sender.isHidden = true
+        // animate here!!!
+        UIView.animate(withDuration: 1, delay: 0, options: [], animations: {
+            sender.alpha = 0
+        })
     }
 
     @objc func submitTapped(_ sender: UIButton) {
@@ -271,7 +273,7 @@ class ViewController: UIViewController {
             score += 1
 
             // If the score is evenly divisible by 7, we know they have found all seven words so we're going to show a UIAlertController that will prompt the user to go to the next level.
-            if letterButtons.allSatisfy({$0.isHidden == true}) {
+            if letterButtons.allSatisfy({ $0.alpha == 0 }) {
                 let ac = UIAlertController(title: "Well done!", message: "Are you ready for the next level?", preferredStyle: .alert)
                 ac.addAction(UIAlertAction(title: "Let's go!", style: .default, handler: levelUp))
                 present(ac, animated: true)
@@ -283,14 +285,13 @@ class ViewController: UIViewController {
         }
     }
 
-
     @objc func clearTapped(_ sender: UIButton) {
         // clear out user input
         currentAnswer.text = ""
 
         // show all tapped buttons for last answer
         for btn in activatedButtons {
-            btn.isHidden = false
+            btn.alpha = 1
         }
 
         activatedButtons.removeAll()
@@ -302,7 +303,7 @@ class ViewController: UIViewController {
 
         // show all tapped buttons for last answer
         for btn in activatedButtons {
-            btn.isHidden = false
+            btn.alpha = 1
         }
         activatedButtons.removeAll()
         score -= 1
@@ -316,7 +317,7 @@ class ViewController: UIViewController {
         loadLevel()
 
         for letterButton in letterButtons {
-            letterButton.isHidden = false
+            letterButton.alpha = 1
         }
     }
 }
