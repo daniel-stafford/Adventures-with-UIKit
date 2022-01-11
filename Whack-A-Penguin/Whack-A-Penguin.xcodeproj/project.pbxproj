@@ -18,6 +18,8 @@
 		DDDAAC8D278C842F00E8E114 /* whackBad.caf in Resources */ = {isa = PBXBuildFile; fileRef = DDDAAC8B278C842F00E8E114 /* whackBad.caf */; };
 		DDDAAC8F278CA52300E8E114 /* WhackSlot.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDDAAC8E278CA52300E8E114 /* WhackSlot.swift */; };
 		DDDAAC97278D795200E8E114 /* gameOver.caf in Resources */ = {isa = PBXBuildFile; fileRef = DDDAAC96278D795200E8E114 /* gameOver.caf */; };
+		DDDAAC99278D81CC00E8E114 /* smokeParticles.sks in Resources */ = {isa = PBXBuildFile; fileRef = DDDAAC98278D81CC00E8E114 /* smokeParticles.sks */; };
+		DDDAACA5278D94A000E8E114 /* mudParticles.sks in Resources */ = {isa = PBXBuildFile; fileRef = DDDAACA4278D94A000E8E114 /* mudParticles.sks */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		DDDAAC8B278C842F00E8E114 /* whackBad.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = whackBad.caf; sourceTree = "<group>"; };
 		DDDAAC8E278CA52300E8E114 /* WhackSlot.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhackSlot.swift; sourceTree = "<group>"; };
 		DDDAAC96278D795200E8E114 /* gameOver.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = gameOver.caf; sourceTree = "<group>"; };
+		DDDAAC98278D81CC00E8E114 /* smokeParticles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = smokeParticles.sks; sourceTree = "<group>"; };
+		DDDAACA4278D94A000E8E114 /* mudParticles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = mudParticles.sks; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -76,6 +80,8 @@
 				DDDAAC8A278C842F00E8E114 /* whack.caf */,
 				DDDAAC8B278C842F00E8E114 /* whackBad.caf */,
 				DDDAAC96278D795200E8E114 /* gameOver.caf */,
+				DDDAAC98278D81CC00E8E114 /* smokeParticles.sks */,
+				DDDAACA4278D94A000E8E114 /* mudParticles.sks */,
 			);
 			path = "Whack-A-Penguin";
 			sourceTree = "<group>";
@@ -144,7 +150,9 @@
 				DDDAAC76278C82CD00E8E114 /* GameScene.sks in Resources */,
 				DDDAAC81278C82D000E8E114 /* Assets.xcassets in Resources */,
 				DDDAAC84278C82D000E8E114 /* LaunchScreen.storyboard in Resources */,
+				DDDAACA5278D94A000E8E114 /* mudParticles.sks in Resources */,
 				DDDAAC8D278C842F00E8E114 /* whackBad.caf in Resources */,
+				DDDAAC99278D81CC00E8E114 /* smokeParticles.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

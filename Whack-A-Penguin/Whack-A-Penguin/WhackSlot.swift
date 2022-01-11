@@ -40,11 +40,12 @@ class WhackSlot: SKNode {
 
     func show(hideTime: Double) {
         if isVisible { return }
-        
+
         charNode.xScale = 1
         charNode.yScale = 1
 
         charNode.run(SKAction.moveBy(x: 0, y: 80, duration: 0.05))
+        animateMud(isAppearing: true)
         isVisible = true
         isHit = false
 
@@ -57,20 +58,23 @@ class WhackSlot: SKNode {
             charNode.texture = SKTexture(imageNamed: "penguinEvil")
             charNode.name = "charEnemy"
         }
-        
+
         // hide after some time
         DispatchQueue.main.asyncAfter(deadline: .now() + (hideTime * 3.5)) { [weak self] in
             self?.hide()
         }
     }
-    
+
     func hide() {
         if !isVisible { return }
-        //move back down to hole
+        // move back down to hole
         charNode.run(SKAction.moveBy(x: 0, y: -80, duration: 0.05))
         isVisible = false
+        
+        animateMud(isAppearing: false)
+        
     }
-    
+
     func hit() {
         isHit = true
 
@@ -81,6 +85,34 @@ class WhackSlot: SKNode {
         // hide the penguin
         let notVisible = SKAction.run { [unowned self] in self.isVisible = false }
         // run wait, hiding, not visible in sequence
+
         charNode.run(SKAction.sequence([delay, hide, notVisible]))
+
+        if let smokeParticles = SKEmitterNode(fileNamed: "smokeParticles.sks") {
+            smokeParticles.position = charNode.position
+            addChild(smokeParticles)
+            fadeAndRemove(node: smokeParticles, duration: 1)
+        }
+    }
+    
+    func animateMud(isAppearing: Bool){
+        if let mudParticles = SKEmitterNode(fileNamed: "mudParticles.sks") {
+            if isAppearing {
+                mudParticles.position = CGPoint(x: 0, y: charNode.position.y + 80)
+            } else {
+                
+                mudParticles.position = CGPoint(x: 0, y: charNode.position.y + 10)
+            }
+            addChild(mudParticles)
+            fadeAndRemove(node: mudParticles, duration: 0.1)
+        }
+    }
+
+    func fadeAndRemove(node: SKNode, duration: TimeInterval) {
+        let wait = SKAction.wait(forDuration: duration)
+        let fadeOutAction = SKAction.fadeOut(withDuration: duration)
+        let remove = SKAction.run({ node.removeFromParent }())
+        let sequence = SKAction.sequence([wait, fadeOutAction, remove])
+        node.run(sequence)
     }
 }
