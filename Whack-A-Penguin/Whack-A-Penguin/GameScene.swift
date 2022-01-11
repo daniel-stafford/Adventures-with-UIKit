@@ -97,9 +97,8 @@ class GameScene: SKScene {
 
             let FinalGameScore = SKLabelNode(fontNamed: "Chalkduster")
             FinalGameScore.text = "Your final score: \(score)"
-            // place center in bottom left
             FinalGameScore.position = CGPoint(x: 512, y: 300)
-//            FinalGameScore.horizontalAlignmentMode = .center
+            FinalGameScore.zPosition = 1
             FinalGameScore.fontSize = 48
             addChild(FinalGameScore)
 
