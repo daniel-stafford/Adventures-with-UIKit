@@ -36,19 +36,17 @@ class ViewController: UIViewController, UIImagePickerControllerDelegate, UINavig
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
         // check we have an image
         guard let image = info[.editedImage] as? UIImage else { return }
-        // clear the imagePicker
-        dismiss(animated: true)
-
-        // use our image as input for the filter
         currentImage = image
+        // clear the imagePicker with fade in animation
+        dismiss(animated: true) { UIView.animate(withDuration: 2.0) {
+            self.imageView.alpha = 1
+        }}
 
         // CIImage is the CoreImage equivalent of UIImage in this context
         // CIImage is like a recipe describing what kind of transformations to apply.
         let beginImage = CIImage(image: currentImage)
         // lots of random keys in CoreImage, this is the input key
         currentFilter.setValue(beginImage, forKey: kCIInputImageKey)
-        print(currentFilter.inputKeys, "inputKeys")
-
         // start porcessing when photo is imported
         applyProcessing()
     }
