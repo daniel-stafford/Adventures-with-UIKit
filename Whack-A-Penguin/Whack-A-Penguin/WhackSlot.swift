@@ -31,6 +31,7 @@ class WhackSlot: SKNode {
         charNode = SKSpriteNode(imageNamed: "penguinGood")
         charNode.position = CGPoint(x: 0, y: -90)
         charNode.name = "character"
+        // If you want something to be cropped, it must be made a child of a crop node.
         cropNode.addChild(charNode)
 
         // has a penguin shaped crop node (for showing/hiding) that contains the penguin
