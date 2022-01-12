@@ -27,7 +27,7 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        title = "Country Smash"
+        title = "Country, Country, Country!"
         navigationController?.navigationBar.prefersLargeTitles = true
 
         let urlString = "https://restcountries.com/v3.1/all"
@@ -63,7 +63,7 @@ class ViewController: UITableViewController {
             self?.present(ac, animated: true)
         }
     }
-    
+
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return allCountries.count
@@ -71,39 +71,39 @@ class ViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Country", for: indexPath)
-        
+
         let country = allCountries[indexPath.row]
-        
+
         var content = cell.defaultContentConfiguration()
-        
+
         content.image = UIImage(named: country.cca2.lowercased())
         content.imageProperties.maximumSize = CGSize(width: 50, height: 50)
         content.imageToTextPadding = CGFloat(30)
         content.text = country.name.common
+
         content.textProperties.font = UIFont.systemFont(ofSize: 20)
-        
+
         cell.contentConfiguration = content
 
         return cell
     }
-    
+
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.alpha = 0
 
         UIView.animate(
-            withDuration: 0.1,
-            delay: 0.01 * Double(indexPath.row),
+            withDuration: 0.4,
             animations: {
                 cell.alpha = 1
         })
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") {
-            
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? CountryVC {
             let country = allCountries[indexPath.row]
-
             vc.title = country.name.common
+            vc.selectedCountry = country
+
             navigationController?.pushViewController(vc, animated: true)
         }
     }
