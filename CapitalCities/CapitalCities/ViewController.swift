@@ -14,7 +14,25 @@ class ViewController: UIViewController, MKMapViewDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
+        let ac = UIAlertController(title: "Select Map Type", message: nil, preferredStyle: .alert)
+
+        let addSatelite = UIAlertAction(title: "Satelite", style: .default) { [weak self] _ in
+            self?.mapView.mapType = .satellite
+        }
+        let addStandard = UIAlertAction(title: "Standard", style: .default) { [weak self] _ in
+            self?.mapView.mapType = .standard
+        }
+        let addHybrid = UIAlertAction(title: "Hybrid", style: .default) { [weak self] _ in
+            self?.mapView.mapType = .hybrid
+        }
+
+        ac.addAction(addSatelite)
+        ac.addAction(addStandard)
+        ac.addAction(addHybrid)
+
+        present(ac, animated: true)
+
         let london = Capital(title: "London", coordinate: CLLocationCoordinate2D(latitude: 51.507222, longitude: -0.1275), info: "Home to the 2012 Summer Olympics.")
         let oslo = Capital(title: "Oslo", coordinate: CLLocationCoordinate2D(latitude: 59.95, longitude: 10.75), info: "Founded over a thousand years ago.")
         let paris = Capital(title: "Paris", coordinate: CLLocationCoordinate2D(latitude: 48.8567, longitude: 2.3508), info: "Often called the City of Light.")
@@ -32,7 +50,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
         let identifier = "Capital"
 
         // 3 Try to dequeue an annotation view from the map view's pool of unused views.
-        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        var annotationView = mapView.dequeueReusableAnnotationView(withIdentifier: identifier) as? MKPinAnnotationView
 
         if annotationView == nil {
             // 4 If it isn't able to find a reusable view, create a new one using MKPinAnnotationView and sets its canShowCallout property to true. This triggers the popup with the city name.
@@ -47,6 +65,7 @@ class ViewController: UIViewController, MKMapViewDelegate {
             annotationView?.annotation = annotation
         }
 
+        annotationView?.pinTintColor = .green
         return annotationView
     }
 
