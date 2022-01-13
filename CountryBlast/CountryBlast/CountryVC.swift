@@ -59,12 +59,14 @@ class CountryVC: UIViewController {
         capitalLabel.textColor = .none
         view.addSubview(capitalLabel)
 
-        flagImage = UIImage(named: selectedCountry?.cca2.lowercased() ?? "")
-        flagImageView = UIImageView(image: flagImage)
-        flagImageView.frame = CGRect(x: 20, y: 175, width: 150, height: 100)
+        flagImageView = UIImageView(image: UIImage(named: selectedCountry?.cca2.lowercased() ?? ""))
+        flagImageView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(flagImageView)
 
         NSLayoutConstraint.activate([
+            
+            flagImageView.topAnchor.constraint(equalTo: view.layoutMarginsGuide.topAnchor, constant: 20),
+            flagImageView.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
 
             regionLabel.topAnchor.constraint(equalTo: flagImageView.bottomAnchor, constant: spacingBetweem),
             regionLabel.leadingAnchor.constraint(equalTo: view.layoutMarginsGuide.leadingAnchor),
