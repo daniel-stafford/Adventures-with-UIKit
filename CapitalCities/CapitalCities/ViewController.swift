@@ -75,9 +75,21 @@ class ViewController: UIViewController, MKMapViewDelegate {
         guard let capital = view.annotation as? Capital else { return }
         let placeName = capital.title
         let placeInfo = capital.info
+        let formatCapitalTitle = placeName == "Washington DC" ? "Washington,_D.C." : placeName
 
         let ac = UIAlertController(title: placeName, message: placeInfo, preferredStyle: .alert)
         ac.addAction(UIAlertAction(title: "OK", style: .default))
+
+        let wiki = UIAlertAction(title: "Wikipedia", style: .default) { [weak self] _ in
+            if let browserView = self?.storyboard?.instantiateViewController(withIdentifier: "Browser") as? BrowserVC {
+                browserView.selectedWebsite = "en.wikipedia.org/wiki/\(formatCapitalTitle ?? "")"
+                
+                self?.navigationController?.pushViewController(browserView, animated: true)
+            }
+        }
+        
+        ac.addAction(wiki)
+
         present(ac, animated: true)
     }
 }

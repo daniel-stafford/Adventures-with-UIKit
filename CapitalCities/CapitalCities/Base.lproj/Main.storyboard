@@ -41,6 +41,21 @@
             </objects>
             <point key="canvasLocation" x="886.95652173913049" y="83.705357142857139"/>
         </scene>
+        <!--BrowserVC-->
+        <scene sceneID="Ied-u4-Cdx">
+            <objects>
+                <viewController storyboardIdentifier="Browser" id="2Ut-Bx-stb" customClass="BrowserVC" customModule="CapitalCities" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nb9-mS-wni">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <viewLayoutGuide key="safeArea" id="NdQ-pt-TnB"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="wca-dP-kr2" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1732" y="84"/>
+        </scene>
         <!--Navigation Controller-->
         <scene sceneID="mS1-Yr-xC6">
             <objects>
