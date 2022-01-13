@@ -27,32 +27,45 @@ class ViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
-        title = "Country, Country, Country!"
+        title = "Country Blast"
         navigationController?.navigationBar.prefersLargeTitles = true
 
-        let urlString = "https://restcountries.com/v3.1/all"
+        performSelector(onMainThread: #selector(getCountries), with: nil, waitUntilDone: false)
+    }
 
-        DispatchQueue.global(qos: .userInitiated).async { [weak self] in
-            if let url = URL(string: urlString) {
-                if let data = try? Data(contentsOf: url) {
-                    self?.parse(json: data)
+    @objc func getCountries() {
+        let urlString = "https://restcountries.com/v3.1/all"
+        if let url = URL(string: urlString) {
+            parse(url: url, type: [Country].self) {
+                allCountries = $0
+                DispatchQueue.main.async { [weak self] in
+                    self?.tableView.reloadData()
                     return
                 }
             }
-            self?.showError()
         }
     }
-
-    func parse(json: Data) {
-        print("parse is running")
-        let decoder = JSONDecoder()
-
-        if let jsonResults = try? decoder.decode([Country].self, from: json) {
-            print("json", jsonResults.count)
-            allCountries = jsonResults
-            DispatchQueue.main.async { [weak self] in
-                self?.tableView.reloadData()
-            }
+    
+    func parse<T: Codable>(url: URL, type: T.Type, after: (T) -> Void) {
+        do {
+            let data = try Data(contentsOf: url)
+            let jsonDecoder = JSONDecoder()
+            let json = try jsonDecoder.decode(type, from: data)
+            after(json)
+        } catch let DecodingError.dataCorrupted(context) {
+            print(context)
+        } catch let DecodingError.keyNotFound(key, context) {
+            print("Key '\(key)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch let DecodingError.valueNotFound(value, context) {
+            print("Value '\(value)' not found:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch let DecodingError.typeMismatch(type, context) {
+            print("Type '\(type)' mismatch:", context.debugDescription)
+            print("codingPath:", context.codingPath)
+        } catch {
+            print("error: ", error)
+            showError()
         }
     }
 
@@ -63,7 +76,6 @@ class ViewController: UITableViewController {
             self?.present(ac, animated: true)
         }
     }
-
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return allCountries.count
@@ -95,7 +107,7 @@ class ViewController: UITableViewController {
             withDuration: 0.4,
             animations: {
                 cell.alpha = 1
-        })
+            })
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
