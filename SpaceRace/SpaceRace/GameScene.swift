@@ -84,7 +84,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // no spin slow down over time
         sprite.physicsBody?.angularDamping = 0
     }
+    
+    
 
+    // The update() method is called once every frame, and lets us make changes to our game.
     override func update(_ currentTime: TimeInterval) {
         for node in children {
             // if node is off screen, remove it
@@ -127,4 +130,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         isGameOver = true
     }
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // disable touches when finger is lifted
+        self.view?.isUserInteractionEnabled = false
+        
+    }
+    
+    
 }
