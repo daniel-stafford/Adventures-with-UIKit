@@ -24,6 +24,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     // note the new type Timer
     var gameTimer: Timer?
     var isGameOver = false
+    // first time interval minus 0.1
+    var timeInterval = 0.9
+    var enemyCount = 0 {
+        didSet {
+            if enemyCount > 0 && enemyCount % 20 == 0 {
+                timeInterval -= 0.1
+                gameTimer?.invalidate()
+                gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+            }
+            if isGameOver {
+                gameTimer?.invalidate()
+            }
+        }
+    }
 
     override func didMove(to view: SKView) {
         backgroundColor = .black
@@ -59,14 +73,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // tell us when contacts happen
         physicsWorld.contactDelegate = self
 
-        // create our timer, new enemy every three seconds
-        gameTimer = Timer.scheduledTimer(timeInterval: 0.35, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createEnemy), userInfo: nil, repeats: true)
     }
 
     @objc func createEnemy() {
         // else should never occur but randomElement requires it.
         guard let enemy = possibleEnemies.randomElement() else { return }
-
         let sprite = SKSpriteNode(imageNamed: enemy)
         // place at random vertical position on right side of screen
         sprite.position = CGPoint(x: 1200, y: Int.random(in: 50 ... 736))
@@ -83,9 +95,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         sprite.physicsBody?.linearDamping = 0
         // no spin slow down over time
         sprite.physicsBody?.angularDamping = 0
+
+        enemyCount += 1
     }
-    
-    
 
     // The update() method is called once every frame, and lets us make changes to our game.
     override func update(_ currentTime: TimeInterval) {
@@ -100,7 +112,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             score += 1
         }
     }
-    
+
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         var location = touch.location(in: self)
@@ -109,15 +121,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if location.y < 100 {
             // clamp here
             location.y = 100
-        
-        // don't let beyond top screen
+
+            // don't let beyond top screen
         } else if location.y > 668 {
             location.y = 668
         }
 
         player.position = location
     }
-    
+
     // fired when collosion occurs
     func didBegin(_ contact: SKPhysicsContact) {
         // note the force unwrap, OK as in bundle
@@ -130,12 +142,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         isGameOver = true
     }
-    
+
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         // disable touches when finger is lifted
-        self.view?.isUserInteractionEnabled = false
-        
+        view?.isUserInteractionEnabled = false
     }
-    
-    
 }
