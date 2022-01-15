@@ -20,7 +20,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     // all possible things to throw at the player
-    let possibleEnemies = ["ball", "hammer", "tv"]
+    let possibleEnemies = ["cage1", "cage2", "cage3"]
     // note the new type Timer
     var gameTimer: Timer?
     var isGameOver = false
@@ -80,6 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         // else should never occur but randomElement requires it.
         guard let enemy = possibleEnemies.randomElement() else { return }
         let sprite = SKSpriteNode(imageNamed: enemy)
+        sprite.setScale(0.5)
         // place at random vertical position on right side of screen
         sprite.position = CGPoint(x: 1200, y: Int.random(in: 50 ... 736))
         addChild(sprite)
