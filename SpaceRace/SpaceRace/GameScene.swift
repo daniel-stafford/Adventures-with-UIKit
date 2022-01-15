@@ -27,7 +27,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
     override func didMove(to view: SKView) {
         backgroundColor = .black
-
+        // note the force unwrap, OK as in bundle
         starfield = SKEmitterNode(fileNamed: "starfield")!
         // right end, halfway up
         starfield.position = CGPoint(x: 1024, y: 384)
@@ -96,5 +96,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if !isGameOver {
             score += 1
         }
+    }
+    
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        var location = touch.location(in: self)
+
+        // don't allow to move over the score label
+        if location.y < 100 {
+            // clamp here
+            location.y = 100
+        
+        // don't let beyond top screen
+        } else if location.y > 668 {
+            location.y = 668
+        }
+
+        player.position = location
+    }
+    
+    // fired when collosion occurs
+    func didBegin(_ contact: SKPhysicsContact) {
+        // note the force unwrap, OK as in bundle
+        let explosion = SKEmitterNode(fileNamed: "explosion")!
+        // if the player hit space debris
+        explosion.position = player.position
+        addChild(explosion)
+
+        player.removeFromParent()
+
+        isGameOver = true
     }
 }
