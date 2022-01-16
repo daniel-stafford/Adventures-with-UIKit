@@ -61,7 +61,7 @@ class ViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 1: try loading the "Detail" view controller and typecasting it to be DetailViewController
-        if let vc = storyboard?.instantiateViewController(withIdentifier: "Detail") as? DetailViewController {
+        if let vc = storyboard?.instantiateViewController(withIdentifier: "Bad") as? DetailViewController {
             // 2: success! Set its selectedImage property
             vc.selectedImage = pictures[indexPath.row]
             vc.title = "Pictures \(indexPath.row + 1) of \(pictures.count)"
