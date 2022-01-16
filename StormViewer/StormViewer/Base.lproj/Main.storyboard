@@ -55,16 +55,18 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="yiS-PL-G57">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+                                <rect key="frame" x="0.0" y="85" width="414" height="942"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="942" id="QVe-my-aye"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="VlR-Fo-X1z"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="yiS-PL-G57" firstAttribute="leading" secondItem="VlR-Fo-X1z" secondAttribute="leading" id="QN8-JM-5Cq"/>
-                            <constraint firstItem="yiS-PL-G57" firstAttribute="centerY" secondItem="ATI-cZ-4aS" secondAttribute="centerY" id="a67-YU-3nl"/>
-                            <constraint firstItem="yiS-PL-G57" firstAttribute="top" secondItem="ATI-cZ-4aS" secondAttribute="topMargin" constant="-44" id="dzF-2A-nsA"/>
-                            <constraint firstItem="yiS-PL-G57" firstAttribute="centerX" secondItem="ATI-cZ-4aS" secondAttribute="centerX" id="u2f-fp-f1j"/>
+                            <constraint firstItem="yiS-PL-G57" firstAttribute="top" secondItem="VlR-Fo-X1z" secondAttribute="top" constant="41" id="Bf1-5L-L35"/>
+                            <constraint firstItem="yiS-PL-G57" firstAttribute="leading" secondItem="VlR-Fo-X1z" secondAttribute="leading" id="MtO-Ai-J2h"/>
+                            <constraint firstItem="yiS-PL-G57" firstAttribute="centerX" secondItem="ATI-cZ-4aS" secondAttribute="centerX" id="lJI-cd-FcD"/>
                         </constraints>
                     </view>
                     <connections>
