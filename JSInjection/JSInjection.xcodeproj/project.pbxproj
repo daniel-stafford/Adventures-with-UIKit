@@ -18,6 +18,7 @@
 		DD3730D12795735F00FF0AE7 /* ActionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = DD3730D02795735F00FF0AE7 /* ActionViewController.swift */; };
 		DD3730D42795735F00FF0AE7 /* MainInterface.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = DD3730D22795735F00FF0AE7 /* MainInterface.storyboard */; };
 		DD3730D82795735F00FF0AE7 /* Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = DD3730C92795735F00FF0AE7 /* Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		DD3730DE27957B1C00FF0AE7 /* Action.js in Resources */ = {isa = PBXBuildFile; fileRef = DD3730DD27957B1C00FF0AE7 /* Action.js */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +60,7 @@
 		DD3730D02795735F00FF0AE7 /* ActionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionViewController.swift; sourceTree = "<group>"; };
 		DD3730D32795735F00FF0AE7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/MainInterface.storyboard; sourceTree = "<group>"; };
 		DD3730D52795735F00FF0AE7 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		DD3730DD27957B1C00FF0AE7 /* Action.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; path = Action.js; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,6 +130,7 @@
 				DD3730D02795735F00FF0AE7 /* ActionViewController.swift */,
 				DD3730D22795735F00FF0AE7 /* MainInterface.storyboard */,
 				DD3730D52795735F00FF0AE7 /* Info.plist */,
+				DD3730DD27957B1C00FF0AE7 /* Action.js */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -223,6 +226,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DD3730DE27957B1C00FF0AE7 /* Action.js in Resources */,
 				DD3730CF2795735F00FF0AE7 /* Media.xcassets in Resources */,
 				DD3730D42795735F00FF0AE7 /* MainInterface.storyboard in Resources */,
 			);
