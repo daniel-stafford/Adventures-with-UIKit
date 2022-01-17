@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DD936B1E279614C7003C3842 /* explosion.sks in Resources */ = {isa = PBXBuildFile; fileRef = DD936B1D279614C7003C3842 /* explosion.sks */; };
+		DD936B20279619DF003C3842 /* spark.sks in Resources */ = {isa = PBXBuildFile; fileRef = DD936B1F279619DF003C3842 /* spark.sks */; };
 		DDAAF6C32794962A00B0484A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAAF6C22794962A00B0484A /* AppDelegate.swift */; };
 		DDAAF6C52794962A00B0484A /* GameScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = DDAAF6C42794962A00B0484A /* GameScene.sks */; };
 		DDAAF6C92794962A00B0484A /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = DDAAF6C82794962A00B0484A /* GameScene.swift */; };
@@ -17,6 +19,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DD936B1D279614C7003C3842 /* explosion.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; name = explosion.sks; path = ../../SpaceRace/SpaceRace/explosion.sks; sourceTree = "<group>"; };
+		DD936B1F279619DF003C3842 /* spark.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = spark.sks; sourceTree = "<group>"; };
 		DDAAF6BF2794962A00B0484A /* ShootingGallery.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShootingGallery.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DDAAF6C22794962A00B0484A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		DDAAF6C42794962A00B0484A /* GameScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = GameScene.sks; sourceTree = "<group>"; };
@@ -64,6 +68,8 @@
 				DDAAF6CC2794962A00B0484A /* Main.storyboard */,
 				DDAAF6CF2794962D00B0484A /* Assets.xcassets */,
 				DDAAF6D12794962D00B0484A /* LaunchScreen.storyboard */,
+				DD936B1D279614C7003C3842 /* explosion.sks */,
+				DD936B1F279619DF003C3842 /* spark.sks */,
 			);
 			path = ShootingGallery;
 			sourceTree = "<group>";
@@ -129,7 +135,9 @@
 				DDAAF6CE2794962A00B0484A /* Main.storyboard in Resources */,
 				DDAAF6C52794962A00B0484A /* GameScene.sks in Resources */,
 				DDAAF6D02794962D00B0484A /* Assets.xcassets in Resources */,
+				DD936B1E279614C7003C3842 /* explosion.sks in Resources */,
 				DDAAF6D32794962D00B0484A /* LaunchScreen.storyboard in Resources */,
+				DD936B20279619DF003C3842 /* spark.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

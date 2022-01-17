@@ -17,7 +17,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    let possibleEnemies = ["cage1", "cage2", "cage3"]
+    let possibleTargets = ["cage1", "cage2", "cage3"]
 
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "landscape")
@@ -28,41 +28,70 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         gameScore = SKLabelNode(fontNamed: "Chalkduster")
         gameScore.text = "Score: 0"
-        // place center in bottom left
         gameScore.position = CGPoint(x: 8, y: 8)
         gameScore.horizontalAlignmentMode = .left
         gameScore.fontSize = 48
         addChild(gameScore)
-
         score = 0
 
-        // graivtiy is zero as well as in sapce
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
-        // tell us when contacts happen
         physicsWorld.contactDelegate = self
 
         gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createTarget), userInfo: nil, repeats: true)
     }
 
-    @objc func createTarget() {
-        // else should never occur but randomElement requires it.
-        guard let enemy = possibleEnemies.randomElement() else { return }
-        let sprite = SKSpriteNode(imageNamed: enemy)
-        sprite.setScale(0.5)
-        // place at random vertical position on right side of screen
-        sprite.position = CGPoint(x: 1200, y: Int.random(in: 50 ... 736))
-        addChild(sprite)
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        let tappedNodes = nodes(at: location)
+        print(tappedNodes.count)
+       
+        for node in tappedNodes {
+            if node.name == "target" {
+                let explosion = SKEmitterNode(fileNamed: "spark")!
+                explosion.position = node.position
+                addChild(explosion)
+                node.removeFromParent()
+                score += 1
+            }
+            else if node.name == "friend" {
+                let sparkles = SKEmitterNode(fileNamed: "spark")!
+                sparkles.position = node.position
+                addChild(sparkles)
+                node.removeFromParent()
+                score -= 1
+            }
+              
+        }
+    }
 
+    @objc func createTarget() {
+        let makeEnemy = Bool.random()
+        let sprite: SKSpriteNode!
+        if makeEnemy {
+            guard let target = possibleTargets.randomElement() else { return }
+            sprite = SKSpriteNode(imageNamed: target)
+            sprite.name = "target"
+        } else {
+            sprite = SKSpriteNode(imageNamed: "travolta")
+            sprite.name = "friend"
+        }
+        sprite.setScale(Double.random(in: 0.4 ... 0.7))
+        sprite.position = CGPoint(x: Int.random(in: 50 ... 1000), y: 800)
         sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
-        // allow to colldie with player
         sprite.physicsBody?.categoryBitMask = 1
-        // moving hard to the left at constant rate
-        sprite.physicsBody?.velocity = CGVector(dx: -500, dy: 0)
-        // constant spin as moving
-        sprite.physicsBody?.angularVelocity = 5
-        // no slow down over time
+        sprite.physicsBody?.velocity = CGVector(dx: 0, dy: -800)
+        sprite.physicsBody?.angularVelocity = CGFloat(Int.random(in: 2 ... 4))
         sprite.physicsBody?.linearDamping = 0
-        // no spin slow down over time
         sprite.physicsBody?.angularDamping = 0
+        addChild(sprite)
+    }
+
+    override func update(_ currentTime: TimeInterval) {
+        for node in children {
+            if node.position.y < -100 {
+                node.removeFromParent()
+            }
+        }
     }
 }
