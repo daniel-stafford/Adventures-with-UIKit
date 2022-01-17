@@ -17,10 +17,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
 
-    let possibleTargets = ["cage1", "cage2", "cage3"]
+    let possibleTargets = ["snow",  "snow2" ]
+    
+  
 
     override func didMove(to view: SKView) {
-        let background = SKSpriteNode(imageNamed: "landscape")
+        let background = SKSpriteNode(imageNamed: "mountains2")
         background.position = CGPoint(x: 512, y: 384)
         background.blendMode = .replace
         background.zPosition = -1
@@ -37,7 +39,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
 
-        gameTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(createTarget), userInfo: nil, repeats: true)
+        gameTimer = Timer.scheduledTimer(timeInterval: 0.7, target: self, selector: #selector(createTarget), userInfo: nil, repeats: true)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -73,10 +75,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             sprite = SKSpriteNode(imageNamed: target)
             sprite.name = "target"
         } else {
-            sprite = SKSpriteNode(imageNamed: "travolta")
+            sprite = SKSpriteNode(imageNamed: "flake")
             sprite.name = "friend"
         }
-        sprite.setScale(Double.random(in: 0.4 ... 0.7))
+        sprite.setScale(Double.random(in: 0.2 ... 0.4))
         sprite.position = CGPoint(x: Int.random(in: 50 ... 1000), y: 800)
         sprite.physicsBody = SKPhysicsBody(texture: sprite.texture!, size: sprite.size)
         sprite.physicsBody?.categoryBitMask = 1
