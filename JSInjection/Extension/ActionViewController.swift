@@ -10,11 +10,11 @@ import UIKit
 import UniformTypeIdentifiers
 
 class ActionViewController: UIViewController {
-    @IBOutlet var imageView: UIImageView!
-
+    var pageTitle = ""
+    var pageURL = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .done, target: self, action: #selector(done))
         //  we only care about first input item created by the extension
         if let inputItem = extensionContext?.inputItems.first as? NSExtensionItem {
             // gives the us first items info via closure
@@ -27,6 +27,13 @@ class ActionViewController: UIViewController {
                     // We sent a dictionary of data from JavaScript, so we typecast javaScriptValues as an NSDictionary again so that we can pull out values using keys,
                     guard let javaScriptValues = itemDictionary[NSExtensionJavaScriptPreprocessingResultsKey] as? NSDictionary else { return }
                     print(javaScriptValues)
+                    self?.pageTitle = javaScriptValues["title"] as? String ?? ""
+                    self?.pageURL = javaScriptValues["URL"] as? String ?? ""
+
+                    DispatchQueue.main.async {
+                        self?.title = self?.pageTitle
+                    }
+
                 }
             }
         }
