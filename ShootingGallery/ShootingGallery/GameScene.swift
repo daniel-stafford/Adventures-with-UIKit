@@ -8,18 +8,23 @@
 import SpriteKit
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
-    var gameScore: SKLabelNode!
     var gameTimer: Timer?
+    var gameAmmo: SKLabelNode!
+    var reload: SKLabelNode!
+    var ammo = 5 {
+        didSet {
+            gameAmmo.text = "Shots left: \(ammo)"
+        }
+    }
 
+    var gameScore: SKLabelNode!
     var score = 0 {
         didSet {
             gameScore.text = "Score: \(score)"
         }
     }
 
-    let possibleTargets = ["snow",  "snow2" ]
-    
-  
+    let possibleTargets = ["snow", "snow2"]
 
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "mountains2")
@@ -29,12 +34,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(background)
 
         gameScore = SKLabelNode(fontNamed: "Chalkduster")
-        gameScore.text = "Score: 0"
-        gameScore.position = CGPoint(x: 8, y: 8)
+        gameScore.position = CGPoint(x: 8, y: 10)
         gameScore.horizontalAlignmentMode = .left
         gameScore.fontSize = 48
         addChild(gameScore)
         score = 0
+
+        gameAmmo = SKLabelNode(fontNamed: "Chalkduster")
+        gameAmmo.position = CGPoint(x: 650, y: 10)
+        gameAmmo.horizontalAlignmentMode = .left
+        gameAmmo.fontSize = 48
+        gameAmmo.name = "ammo"
+        addChild(gameAmmo)
+        ammo = 6
+
+        reload = SKLabelNode(fontNamed: "Chalkduster")
+        reload.position = CGPoint(x: 800, y: 700)
+        reload.text = "Reload"
+        reload.horizontalAlignmentMode = .left
+        reload.fontSize = 48
+        reload.name = "ammo"
 
         physicsWorld.gravity = CGVector(dx: 0, dy: 0)
         physicsWorld.contactDelegate = self
@@ -46,24 +65,35 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         guard let touch = touches.first else { return }
         let location = touch.location(in: self)
         let tappedNodes = nodes(at: location)
-        print(tappedNodes.count)
-       
+
+        if ammo > 0 {
+            ammo -= 1
+        } else {
+            ammo = 0
+        }
+
         for node in tappedNodes {
-            if node.name == "target" {
-                let explosion = SKEmitterNode(fileNamed: "spark")!
-                explosion.position = node.position
-                addChild(explosion)
+            if node.name == "ammo" {
+                ammo = 6
                 node.removeFromParent()
-                score += 1
             }
-            else if node.name == "friend" {
-                let sparkles = SKEmitterNode(fileNamed: "spark")!
-                sparkles.position = node.position
-                addChild(sparkles)
-                node.removeFromParent()
-                score -= 1
+            if ammo > 0 {
+                if node.name == "target" || node.name == "friend" {
+                    let explosion = SKEmitterNode(fileNamed: "spark")!
+                    explosion.position = node.position
+                    addChild(explosion)
+                    node.removeFromParent()
+                }
+                if node.name == "target" {
+                    score += 1
+                }
+                if node.name == "friend" {
+                    score -= 1
+                }
             }
-              
+        }
+        if ammo == 5 {
+            addChild(reload)
         }
     }
 
