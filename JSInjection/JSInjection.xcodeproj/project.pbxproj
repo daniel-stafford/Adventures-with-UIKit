@@ -105,12 +105,12 @@
 			isa = PBXGroup;
 			children = (
 				DD3730B127956EC700FF0AE7 /* AppDelegate.swift */,
+				DD3730BA27956EC800FF0AE7 /* Assets.xcassets */,
+				DD3730BF27956EC800FF0AE7 /* Info.plist */,
+				DD3730BC27956EC800FF0AE7 /* LaunchScreen.storyboard */,
+				DD3730B727956EC700FF0AE7 /* Main.storyboard */,
 				DD3730B327956EC700FF0AE7 /* SceneDelegate.swift */,
 				DD3730B527956EC700FF0AE7 /* ViewController.swift */,
-				DD3730B727956EC700FF0AE7 /* Main.storyboard */,
-				DD3730BA27956EC800FF0AE7 /* Assets.xcassets */,
-				DD3730BC27956EC800FF0AE7 /* LaunchScreen.storyboard */,
-				DD3730BF27956EC800FF0AE7 /* Info.plist */,
 			);
 			path = JSInjection;
 			sourceTree = "<group>";
