@@ -31,9 +31,9 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         }
     }
 
-    @objc func scheduleLocal() {
+    @objc func scheduleLocal(isReminder: Bool = false) {
         registerCategories()
-        
+
         let center = UNUserNotificationCenter.current()
         // only show new notifications
         center.removeAllPendingNotificationRequests()
@@ -57,7 +57,7 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         dateComponents.minute = 30
 
 //        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
-        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
+        let trigger = isReminder ? UNTimeIntervalNotificationTrigger(timeInterval: 10, repeats: false) : UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
 
         // can use whatever identifier, but must be unique
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
@@ -72,10 +72,13 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         // identifier is internal
         // foreground = when tapped, launch app
         let show = UNNotificationAction(identifier: "show", title: "Tell me more…", options: .foreground)
+        let ignore = UNNotificationAction(identifier: "kill", title: "Stop this madness", options: .foreground)
+        let remind = UNNotificationAction(identifier: "remind", title: "Remind me later", options: .destructive)
+
         // identifier must match with content.categoryIdentifier
         // intents relates to talking to Siri
         // options - carPlay support, custom dismiss etc.
-        let category = UNNotificationCategory(identifier: "alarm", actions: [show], intentIdentifiers: [], options: [])
+        let category = UNNotificationCategory(identifier: "alarm", actions: [show, ignore, remind], intentIdentifiers: [], options: [])
 
         center.setNotificationCategories([category])
     }
@@ -90,12 +93,15 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
             switch response.actionIdentifier {
             case UNNotificationDefaultActionIdentifier:
                 // the user swiped to unlock
-                print("Default identifier")
-
+                runAlert(title: "Default identifier", message: "You swiped")
             case "show":
                 // the user tapped our "show more info…" button
-                print("Show more information…")
-
+                runAlert(title: "Show more info", message: "Blah blah blah")
+            case "kill":
+                // tapped ignore
+                runAlert(title: "Notification stopped", message: "Alright, alright. Forget about it!")
+            case "remind":
+                scheduleLocal(isReminder: true)
             default:
                 break
             }
@@ -103,5 +109,11 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
 
         // you must call the completion handler when you're done
         completionHandler()
+    }
+
+    func runAlert(title: String, message: String) {
+        let ac = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        ac.addAction(UIAlertAction(title: "OK", style: .default))
+        present(ac, animated: true)
     }
 }
