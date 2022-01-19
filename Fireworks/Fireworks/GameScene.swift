@@ -17,7 +17,7 @@ class GameScene: SKScene {
     let rightEdge = 1024 + 22
     var timeInterval = 6
     var rounds = 0
-    let maxRounds = 3
+    let maxRounds = 4
 
     var score = 0 {
         didSet {
@@ -31,14 +31,14 @@ class GameScene: SKScene {
         background.blendMode = .replace
         background.zPosition = -1
         addChild(background)
-        
+
         scoreLabel =  SKLabelNode(fontNamed: "Chalkduster")
         scoreLabel.position = CGPoint(x: 10, y: 50)
         scoreLabel.horizontalAlignmentMode = .left
         scoreLabel.fontSize = 48
         addChild(scoreLabel)
         score = 0
-        
+
         gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timeInterval), target: self, selector: #selector(launchFireworks), userInfo: nil, repeats: true)
     }
 
@@ -203,15 +203,21 @@ class GameScene: SKScene {
         if let emitter = SKEmitterNode(fileNamed: "explode") {
             emitter.position = firework.position
             addChild(emitter)
+            firework.removeFromParent()
+
+            let delay = SKAction.wait(forDuration: 0.6)
+            let remove = SKAction.removeFromParent()
+
+            emitter.run(SKAction.sequence([delay, remove]))
         }
 
-        firework.removeFromParent()
+
     }
 
     func explodeFireworks() {
         // for adjusting score
         var numExploded = 0
-        
+
         // loop backwards
         for (index, fireworkContainer) in fireworks.enumerated().reversed() {
             // safely check each is firework
@@ -240,7 +246,7 @@ class GameScene: SKScene {
             score += 4000
         }
     }
-    
+
     func gameOver() {
         gameTimer?.invalidate()
         run(SKAction.playSoundFileNamed("gameOver.caf", waitForCompletion: false))
