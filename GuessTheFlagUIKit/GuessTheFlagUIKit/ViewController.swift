@@ -8,7 +8,7 @@
 import SwiftUI
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UNUserNotificationCenterDelegate {
     @IBOutlet var button1: UIButton!
     @IBOutlet var button2: UIButton!
     @IBOutlet var button3: UIButton!
@@ -28,16 +28,18 @@ class ViewController: UIViewController {
 
         let defaults = UserDefaults.standard
 
-        if let avedHighScore = defaults.object(forKey: "highScore") as? Data {
+        if let savedHighScore = defaults.object(forKey: "highScore") as? Data {
             let jsonDecoder = JSONDecoder()
 
             do {
-                highScore = try jsonDecoder.decode(Int.self, from: avedHighScore)
+                highScore = try jsonDecoder.decode(Int.self, from: savedHighScore)
                 print("high score loaded", highScore)
             } catch {
                 print("Failed to load high score")
             }
         }
+
+        registerLocal()
 
         countries += ["estonia", "france", "germany", "ireland", "italy", "monaco", "nigeria", "poland", "russia", "spain", "uk", "us"]
 
@@ -58,6 +60,8 @@ class ViewController: UIViewController {
         getTitle()
         for (index, button) in buttons.enumerated() {
             button.layer.borderWidth = 1
+            // remove padding from border
+            button.configuration?.contentInsets = .zero
             button.setImage(UIImage(named: countries[index]), for: .normal)
         }
     }
@@ -167,5 +171,42 @@ class ViewController: UIViewController {
         } else {
             print("Failed to save high score.")
         }
+    }
+
+    func registerLocal() {
+        let center = UNUserNotificationCenter.current()
+        center.requestAuthorization(options: [.alert, .badge, .sound]) { [weak self] granted, _ in
+            if granted {
+                print("Yay!")
+                self!.scheduleLocal()
+            } else {
+                print("D'oh")
+            }
+        }
+    }
+
+    func scheduleLocal() {
+        registerCategories()
+        let center = UNUserNotificationCenter.current()
+        center.removeAllPendingNotificationRequests()
+        let content = UNMutableNotificationContent()
+        content.title = "Let's play"
+        content.body = "Practice makes pefect.  Learn those country flags!"
+        content.categoryIdentifier = "alarm"
+        content.sound = UNNotificationSound.default
+        // remind every day for a week
+        for num in 1 ... 7 {
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(num * 86400), repeats: false)
+            let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
+            center.add(request)
+        }
+    }
+
+    func registerCategories() {
+        let center = UNUserNotificationCenter.current()
+        center.delegate = self
+        let show = UNNotificationAction(identifier: "show", title: "Let's play!", options: .foreground)
+        let category = UNNotificationCategory(identifier: "alarm", actions: [show], intentIdentifiers: [], options: [])
+        center.setNotificationCategories([category])
     }
 }
