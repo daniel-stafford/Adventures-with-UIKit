@@ -29,6 +29,7 @@
 		DDC7102A27986E2100621F13 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		DDC7103127986F3900621F13 /* explode.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = explode.sks; sourceTree = "<group>"; };
 		DDC7103227986F3900621F13 /* fuse.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = fuse.sks; sourceTree = "<group>"; };
+		DDC710352798851A00621F13 /* gameOver.caf */ = {isa = PBXFileReference; lastKnownFileType = file; name = gameOver.caf; path = "../../Whack-A-Penguin/Whack-A-Penguin/gameOver.caf"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +71,7 @@
 				DDC7103127986F3900621F13 /* explode.sks */,
 				DDC7103227986F3900621F13 /* fuse.sks */,
 				DDC7102227986E1F00621F13 /* GameViewController.swift */,
+				DDC710352798851A00621F13 /* gameOver.caf */,
 			);
 			path = Fireworks;
 			sourceTree = "<group>";

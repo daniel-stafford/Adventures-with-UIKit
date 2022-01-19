@@ -16,10 +16,12 @@ class GameScene: SKScene {
     let bottomEdge = -22
     let rightEdge = 1024 + 22
     var timeInterval = 6
+    var rounds = 0
+    let maxRounds = 3
 
     var score = 0 {
         didSet {
-//            scoreLabel.text = "Score: \(score)"
+            scoreLabel.text = "Score: \(score)"
         }
     }
 
@@ -29,7 +31,14 @@ class GameScene: SKScene {
         background.blendMode = .replace
         background.zPosition = -1
         addChild(background)
-
+        
+        scoreLabel =  SKLabelNode(fontNamed: "Chalkduster")
+        scoreLabel.position = CGPoint(x: 10, y: 50)
+        scoreLabel.horizontalAlignmentMode = .left
+        scoreLabel.fontSize = 48
+        addChild(scoreLabel)
+        score = 0
+        
         gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timeInterval), target: self, selector: #selector(launchFireworks), userInfo: nil, repeats: true)
     }
 
@@ -145,6 +154,10 @@ class GameScene: SKScene {
     }
 
     @objc func launchFireworks() {
+        if rounds == maxRounds {
+            gameOver()
+            return
+        }
         let movementAmount: CGFloat = 1800
 
         switch Int.random(in: 0 ... 3) {
@@ -183,6 +196,7 @@ class GameScene: SKScene {
         default:
             break
         }
+        rounds += 1
     }
 
     func explode(firework: SKNode) {
@@ -225,5 +239,15 @@ class GameScene: SKScene {
         default:
             score += 4000
         }
+    }
+    
+    func gameOver() {
+        gameTimer?.invalidate()
+        run(SKAction.playSoundFileNamed("gameOver.caf", waitForCompletion: false))
+        let gameOver = SKLabelNode(fontNamed: "Chalkduster")
+        gameOver.text = "That's it! Final score: \(score)"
+        gameOver.position = CGPoint(x: 512, y: 384)
+        gameOver.zPosition = 1
+        addChild(gameOver)
     }
 }
