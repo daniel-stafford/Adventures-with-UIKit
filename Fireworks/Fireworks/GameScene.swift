@@ -32,7 +32,7 @@ class GameScene: SKScene {
         background.zPosition = -1
         addChild(background)
 
-        scoreLabel =  SKLabelNode(fontNamed: "Chalkduster")
+        scoreLabel = SKLabelNode(fontNamed: "Chalkduster")
         scoreLabel.position = CGPoint(x: 10, y: 50)
         scoreLabel.horizontalAlignmentMode = .left
         scoreLabel.fontSize = 48
@@ -210,8 +210,6 @@ class GameScene: SKScene {
 
             emitter.run(SKAction.sequence([delay, remove]))
         }
-
-
     }
 
     func explodeFireworks() {
