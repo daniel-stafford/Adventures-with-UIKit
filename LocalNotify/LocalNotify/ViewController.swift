@@ -6,10 +6,10 @@
 //
 
 import UIKit
-// new framework for user nitifications
+// new framework for user notifications
 import UserNotifications
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, UNUserNotificationCenterDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -32,8 +32,10 @@ class ViewController: UIViewController {
     }
 
     @objc func scheduleLocal() {
+        registerCategories()
+        
         let center = UNUserNotificationCenter.current()
-        //only show new notifications
+        // only show new notifications
         center.removeAllPendingNotificationRequests()
         // create content
         let content = UNMutableNotificationContent()
@@ -53,12 +55,53 @@ class ViewController: UIViewController {
         // 10:30
         dateComponents.hour = 10
         dateComponents.minute = 30
-    
+
 //        let trigger = UNCalendarNotificationTrigger(dateMatching: dateComponents, repeats: true)
         let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 5, repeats: false)
 
         // can use whatever identifier, but must be unique
         let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
         center.add(request)
+    }
+
+    func registerCategories() {
+        let center = UNUserNotificationCenter.current()
+        // any messages sent, get reported to us, so remember that class must conform to UNUserNotificationCenterDelegate
+        center.delegate = self
+
+        // identifier is internal
+        // foreground = when tapped, launch app
+        let show = UNNotificationAction(identifier: "show", title: "Tell me more…", options: .foreground)
+        // identifier must match with content.categoryIdentifier
+        // intents relates to talking to Siri
+        // options - carPlay support, custom dismiss etc.
+        let category = UNNotificationCategory(identifier: "alarm", actions: [show], intentIdentifiers: [], options: [])
+
+        center.setNotificationCategories([category])
+    }
+
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+        // pull out the buried userInfo dictionary
+        let userInfo = response.notification.request.content.userInfo
+
+        if let customData = userInfo["customData"] as? String {
+            print("Custom data received: \(customData)")
+
+            switch response.actionIdentifier {
+            case UNNotificationDefaultActionIdentifier:
+                // the user swiped to unlock
+                print("Default identifier")
+
+            case "show":
+                // the user tapped our "show more info…" button
+                print("Show more information…")
+
+            default:
+                break
+            }
+        }
+
+        // you must call the completion handler when you're done
+        completionHandler()
     }
 }
