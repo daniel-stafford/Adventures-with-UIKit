@@ -53,8 +53,8 @@ class ActionViewController: UIViewController {
     @objc func chooseScript() {
         let ac = UIAlertController(title: "Choose Script", message: "", preferredStyle: .alert)
         ac.addAction(generateAlertAction(title: "Display webpage title", text: "alert(document.title);"))
-        ac.addAction(generateAlertAction(title: "Display current year", text: "const d = new Date; alert(d.getFullYear());"))
-        ac.addAction(generateAlertAction(title: "Display user agent info", text: "alert(navigator.userAgent);"))
+        ac.addAction(generateAlertAction(title: "Change background green", text: "document.body.style.backgroundColor = 'green';"))
+        ac.addAction(generateAlertAction(title: "Change text red", text: "document.body.style.color = 'red';"))
         present(ac, animated: true)
     }
 
