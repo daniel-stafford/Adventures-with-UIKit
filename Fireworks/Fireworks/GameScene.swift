@@ -33,6 +33,60 @@ class GameScene: SKScene {
         gameTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timeInterval), target: self, selector: #selector(launchFireworks), userInfo: nil, repeats: true)
     }
 
+    func checkTouches(_ touches: Set<UITouch>) {
+        guard let touch = touches.first else { return }
+
+        let location = touch.location(in: self)
+        let nodesAtPoint = nodes(at: location)
+
+        // we want to cast all nodes as SKSpriteNode to be able to modify them (e.g. use colorBlendFactor
+        // case for let XXXX as YYYYY in ZZZZZ
+        for case let node as SKSpriteNode in nodesAtPoint {
+            // if not firework go to next loop
+            guard node.name == "firework" else { continue }
+
+            // inner loop, be careful!
+            // only one firework color at a time
+            // parent will be container node (sprite and emitter)
+            for parent in fireworks {
+                // exit loop if we can get the spriteNode inside the parent node
+                guard let firework = parent.children.first as? SKSpriteNode else { continue }
+
+                // if prior firework color is different color from new
+                if firework.name == "selected" && firework.color != node.color {
+                    firework.name = "firework"
+                    firework.colorBlendFactor = 1
+                }
+            }
+            // we've touched it, so now selected firework
+            node.name = "selected"
+            // change to white color
+            node.colorBlendFactor = 0
+        }
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesBegan(touches, with: event)
+        checkTouches(touches)
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        super.touchesMoved(touches, with: event)
+        checkTouches(touches)
+    }
+
+    override func update(_ currentTime: TimeInterval) {
+        // loop through array backwards
+        for (index, firework) in fireworks.enumerated().reversed() {
+            // give players a little bit extra time
+            if firework.position.y > 900 {
+                // this uses a position high above so that rockets can explode off screen
+                fireworks.remove(at: index)
+                firework.removeFromParent()
+            }
+        }
+    }
+
     func createFirework(xMovement: CGFloat, x: Int, y: Int) {
         // 1
         let node = SKNode()
