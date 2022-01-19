@@ -73,7 +73,7 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         // foreground = when tapped, launch app
         let show = UNNotificationAction(identifier: "show", title: "Tell me more…", options: .foreground)
         let ignore = UNNotificationAction(identifier: "kill", title: "Stop this madness", options: .foreground)
-        let remind = UNNotificationAction(identifier: "remind", title: "Remind me later", options: .destructive)
+        let remind = UNNotificationAction(identifier: "remind", title: "Remind me later", options: .foreground)
 
         // identifier must match with content.categoryIdentifier
         // intents relates to talking to Siri
@@ -102,6 +102,8 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
                 runAlert(title: "Notification stopped", message: "Alright, alright. Forget about it!")
             case "remind":
                 scheduleLocal(isReminder: true)
+                runAlert(title: "Reminder", message: "OK, I will remind you in 10 seconds")
+
             default:
                 break
             }
