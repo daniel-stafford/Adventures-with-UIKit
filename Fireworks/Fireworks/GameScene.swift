@@ -19,7 +19,7 @@ class GameScene: SKScene {
 
     var score = 0 {
         didSet {
-            scoreLabel.text = "Score: \(score)"
+//            scoreLabel.text = "Score: \(score)"
         }
     }
 
@@ -64,7 +64,7 @@ class GameScene: SKScene {
             node.colorBlendFactor = 0
         }
     }
-    
+
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesBegan(touches, with: event)
         checkTouches(touches)
@@ -182,6 +182,48 @@ class GameScene: SKScene {
 
         default:
             break
+        }
+    }
+
+    func explode(firework: SKNode) {
+        if let emitter = SKEmitterNode(fileNamed: "explode") {
+            emitter.position = firework.position
+            addChild(emitter)
+        }
+
+        firework.removeFromParent()
+    }
+
+    func explodeFireworks() {
+        // for adjusting score
+        var numExploded = 0
+        
+        // loop backwards
+        for (index, fireworkContainer) in fireworks.enumerated().reversed() {
+            // safely check each is firework
+            guard let firework = fireworkContainer.children.first as? SKSpriteNode else { continue }
+            // explode the selected ones
+            if firework.name == "selected" {
+                // destroy this firework!
+                explode(firework: fireworkContainer)
+                fireworks.remove(at: index)
+                numExploded += 1
+            }
+        }
+
+        switch numExploded {
+        case 0:
+            break
+        case 1:
+            score += 200
+        case 2:
+            score += 500
+        case 3:
+            score += 1500
+        case 4:
+            score += 2500
+        default:
+            score += 4000
         }
     }
 }
