@@ -61,15 +61,15 @@
 		DDC7101927986E1F00621F13 /* Fireworks */ = {
 			isa = PBXGroup;
 			children = (
+				DDC7102027986E1F00621F13 /* GameScene.swift */,
 				DDC7101A27986E1F00621F13 /* AppDelegate.swift */,
 				DDC7101C27986E1F00621F13 /* GameScene.sks */,
-				DDC7102027986E1F00621F13 /* GameScene.swift */,
-				DDC7102227986E1F00621F13 /* GameViewController.swift */,
 				DDC7102427986E1F00621F13 /* Main.storyboard */,
 				DDC7102727986E2100621F13 /* Assets.xcassets */,
 				DDC7102927986E2100621F13 /* LaunchScreen.storyboard */,
 				DDC7103127986F3900621F13 /* explode.sks */,
 				DDC7103227986F3900621F13 /* fuse.sks */,
+				DDC7102227986E1F00621F13 /* GameViewController.swift */,
 			);
 			path = Fireworks;
 			sourceTree = "<group>";
