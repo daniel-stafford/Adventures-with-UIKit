@@ -25,6 +25,7 @@ class ViewController: UITableViewController {
         
         toolbarItems = [spacer, share]
         navigationController?.isToolbarHidden = false
+        
 
     }
 
