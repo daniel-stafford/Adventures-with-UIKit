@@ -22,6 +22,7 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
     var turns = 0
     var numQuestions = 5
     var highScore = 0
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -196,7 +197,7 @@ class ViewController: UIViewController, UNUserNotificationCenterDelegate {
         content.sound = UNNotificationSound.default
         // remind every day for a week
         for num in 1 ... 7 {
-            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(num * 86400), repeats: false)
+            let trigger = UNTimeIntervalNotificationTrigger(timeInterval: TimeInterval(num * 5), repeats: false)
             let request = UNNotificationRequest(identifier: UUID().uuidString, content: content, trigger: trigger)
             center.add(request)
         }
