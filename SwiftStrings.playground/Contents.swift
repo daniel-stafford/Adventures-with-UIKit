@@ -1,4 +1,7 @@
-import Cocoa
+import UIKit
+
+var greeting = "Hello, playground"
+
 
 let name = "Taylor"
 
@@ -83,3 +86,13 @@ input.containsAny(of: languages)
 
 // arrays have second contains(where: ), add close input,contains, which cycles through array
 languages.contains(where: input.contains)
+
+let string = "This is a test string"
+let attributes: [NSAttributedString.Key: Any] = [
+    .foregroundColor: UIColor.white,
+    .backgroundColor: UIColor.red,
+    .font: UIFont.boldSystemFont(ofSize: 36)
+]
+
+let attributedString = NSAttributedString(string: string, attributes: attributes)
+
