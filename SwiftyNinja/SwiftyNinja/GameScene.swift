@@ -186,12 +186,18 @@ class GameScene: SKScene {
         let nodesAtPoint = nodes(at: location)
 
         for case let node as SKSpriteNode in nodesAtPoint {
-            if node.name == "enemy" {
+            if node.name == "enemy" || node.name == "bonus" {
                 // destroy penguin
                 //  1. add slice emiter
                 if let emitter = SKEmitterNode(fileNamed: "sliceHitEnemy") {
                     emitter.position = node.position
                     addChild(emitter)
+                }
+                
+                if node.name == "bonus" {
+                    score += 10
+                } else {
+                    score += 1
                 }
 
                 // 2 remove name to prevent player from getting further points
@@ -210,8 +216,6 @@ class GameScene: SKScene {
                 let seq = SKAction.sequence([group, .removeFromParent()])
                 node.run(seq)
 
-                // 6
-                score += 1
 
                 // 7  remove enemy from array
                 if let index = activeEnemies.firstIndex(of: node) {
@@ -274,10 +278,9 @@ class GameScene: SKScene {
     func createEnemy(forceBomb: ForceBomb = .random) {
         let enemy: SKSpriteNode
 
-//        var enemyType = Int.random(in: 0 ... 6)
-        var enemyType = 3
-        print("enemyType!! ", enemyType)
-        if forceBomb == .never {
+        var enemyType = Int.random(in: 0 ... 6)
+
+        if forceBomb == .never && enemyType != 2 {
             enemyType = 1
         } else if forceBomb == .always {
             enemyType = 0
@@ -315,8 +318,13 @@ class GameScene: SKScene {
                 enemy.addChild(emitter)
             }
 
-        }
-        else {
+            // Create bonus enemy penguin node/s
+        } else if enemyType == 2 {
+            enemy = SKSpriteNode(imageNamed: "bonus")
+            enemy.setScale(0.3)
+            run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
+            enemy.name = "bonus"
+        } else {
             // make penguin
             enemy = SKSpriteNode(imageNamed: "penguin")
             run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
@@ -425,7 +433,7 @@ class GameScene: SKScene {
                 if node.position.y < -140 {
                     node.removeAllActions()
 
-                    if node.name == "enemy" {
+                    if node.name == "enemy" || node.name == "bonus" {
                         node.name = ""
                         subtractLife()
 
