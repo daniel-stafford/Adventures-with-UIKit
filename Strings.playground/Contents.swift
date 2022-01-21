@@ -108,13 +108,13 @@ attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 40), range
 // Set .link to be a URL to make clickable links in your strings.
 
 // Set .underlineStyle to a value from NSUnderlineStyle to strike out characters.
-//Set .strikethroughStyle to a value from NSUnderlineStyle (no, that’s not a typo) to strike out characters.
-//Set .paragraphStyle to an instance of NSMutableParagraphStyle to control text alignment and spacing.
-//Set .link to be a URL to make clickable links in your strings.
+// Set .strikethroughStyle to a value from NSUnderlineStyle (no, that’s not a typo) to strike out characters.
+// Set .paragraphStyle to an instance of NSMutableParagraphStyle to control text alignment and spacing.
+// Set .link to be a URL to make clickable links in your strings.
 
 extension String {
     func withPrefix(_ prefix: String) -> String {
-        guard !self.contains(prefix)  else { return self}
+        guard !contains(prefix) else { return self }
         return prefix + self
     }
 }
@@ -137,18 +137,18 @@ extension String {
 
 extension String {
     func lines() -> [String] {
-        return self.components(separatedBy: "\n")
+        return components(separatedBy: "\n")
     }
 }
 
 "this\nis\na\ntest".lines()
 
-//Extend UIView so that it has a bounceOut(duration:) method that uses animation to scale its size down to 0.0001 over a specified number of seconds.
+// Extend UIView so that it has a bounceOut(duration:) method that uses animation to scale its size down to 0.0001 over a specified number of seconds.
 
 extension UIView {
-    func bounceOut(duration: Int) -> Void {
+    func bounceOut(duration: Int) {
         UIView.animate(withDuration: TimeInterval(duration), animations: { [weak self] in
-            self?.transform = CGAffineTransform.init(scaleX: 0.001, y: 0.001)
+            self?.transform = CGAffineTransform(scaleX: 0.001, y: 0.001)
         })
     }
 }
@@ -167,11 +167,10 @@ UIView.animate(
         test.alpha = 1
     })
 
-
-//Extend Int with a times() method that runs a closure as many times as the number is high. For example, 5.times { print("Hello!") } will print “Hello” five times.
+// Extend Int with a times() method that runs a closure as many times as the number is high. For example, 5.times { print("Hello!") } will print “Hello” five times.
 
 extension Int {
-    func times(_ method: () -> Void)  {
+    func times(_ method: () -> Void) {
         for _ in 0 ..< self {
             method()
         }
@@ -182,5 +181,17 @@ extension Int {
     print("hello")
 }
 
+// Extend Array so that it has a mutating remove(item:) method. If the item exists more than once, it should remove only the first instance it finds. Tip: you will need to add the Comparable constraint to make this work!
 
-//Extend Array so that it has a mutating remove(item:) method. If the item exists more than once, it should remove only the first instance it finds. Tip: you will need to add the Comparable constraint to make this work!
+extension Array where Element: Comparable {
+    func remove(item: Element) -> Array {
+        var newArray = self
+        if let index = firstIndex(of: item) {
+            newArray.remove(at: index)
+            return newArray
+        }
+        return self
+    }
+}
+
+["dog", "cat", "dog"].remove(item: "dog")
