@@ -112,3 +112,34 @@ attributedString.addAttribute(.font, value: UIFont.systemFont(ofSize: 40), range
 //Set .paragraphStyle to an instance of NSMutableParagraphStyle to control text alignment and spacing.
 //Set .link to be a URL to make clickable links in your strings.
 
+extension String {
+    func withPrefix(_ prefix: String) -> String {
+        guard !self.contains(prefix)  else { return self}
+        return prefix + self
+    }
+}
+
+"pet".withPrefix("car")
+
+extension String {
+    func isNumeric() -> Bool {
+        for char in self {
+            if char.isNumber {
+                return true
+            }
+        }
+        return false
+    }
+}
+
+"hello1".isNumeric()
+"hello".isNumeric()
+
+extension String {
+    func lines() -> [String] {
+        return self.components(separatedBy: "\n")
+    }
+}
+
+"this\nis\na\ntest".lines()
+
