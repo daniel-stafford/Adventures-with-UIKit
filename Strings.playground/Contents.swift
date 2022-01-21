@@ -145,6 +145,28 @@ extension String {
 
 //Extend UIView so that it has a bounceOut(duration:) method that uses animation to scale its size down to 0.0001 over a specified number of seconds.
 
+extension UIView {
+    func bounceOut(duration: Int) -> Void {
+        UIView.animate(withDuration: TimeInterval(duration), animations: { [weak self] in
+            self?.transform = CGAffineTransform.init(scaleX: 0.001, y: 0.001)
+        })
+    }
+}
+
+let test = UIView()
+test.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+test.backgroundColor = .red
+
+test.bounceOut(duration: 2)
+
+test.alpha = 0
+
+UIView.animate(
+    withDuration: 0.4,
+    animations: {
+        test.alpha = 1
+    })
+
 
 //Extend Int with a times() method that runs a closure as many times as the number is high. For example, 5.times { print("Hello!") } will print “Hello” five times.
 
