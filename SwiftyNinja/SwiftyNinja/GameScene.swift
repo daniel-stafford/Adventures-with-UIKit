@@ -21,6 +21,10 @@ class GameScene: SKScene {
     var activeSliceBG: SKShapeNode!
     var activeSliceFG: SKShapeNode!
 
+    var activeSlicePoints = [CGPoint]()
+
+    var isSwooshSoundActive = false
+
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "sliceBackground")
         background.position = CGPoint(x: 512, y: 384)
@@ -51,7 +55,7 @@ class GameScene: SKScene {
     func createLives() {
         for i in 0 ..< 3 {
             let spriteNode = SKSpriteNode(imageNamed: "sliceLife")
-           // use i * 70 to bump right each time
+            // use i * 70 to bump right each time
             spriteNode.position = CGPoint(x: CGFloat(834 + (i * 70)), y: 720)
             addChild(spriteNode)
 
@@ -75,5 +79,87 @@ class GameScene: SKScene {
 
         addChild(activeSliceBG)
         addChild(activeSliceFG)
+    }
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+
+        // 1 Ditch all prior slice points
+        activeSlicePoints.removeAll(keepingCapacity: true)
+
+        // 2 Append new location just like touchMoved
+        let location = touch.location(in: self)
+        activeSlicePoints.append(location)
+
+        // 3
+        redrawActiveSlice()
+
+        // 4 Important - remove fade out action
+        activeSliceBG.removeAllActions()
+        activeSliceFG.removeAllActions()
+
+        // 5 Now alpha won't conflict with disabled fade out action
+        activeSliceBG.alpha = 1
+        activeSliceFG.alpha = 1
+    }
+
+    func redrawActiveSlice() {
+        // 1 If only one slice, not enough to make line, exit method
+        if activeSlicePoints.count < 2 {
+            activeSliceBG.path = nil
+            activeSliceFG.path = nil
+            return
+        }
+
+        // 2 Track max 12 slices (stops from being too long)
+        if activeSlicePoints.count > 12 {
+            // remove as many to get to 12
+            activeSlicePoints.removeFirst(activeSlicePoints.count - 12)
+        }
+
+        // 3 start path on first slice on screen
+        let path = UIBezierPath()
+        path.move(to: activeSlicePoints[0])
+
+        // move path to point of next slice
+        for i in 1 ..< activeSlicePoints.count {
+            path.addLine(to: activeSlicePoints[i])
+        }
+
+        // 4 Assign path to our shape nodes
+        activeSliceBG.path = path.cgPath
+        activeSliceFG.path = path.cgPath
+    }
+
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        // add touch to slice array
+        activeSlicePoints.append(location)
+        redrawActiveSlice()
+        if !isSwooshSoundActive {
+            playSwooshSound()
+        }
+    }
+
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        // slice fades out after quarter second
+        activeSliceBG.run(SKAction.fadeOut(withDuration: 0.25))
+        activeSliceFG.run(SKAction.fadeOut(withDuration: 0.25))
+    }
+
+    func playSwooshSound() {
+        isSwooshSoundActive = true
+
+        // play one of three sounds
+        let randomNumber = Int.random(in: 1 ... 3)
+        let soundName = "swoosh\(randomNumber).caf"
+
+        let swooshSound = SKAction.playSoundFileNamed(soundName, waitForCompletion: true)
+
+        // completion closure tells game no longer playing
+        run(swooshSound) { [weak self] in
+            self?.isSwooshSoundActive = false
+        }
     }
 }
