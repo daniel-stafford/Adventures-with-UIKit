@@ -5,13 +5,18 @@
 //  Created by Daniel Stafford on 1/20/22.
 //
 
-import SpriteKit
 // allows us to stop sounds
 import AVFoundation
+import SpriteKit
 
 class GameScene: SKScene {
     enum ForceBomb {
         case never, always, random
+    }
+
+    // CaseIterable automatically adds an allCases property to the SequenceType enum that lists all its cases as an array. This is really useful in our project because we can then use randomElement() to pick random sequence types to run our game.
+    enum SequenceType: CaseIterable {
+        case oneNoBomb, one, twoWithOneBomb, two, three, four, chain, fastChain
     }
 
     var gameScore: SKLabelNode!
@@ -34,6 +39,13 @@ class GameScene: SKScene {
 
     var activeEnemies = [SKSpriteNode]()
 
+    var popupTime = 0.9
+    var sequence = [SequenceType]()
+    var sequencePosition = 0
+    var chainDelay = 3.0
+    // when to know all enemies destoryed
+    var nextSequenceQueued = true
+
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "sliceBackground")
         background.position = CGPoint(x: 512, y: 384)
@@ -49,6 +61,22 @@ class GameScene: SKScene {
         createScore()
         createLives()
         createSlices()
+
+        // warm up to the game for fist sequence
+        sequence = [.oneNoBomb, .oneNoBomb, .twoWithOneBomb, .twoWithOneBomb, .three, .one, .chain]
+
+        // now random sequences after warm up
+        for _ in 0 ... 1000 {
+            // random element allowed by CaseIterable
+            if let nextSequence = SequenceType.allCases.randomElement() {
+                sequence.append(nextSequence)
+            }
+        }
+
+        // toss enemies after two seconds when game starts
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { [weak self] in
+            self?.tossEnemies()
+        }
     }
 
     func createScore() {
@@ -257,12 +285,87 @@ class GameScene: SKScene {
         activeEnemies.append(enemy)
     }
 
-    
+    func tossEnemies() {
+        // game gets harder as it progresses
+        popupTime *= 0.991
+        chainDelay *= 0.99
+        physicsWorld.speed *= 1.02
+
+        let sequenceType = sequence[sequencePosition]
+
+        switch sequenceType {
+        case .oneNoBomb:
+            createEnemy(forceBomb: .never)
+
+        case .one:
+            createEnemy()
+
+        case .twoWithOneBomb:
+            createEnemy(forceBomb: .never)
+            createEnemy(forceBomb: .always)
+
+        case .two:
+            createEnemy()
+            createEnemy()
+
+        case .three:
+            createEnemy()
+            createEnemy()
+            createEnemy()
+
+        case .four:
+            createEnemy()
+            createEnemy()
+            createEnemy()
+            createEnemy()
+
+        case .chain:
+            createEnemy()
+
+            // stagger enemy creation using GCD asyncAfter
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0)) { [weak self] in self?.createEnemy() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0 * 2)) { [weak self] in self?.createEnemy() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0 * 3)) { [weak self] in self?.createEnemy() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 5.0 * 4)) { [weak self] in self?.createEnemy() }
+
+        case .fastChain:
+            createEnemy()
+
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0)) { [weak self] in self?.createEnemy() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0 * 2)) { [weak self] in self?.createEnemy() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0 * 3)) { [weak self] in self?.createEnemy() }
+            DispatchQueue.main.asyncAfter(deadline: .now() + (chainDelay / 10.0 * 4)) { [weak self] in self?.createEnemy() }
+        }
+
+        sequencePosition += 1
+        // If it's false, it means we don't have a call to tossEnemies() in the pipeline waiting to execute. It gets set to true only in the gap between the previous sequence item finishing and tossEnemies() being called. Think of it as meaning, "I know there aren't any enemies right now, but more will come shortly."
+        nextSequenceQueued = false
+    }
+
     override func update(_ currentTime: TimeInterval) {
+        // remove enemies off screen
+        if activeEnemies.count > 0 {
+            for (index, node) in activeEnemies.enumerated().reversed() {
+                if node.position.y < -140 {
+                    node.removeFromParent()
+                    activeEnemies.remove(at: index)
+                }
+            }
+        } else {
+            // if no enemies and bit another toss waiting, start a new toss
+            if !nextSequenceQueued {
+                DispatchQueue.main.asyncAfter(deadline: .now() + popupTime) { [weak self] in
+                    self?.tossEnemies()
+                }
+                // pause toss enemies
+                nextSequenceQueued = true
+            }
+        }
+
         var bombCount = 0
 
         for node in activeEnemies {
-            //get all bombs
+            // get all bombs
             if node.name == "bombContainer" {
                 bombCount += 1
                 // only need to know at least one bomb exists
