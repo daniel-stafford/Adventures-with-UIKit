@@ -6,8 +6,14 @@
 //
 
 import SpriteKit
+// allows us to stop sounds
+import AVFoundation
 
 class GameScene: SKScene {
+    enum ForceBomb {
+        case never, always, random
+    }
+
     var gameScore: SKLabelNode!
     var score = 0 {
         didSet {
@@ -24,6 +30,9 @@ class GameScene: SKScene {
     var activeSlicePoints = [CGPoint]()
 
     var isSwooshSoundActive = false
+    var bombSoundEffect: AVAudioPlayer?
+
+    var activeEnemies = [SKSpriteNode]()
 
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "sliceBackground")
@@ -160,6 +169,110 @@ class GameScene: SKScene {
         // completion closure tells game no longer playing
         run(swooshSound) { [weak self] in
             self?.isSwooshSoundActive = false
+        }
+    }
+
+    // as random most of time, use as default argument
+    func createEnemy(forceBomb: ForceBomb = .random) {
+        let enemy: SKSpriteNode
+
+        var enemyType = Int.random(in: 0 ... 6)
+
+        if forceBomb == .never {
+            enemyType = 1
+        } else if forceBomb == .always {
+            enemyType = 0
+        }
+
+        if enemyType == 0 {
+            // 1 make a bomb, using SKSpirteNode
+            enemy = SKSpriteNode()
+            // bomb always in front
+            enemy.zPosition = 1
+            enemy.name = "bombContainer"
+
+            // 2
+            let bombImage = SKSpriteNode(imageNamed: "sliceBomb")
+            bombImage.name = "bomb"
+            enemy.addChild(bombImage)
+
+            // 3 Ensure sound effect played from scratch
+            if bombSoundEffect != nil {
+                bombSoundEffect?.stop()
+                bombSoundEffect = nil
+            }
+
+            // 4
+            if let path = Bundle.main.url(forResource: "sliceBombFuse", withExtension: "caf") {
+                if let sound = try? AVAudioPlayer(contentsOf: path) {
+                    bombSoundEffect = sound
+                    sound.play()
+                }
+            }
+
+            // 5
+            if let emitter = SKEmitterNode(fileNamed: "sliceFuse") {
+                emitter.position = CGPoint(x: 76, y: 64)
+                enemy.addChild(emitter)
+            }
+        } else {
+            // make penguin
+            enemy = SKSpriteNode(imageNamed: "penguin")
+            run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
+            enemy.name = "enemy"
+        }
+
+        // position section!
+        // starting random position at bottom of screen
+        let randomPosition = CGPoint(x: Int.random(in: 64 ... 960), y: -128)
+        enemy.position = randomPosition
+
+        // 2 Angular movement for enemy
+        let randomAngularVelocity = CGFloat.random(in: -3 ... 3)
+        let randomXVelocity: Int
+
+        // 3. If position on  far left, move to far right
+        if randomPosition.x < 256 {
+            randomXVelocity = Int.random(in: 8 ... 15)
+            // 3. If slightly on left, gently right
+        } else if randomPosition.x < 512 {
+            randomXVelocity = Int.random(in: 3 ... 5)
+        } else if randomPosition.x < 768 {
+            randomXVelocity = -Int.random(in: 3 ... 5)
+        } else {
+            randomXVelocity = -Int.random(in: 8 ... 15)
+        }
+
+        // 4 Again, using "magic number", trial and error
+        let randomYVelocity = Int.random(in: 24 ... 32)
+
+        // 5 config velocity, spin
+        enemy.physicsBody = SKPhysicsBody(circleOfRadius: 64)
+        enemy.physicsBody?.velocity = CGVector(dx: randomXVelocity * 40, dy: randomYVelocity * 40)
+        enemy.physicsBody?.angularVelocity = randomAngularVelocity
+        // enemies won't bounce into each other
+        enemy.physicsBody?.collisionBitMask = 0
+
+        addChild(enemy)
+        activeEnemies.append(enemy)
+    }
+
+    
+    override func update(_ currentTime: TimeInterval) {
+        var bombCount = 0
+
+        for node in activeEnemies {
+            //get all bombs
+            if node.name == "bombContainer" {
+                bombCount += 1
+                // only need to know at least one bomb exists
+                break
+            }
+        }
+        if bombCount == 0 {
+            // no bombs – stop the fuse sound!
+            bombSoundEffect?.stop()
+            bombSoundEffect = nil
         }
     }
 }
