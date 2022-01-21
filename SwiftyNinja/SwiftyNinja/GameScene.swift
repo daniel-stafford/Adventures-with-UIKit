@@ -45,9 +45,8 @@ class GameScene: SKScene {
     var chainDelay = 3.0
     // when to know all enemies destroyed
     var nextSequenceQueued = true
-    
-    var isGameEnded = false
 
+    var isGameEnded = false
 
     override func didMove(to view: SKView) {
         let background = SKSpriteNode(imageNamed: "sliceBackground")
@@ -275,8 +274,9 @@ class GameScene: SKScene {
     func createEnemy(forceBomb: ForceBomb = .random) {
         let enemy: SKSpriteNode
 
-        var enemyType = Int.random(in: 0 ... 6)
-
+//        var enemyType = Int.random(in: 0 ... 6)
+        var enemyType = 3
+        print("enemyType!! ", enemyType)
         if forceBomb == .never {
             enemyType = 1
         } else if forceBomb == .always {
@@ -314,7 +314,9 @@ class GameScene: SKScene {
                 emitter.position = CGPoint(x: 76, y: 64)
                 enemy.addChild(emitter)
             }
-        } else {
+
+        }
+        else {
             // make penguin
             enemy = SKSpriteNode(imageNamed: "penguin")
             run(SKAction.playSoundFileNamed("launch.caf", waitForCompletion: false))
@@ -504,5 +506,10 @@ class GameScene: SKScene {
             livesImages[1].texture = SKTexture(imageNamed: "sliceLifeGone")
             livesImages[2].texture = SKTexture(imageNamed: "sliceLifeGone")
         }
+
+        let gameOver = SKSpriteNode(imageNamed: "gameOver")
+        gameOver.position = CGPoint(x: 512, y: 384)
+        gameOver.zPosition = 1
+        addChild(gameOver)
     }
 }
