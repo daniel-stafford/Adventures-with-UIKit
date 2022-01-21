@@ -28,7 +28,9 @@ class GameScene: SKScene {
         background.zPosition = -1
         addChild(background)
 
+        // earth default -9.8, so perhaps moon gravity?
         physicsWorld.gravity = CGVector(dx: 0, dy: -6)
+        // everything happens at slight slower rate
         physicsWorld.speed = 0.85
 
         createScore()
@@ -49,6 +51,7 @@ class GameScene: SKScene {
     func createLives() {
         for i in 0 ..< 3 {
             let spriteNode = SKSpriteNode(imageNamed: "sliceLife")
+           // use i * 70 to bump right each time
             spriteNode.position = CGPoint(x: CGFloat(834 + (i * 70)), y: 720)
             addChild(spriteNode)
 
@@ -57,6 +60,7 @@ class GameScene: SKScene {
     }
 
     func createSlices() {
+        // SKShapeNode for shapes!
         activeSliceBG = SKShapeNode()
         activeSliceBG.zPosition = 2
 
